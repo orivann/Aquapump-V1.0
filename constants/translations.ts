@@ -22,9 +22,15 @@ export const translations = {
   about: {
     title: { en: 'About AquaPump', he: 'אודות AquaPump' },
     description: {
-      en: 'Leading Israeli innovation in smart water pump technology. We combine cutting-edge engineering with sustainable practices to deliver pumps that exceed industry standards.',
-      he: 'חדשנות ישראלית מובילה בטכנולוגיית משאבות מים חכמות. אנו משלבים הנדסה מתקדמת עם שיטות קיימות כדי לספק משאבות העולות על תקני התעשייה.',
+      en: 'AquaPump is part of AquaTech Group, a leading Israeli company in smart water pump technology. Based in Ramla, Israel, we have been an industry leader for over 20 years, combining cutting-edge engineering with sustainable practices to deliver pumps that exceed industry standards.',
+      he: 'AquaPump היא חלק מקבוצת AquaTech, חברה ישראלית מובילה בטכנולוגיית משאבות מים חכמות. ממוקמים ברמלה, ישראל, אנו מובילים בתעשייה כבר למעלה מ-20 שנה, משלבים הנדסה מתקדמת עם שיטות קיימות כדי לספק משאבות העולות על תקני התעשייה.',
     },
+    company: { en: 'Part of', he: 'חלק מ' },
+    companyName: { en: 'AquaTech Group', he: 'קבוצת AquaTech' },
+    location: { en: 'Location', he: 'מיקום' },
+    locationName: { en: 'Ramla, Israel', he: 'רמלה, ישראל' },
+    experience: { en: 'Experience', he: 'ניסיון' },
+    experienceYears: { en: '20+ Years Industry Leader', he: 'מובילים בתעשייה 20+ שנים' },
   },
   technology: {
     title: { en: 'Advanced Technology', he: 'טכנולוגיה מתקדמת' },
