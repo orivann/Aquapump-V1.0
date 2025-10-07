@@ -144,7 +144,7 @@ function MagneticButton({ children, onPress, theme }: { children: React.ReactNod
 
 export default function Hero({ scrollY }: { scrollY: Animated.Value }) {
   const { t, isRTL } = useLanguage();
-  const { theme } = useTheme();
+  const { theme, themeMode } = useTheme();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
 
@@ -174,17 +174,17 @@ export default function Hero({ scrollY }: { scrollY: Animated.Value }) {
           },
         ]}
       >
-        <Text style={[styles.headline, isRTL && styles.rtlText, { color: theme.colors.light }]}>
+        <Text style={[styles.headline, isRTL && styles.rtlText, { color: themeMode === 'dark' ? theme.colors.light : '#1E40AF' }]}>
           {t(translations.hero.headline)}
         </Text>
-        <Text style={[styles.subheadline, isRTL && styles.rtlText, { color: theme.colors.gray }]}>
+        <Text style={[styles.subheadline, isRTL && styles.rtlText, { color: themeMode === 'dark' ? theme.colors.gray : '#475569' }]}>
           {t(translations.hero.subheadline)}
         </Text>
 
         <View style={[styles.ctaContainer, isRTL && styles.rtlRow]}>
           <MagneticButton onPress={() => console.log('Explore')} theme={theme}>
             <TouchableOpacity style={[styles.primaryButton, { backgroundColor: theme.colors.primary }, theme.shadows.md]}>
-              <Text style={[styles.primaryButtonText, { color: theme.colors.dark }]}>
+              <Text style={[styles.primaryButtonText, { color: '#FFFFFF' }]}>
                 {t(translations.hero.exploreCTA)}
               </Text>
             </TouchableOpacity>

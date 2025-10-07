@@ -121,7 +121,7 @@ function ProductCard({ name, description, delay, isRTL, color, scrollY, theme }:
 
 export default function Products({ scrollY }: { scrollY: Animated.Value }) {
   const { t, isRTL } = useLanguage();
-  const { theme } = useTheme();
+  const { theme, themeMode } = useTheme();
 
   const products = [
     {
@@ -142,8 +142,8 @@ export default function Products({ scrollY }: { scrollY: Animated.Value }) {
   ];
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.secondary }]}>
-      <Text style={[styles.sectionTitle, isRTL && styles.rtlText, { color: theme.colors.light }]}>
+    <View style={[styles.container, { backgroundColor: themeMode === 'dark' ? theme.colors.secondary : '#FFFFFF' }]}>
+      <Text style={[styles.sectionTitle, isRTL && styles.rtlText, { color: themeMode === 'dark' ? theme.colors.light : '#1E40AF' }]}>
         {t(translations.products.title)}
       </Text>
 

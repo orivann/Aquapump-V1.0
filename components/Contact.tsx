@@ -17,7 +17,7 @@ const { width } = Dimensions.get('window');
 
 export default function Contact() {
   const { t, isRTL } = useLanguage();
-  const { theme } = useTheme();
+  const { theme, themeMode } = useTheme();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -41,8 +41,8 @@ export default function Contact() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.dark }]}>
-      <Text style={[styles.sectionTitle, isRTL && styles.rtlText, { color: theme.colors.light }]}>
+    <View style={[styles.container, { backgroundColor: themeMode === 'dark' ? theme.colors.dark : theme.colors.secondary }]}>
+      <Text style={[styles.sectionTitle, isRTL && styles.rtlText, { color: themeMode === 'dark' ? theme.colors.light : '#1E40AF' }]}>
         {t(translations.contact.title)}
       </Text>
 
