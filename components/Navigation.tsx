@@ -1,6 +1,6 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import { Globe, Sun, Moon, MessageCircle } from 'lucide-react-native';
+import { Globe, Sun, Moon } from 'lucide-react-native';
 import {
   View,
   Text,
@@ -18,10 +18,6 @@ export default function Navigation() {
     changeLanguage(language === 'en' ? 'he' : 'en');
   };
 
-  const handleWhatsApp = () => {
-    console.log('Opening WhatsApp...');
-  };
-
   return (
     <View style={styles.container}>
       {Platform.OS === 'web' ? (
@@ -34,14 +30,6 @@ export default function Navigation() {
         <Text style={[styles.logo, { color: themeMode === 'dark' ? theme.colors.primary : '#1E40AF' }]}>AquaPump</Text>
 
         <View style={styles.controls}>
-          <TouchableOpacity
-            style={[styles.whatsappButton, { backgroundColor: theme.colors.success + '20', borderColor: theme.colors.success }]}
-            onPress={handleWhatsApp}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          >
-            <MessageCircle size={22} color={theme.colors.success} strokeWidth={2.5} />
-          </TouchableOpacity>
-
           <TouchableOpacity
             style={[styles.controlButton, { borderColor: theme.colors.primary + '40', backgroundColor: themeMode === 'dark' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.8)' }]}
             onPress={toggleTheme}
@@ -101,17 +89,6 @@ const styles = StyleSheet.create({
   controls: {
     flexDirection: 'row',
     gap: 12,
-  },
-  whatsappButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 14,
-    borderWidth: 2,
-    minHeight: 50,
-    minWidth: 50,
   },
   controlButton: {
     flexDirection: 'row',

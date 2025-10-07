@@ -1,6 +1,7 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
+import { MessageCircle } from 'lucide-react-native';
 import React, { useRef, useEffect, useState } from 'react';
 import {
   View,
@@ -148,6 +149,10 @@ export default function Hero({ scrollY }: { scrollY: Animated.Value }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
 
+  const handleWhatsApp = () => {
+    console.log('Opening WhatsApp...');
+  };
+
   useEffect(() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
@@ -174,25 +179,36 @@ export default function Hero({ scrollY }: { scrollY: Animated.Value }) {
           },
         ]}
       >
-        <Text style={[styles.headline, isRTL && styles.rtlText, { color: themeMode === 'dark' ? theme.colors.light : '#1E40AF' }]}>
+        <Text style={[styles.headline, styles.centerText, { color: themeMode === 'dark' ? theme.colors.light : '#1E40AF' }]}>
           {t(translations.hero.headline)}
         </Text>
-        <Text style={[styles.subheadline, isRTL && styles.rtlText, { color: themeMode === 'dark' ? theme.colors.gray : '#475569' }]}>
+        <Text style={[styles.subheadline, styles.centerText, { color: themeMode === 'dark' ? theme.colors.gray : '#475569' }]}>
           {t(translations.hero.subheadline)}
         </Text>
 
-        <View style={[styles.ctaContainer, isRTL && styles.rtlRow]}>
-          <MagneticButton onPress={() => console.log('Explore')} theme={theme}>
-            <TouchableOpacity style={[styles.primaryButton, { backgroundColor: theme.colors.primary }, theme.shadows.md]}>
-              <Text style={[styles.primaryButtonText, { color: '#FFFFFF' }]}>
-                {t(translations.hero.exploreCTA)}
-              </Text>
-            </TouchableOpacity>
-          </MagneticButton>
-          <MagneticButton onPress={() => console.log('Quote')} theme={theme}>
-            <TouchableOpacity style={[styles.secondaryButton, { borderColor: theme.colors.primary }]}>
-              <Text style={[styles.secondaryButtonText, { color: theme.colors.primary }]}>
-                {t(translations.hero.quoteCTA)}
+        <View style={styles.buttonsWrapper}>
+          <View style={[styles.ctaContainer, isRTL && styles.rtlRow]}>
+            <MagneticButton onPress={() => console.log('Explore')} theme={theme}>
+              <TouchableOpacity style={[styles.primaryButton, { backgroundColor: theme.colors.primary }, theme.shadows.md]}>
+                <Text style={[styles.primaryButtonText, { color: '#FFFFFF' }]}>
+                  {t(translations.hero.exploreCTA)}
+                </Text>
+              </TouchableOpacity>
+            </MagneticButton>
+            <MagneticButton onPress={() => console.log('Quote')} theme={theme}>
+              <TouchableOpacity style={[styles.secondaryButton, { borderColor: theme.colors.primary }]}>
+                <Text style={[styles.secondaryButtonText, { color: theme.colors.primary }]}>
+                  {t(translations.hero.quoteCTA)}
+                </Text>
+              </TouchableOpacity>
+            </MagneticButton>
+          </View>
+
+          <MagneticButton onPress={handleWhatsApp} theme={theme}>
+            <TouchableOpacity style={[styles.whatsappButton, { backgroundColor: theme.colors.success + '20', borderColor: theme.colors.success }]}>
+              <MessageCircle size={20} color={theme.colors.success} strokeWidth={2.5} />
+              <Text style={[styles.whatsappButtonText, { color: theme.colors.success }]}>
+                {t(translations.hero.whatsappCTA)}
               </Text>
             </TouchableOpacity>
           </MagneticButton>
@@ -277,19 +293,22 @@ const styles = StyleSheet.create({
   headline: {
     fontSize: 48,
     fontWeight: '700' as const,
-    textAlign: 'center',
     marginBottom: 16,
     letterSpacing: -1,
   },
   subheadline: {
     fontSize: 18,
     fontWeight: '400' as const,
-    textAlign: 'center',
-    marginBottom: 32,
+    marginBottom: 40,
     lineHeight: 28,
   },
-  rtlText: {
-    textAlign: 'right',
+  centerText: {
+    textAlign: 'center',
+  },
+  buttonsWrapper: {
+    alignItems: 'center',
+    gap: 20,
+    width: '100%',
   },
   ctaContainer: {
     flexDirection: 'row',
@@ -318,6 +337,20 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   secondaryButtonText: {
+    fontSize: 16,
+    fontWeight: '600' as const,
+  },
+  whatsappButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingHorizontal: 28,
+    paddingVertical: 14,
+    borderRadius: 16,
+    borderWidth: 2,
+  },
+  whatsappButtonText: {
     fontSize: 16,
     fontWeight: '600' as const,
   },

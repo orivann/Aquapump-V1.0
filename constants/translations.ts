@@ -17,6 +17,7 @@ export const translations = {
     },
     exploreCTA: { en: 'Explore Technology', he: 'חקור טכנולוגיה' },
     quoteCTA: { en: 'Get Quote', he: 'קבל הצעת מחיר' },
+    whatsappCTA: { en: 'Chat on WhatsApp', he: 'שוחח בוואטסאפ' },
   },
   about: {
     title: { en: 'About AquaPump', he: 'אודות AquaPump' },

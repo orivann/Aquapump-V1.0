@@ -42,7 +42,7 @@ export default function Contact() {
 
   return (
     <View style={[styles.container, { backgroundColor: themeMode === 'dark' ? theme.colors.dark : theme.colors.secondary }]}>
-      <Text style={[styles.sectionTitle, isRTL && styles.rtlText, { color: themeMode === 'dark' ? theme.colors.light : '#1E40AF' }]}>
+      <Text style={[styles.sectionTitle, styles.centerText, { color: themeMode === 'dark' ? theme.colors.light : '#1E40AF' }]}>
         {t(translations.contact.title)}
       </Text>
 
@@ -95,7 +95,7 @@ export default function Contact() {
       </View>
 
       <View style={[styles.footer, { borderTopColor: theme.colors.primary + '30' }]}>
-        <Text style={[styles.footerText, isRTL && styles.rtlText, { color: theme.colors.gray }]}>
+        <Text style={[styles.footerText, styles.centerText, { color: theme.colors.gray }]}>
           {t(translations.footer.copyright)}
         </Text>
       </View>
@@ -112,12 +112,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 40,
     fontWeight: '700' as const,
-    textAlign: 'center',
-    marginBottom: 32,
+    marginBottom: 48,
     paddingHorizontal: 24,
   },
-  rtlText: {
-    textAlign: 'right',
+  centerText: {
+    textAlign: 'center',
   },
   formContainer: {
     width: '90%',
@@ -149,7 +148,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 16,
     alignItems: 'center',
-    marginTop: 16,
+    marginTop: 8,
   },
   submitButtonText: {
     fontSize: 18,
@@ -159,10 +158,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
+    gap: 10,
     paddingVertical: 16,
     borderRadius: 16,
     borderWidth: 2,
+    marginTop: 4,
   },
   whatsappButtonText: {
     fontSize: 16,
