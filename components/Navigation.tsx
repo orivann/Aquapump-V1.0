@@ -33,6 +33,7 @@ export default function Navigation() {
           <TouchableOpacity
             style={[styles.controlButton, { borderColor: theme.colors.primary + '40' }]}
             onPress={toggleTheme}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
             {themeMode === 'dark' ? (
               <Sun size={20} color={theme.colors.primary} strokeWidth={2} />
@@ -44,6 +45,7 @@ export default function Navigation() {
           <TouchableOpacity
             style={[styles.controlButton, { borderColor: theme.colors.primary + '40' }]}
             onPress={toggleLanguage}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
             <Globe size={20} color={theme.colors.primary} strokeWidth={2} />
             <Text style={[styles.langText, { color: theme.colors.light }]}>{language === 'en' ? 'EN' : 'עב'}</Text>
@@ -63,14 +65,14 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   navBar: {
-    height: 70,
+    height: 88,
   },
   navContent: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: 70,
+    height: 88,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -91,12 +93,13 @@ const styles = StyleSheet.create({
   controlButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
+    gap: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 10,
     backgroundColor: 'rgba(0, 0, 0, 0.1)',
     borderWidth: 1,
+    minHeight: 44,
   },
   langText: {
     fontSize: 14,

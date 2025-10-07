@@ -14,7 +14,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { generateText } from '@rork/toolkit-sdk';
+
 
 interface Message {
   id: string;
@@ -33,6 +33,7 @@ export default function Chatbot() {
       content: t(translations.chatbot.greeting),
     },
   ]);
+  const toolkitUrl = process.env.EXPO_PUBLIC_TOOLKIT_URL ?? '';
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -40,16 +41,22 @@ export default function Chatbot() {
 
   const detectLanguage = useCallback(async (text: string) => {
     try {
-      const response = await generateText({
-        messages: [
-          { role: 'user', content: `Detect the language of this text and respond with only 'en' or 'he': "${text}"` },
-        ],
+      const res = await fetch(new URL('/agent/chat', (toolkitUrl || 'https://toolkit.rork.com')).toString(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [
+            { role: 'user', content: `Detect the language of this text and respond with only 'en' or 'he': "${text}"` },
+          ],
+        }),
       });
-      return response.trim().toLowerCase() === 'he' ? 'he' : 'en';
+      const data = await res.json();
+      const detected = (data?.text ?? '').trim().toLowerCase();
+      return detected === 'he' ? 'he' : 'en';
     } catch {
       return language;
     }
-  }, [language]);
+  }, [language, toolkitUrl]);
 
   const toggleChat = useCallback(() => {
     if (!isOpen) {
@@ -72,6 +79,10 @@ export default function Chatbot() {
   const sendMessage = useCallback(async () => {
     if (!input.trim() || isLoading) return;
 
+    if (!toolkitUrl) {
+      console.warn('Missing EXPO_PUBLIC_TOOLKIT_URL');
+    }
+
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
@@ -89,21 +100,24 @@ export default function Chatbot() {
         : 'You are AquaBot, an AI assistant for AquaPump company. You help customers with questions about smart water pumps, pricing, installation, and support. Always respond professionally and friendly in English.';
 
     try {
-      const response = await generateText({
-        messages: [
-          { role: 'user', content: systemPrompt },
-          ...messages.map((m) => ({
-            role: m.role,
-            content: m.content,
-          })),
-          { role: 'user', content: userMessage.content },
-        ],
+      const res = await fetch(new URL('/agent/chat', toolkitUrl || 'https://toolkit.rork.com').toString(), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [
+            ...messages.map((m) => ({ role: m.role, content: m.content })),
+            { role: 'user', content: `${systemPrompt}\n\n${userMessage.content}` },
+          ],
+        }),
       });
+
+      const data = await res.json();
+      const text: string = (data?.text ?? data?.message ?? data?.content ?? '').toString();
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: response,
+        content: text || (detectedLang === 'he' ? 'אין תגובה זמינה כרגע.' : 'No response available right now.'),
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
@@ -121,7 +135,7 @@ export default function Chatbot() {
     } finally {
       setIsLoading(false);
     }
-  }, [input, isLoading, messages, detectLanguage]);
+  }, [input, isLoading, messages, detectLanguage, toolkitUrl]);
 
   return (
     <>
