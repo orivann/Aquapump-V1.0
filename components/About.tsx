@@ -13,14 +13,14 @@ export default function About({ scrollY }: AboutProps) {
   const { theme, themeMode } = useTheme();
 
   const opacity = scrollY.interpolate({
-    inputRange: [0, 200, 400],
-    outputRange: [0, 0, 1],
+    inputRange: [300, 500],
+    outputRange: [0, 1],
     extrapolate: 'clamp',
   });
 
   const translateY = scrollY.interpolate({
-    inputRange: [0, 200, 400],
-    outputRange: [50, 50, 0],
+    inputRange: [300, 500],
+    outputRange: [30, 0],
     extrapolate: 'clamp',
   });
 
@@ -150,53 +150,54 @@ export default function About({ scrollY }: AboutProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 80,
+    paddingVertical: 40,
     paddingHorizontal: 20,
   },
   content: {
-    maxWidth: 1200,
+    maxWidth: 1000,
     width: '100%',
     alignSelf: 'center',
   },
   title: {
-    fontSize: 42,
+    fontSize: 32,
     fontWeight: '700' as const,
-    marginBottom: 24,
+    marginBottom: 16,
   },
   description: {
-    fontSize: 18,
-    lineHeight: 28,
-    marginBottom: 48,
+    fontSize: 16,
+    lineHeight: 24,
+    marginBottom: 32,
+    opacity: 0.9,
   },
   infoGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 24,
+    gap: 16,
     justifyContent: 'center',
   },
   infoCard: {
     flex: 1,
-    minWidth: 250,
-    maxWidth: 350,
-    padding: 32,
-    borderRadius: 16,
+    minWidth: 200,
+    maxWidth: 280,
+    padding: 20,
+    borderRadius: 12,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 5,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
   },
   icon: {
-    marginBottom: 16,
+    marginBottom: 12,
   },
   infoTitle: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: '600' as const,
-    marginBottom: 8,
+    marginBottom: 6,
   },
   infoText: {
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: 14,
+    lineHeight: 20,
   },
 });
