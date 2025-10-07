@@ -34,6 +34,7 @@ export default function Chatbot() {
     },
   ]);
   const toolkitUrl = process.env.EXPO_PUBLIC_TOOLKIT_URL ?? '';
+  const apiKey = process.env.ai_chat_key ?? '';
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -43,7 +44,10 @@ export default function Chatbot() {
     try {
       const res = await fetch(new URL('/agent/chat', (toolkitUrl || 'https://toolkit.rork.com')).toString(), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
+        },
         body: JSON.stringify({
           messages: [
             { role: 'user', content: `Detect the language of this text and respond with only 'en' or 'he': "${text}"` },
@@ -56,7 +60,7 @@ export default function Chatbot() {
     } catch {
       return language;
     }
-  }, [language, toolkitUrl]);
+  }, [language, toolkitUrl, apiKey]);
 
   const toggleChat = useCallback(() => {
     if (!isOpen) {
@@ -82,6 +86,9 @@ export default function Chatbot() {
     if (!toolkitUrl) {
       console.warn('Missing EXPO_PUBLIC_TOOLKIT_URL');
     }
+    if (!apiKey) {
+      console.warn('Missing ai_chat_key env var for chatbot auth');
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -102,7 +109,10 @@ export default function Chatbot() {
     try {
       const res = await fetch(new URL('/agent/chat', toolkitUrl || 'https://toolkit.rork.com').toString(), {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
+        },
         body: JSON.stringify({
           messages: [
             ...messages.map((m) => ({ role: m.role, content: m.content })),
@@ -135,7 +145,7 @@ export default function Chatbot() {
     } finally {
       setIsLoading(false);
     }
-  }, [input, isLoading, messages, detectLanguage, toolkitUrl]);
+  }, [input, isLoading, messages, detectLanguage, toolkitUrl, apiKey]);
 
   return (
     <>
