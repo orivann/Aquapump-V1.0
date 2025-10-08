@@ -1,0 +1,18 @@
+# Git
+.git
+.gitignore
+
+# Node
+node_modules
+bun.lockb
+
+# Expo
+.expo
+
+# IDE
+.idea
+.vscode
+
+# Misc
+*.log
+*.lock
