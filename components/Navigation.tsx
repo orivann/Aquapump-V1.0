@@ -87,20 +87,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 32,
+    paddingHorizontal: Platform.OS === 'web' ? 48 : 32,
     paddingTop: 12,
+    maxWidth: Platform.OS === 'web' ? 1400 : undefined,
+    alignSelf: 'center',
+    width: '100%',
   },
   navContentRTL: {
     flexDirection: 'row-reverse',
   },
   logo: {
-    fontSize: 32,
+    fontSize: Platform.OS === 'web' ? 36 : 32,
     fontWeight: '800' as const,
     letterSpacing: -0.8,
+    marginRight: Platform.OS === 'web' ? 60 : 24,
   },
   controls: {
     flexDirection: 'row',
-    gap: 14,
+    gap: Platform.OS === 'web' ? 18 : 14,
+    marginLeft: Platform.OS === 'web' ? 60 : 24,
   },
   controlButton: {
     flexDirection: 'row',
