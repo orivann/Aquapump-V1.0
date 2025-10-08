@@ -99,6 +99,14 @@ const Chatbot = memo(function Chatbot() {
 
     if (!apiKey) {
       console.warn('Missing EXPO_PUBLIC_AI_CHAT_KEY env var for chatbot auth');
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: 'Chatbot is not configured. Missing API key.',
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+      setIsLoading(false);
+      return;
     }
 
     const userMessage: Message = {
@@ -154,15 +162,17 @@ const Chatbot = memo(function Chatbot() {
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Chatbot error:', error);
+      const errorMessageContent =
+        error.message && error.message.includes('API returned')
+          ? 'Sorry, the server is currently unavailable. Please try again later.'
+          : 'Sorry, an unexpected error occurred. Please try again.';
+
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content:
-          detectedLang === 'he'
-            ? 'מצטער, אירעה שגיאה. אנא נסה שוב.'
-            : 'Sorry, an error occurred. Please try again.',
+        content: detectedLang === 'he' ? 'מצטער, אירעה שגיאה. אנא נסה שוב.' : errorMessageContent,
       };
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
@@ -181,7 +191,7 @@ const Chatbot = memo(function Chatbot() {
         activeOpacity={0.8}
       >
         <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
-          <MessageCircle size={28} color={theme.colors.dark} strokeWidth={2} />
+          <MessageCircle size={28} color={themeMode === 'dark' ? theme.colors.light : theme.colors.dark} strokeWidth={2} />
         </Animated.View>
       </TouchableOpacity>
 
@@ -199,10 +209,10 @@ const Chatbot = memo(function Chatbot() {
               <View style={[styles.botAvatar, { backgroundColor: theme.colors.primary }]}>
                 <Text style={styles.botAvatarText}>💧</Text>
               </View>
-              <Text style={[styles.chatTitle, { color: themeMode === 'dark' ? theme.colors.light : '#0F172A' }]}>AquaBot</Text>
+              <Text style={[styles.chatTitle, { color: themeMode === 'dark' ? theme.colors.light : theme.colors.dark }]}>AquaBot</Text>
             </View>
             <TouchableOpacity testID="chatbot-close" accessibilityRole="button" accessibilityLabel="Close chat" onPress={toggleChat} style={styles.closeButton}>
-              <X size={24} color={themeMode === 'dark' ? theme.colors.light : '#0F172A'} strokeWidth={2} />
+              <X size={24} color={themeMode === 'dark' ? theme.colors.light : theme.colors.dark} strokeWidth={2} />
             </TouchableOpacity>
           </View>
 
@@ -219,7 +229,9 @@ const Chatbot = memo(function Chatbot() {
                 <Text
                   style={[
                     styles.messageText,
-                    message.role === 'user' ? [styles.userText, { color: '#FFFFFF' }] : [styles.assistantText, { color: themeMode === 'dark' ? theme.colors.light : '#0F172A' }],
+                    message.role === 'user'
+                      ? [styles.userText, { color: themeMode === 'dark' ? theme.colors.light : theme.colors.dark }]
+                      : [styles.assistantText, { color: themeMode === 'dark' ? theme.colors.light : theme.colors.dark }],
                     isRTL && styles.rtlText,
                   ]}
                 >
@@ -235,13 +247,13 @@ const Chatbot = memo(function Chatbot() {
           </ScrollView>
 
           <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
             style={[styles.inputContainer, { backgroundColor: themeMode === 'dark' ? theme.colors.secondary : '#F8FAFC', borderTopColor: theme.colors.primary + '30' }]}
           >
             <TextInput
               testID="chatbot-input"
-              style={[styles.input, isRTL && styles.inputRTL, { color: themeMode === 'dark' ? theme.colors.light : '#0F172A', backgroundColor: themeMode === 'dark' ? theme.colors.accent : '#FFFFFF', borderColor: theme.colors.primary + '30' }]}
+              style={[styles.input, isRTL && styles.inputRTL, { color: themeMode === 'dark' ? theme.colors.light : theme.colors.dark, backgroundColor: themeMode === 'dark' ? theme.colors.accent : '#FFFFFF', borderColor: theme.colors.primary + '30' }]}
               value={input}
               onChangeText={setInput}
               placeholder={t(translations.chatbot.placeholder)}
@@ -257,7 +269,7 @@ const Chatbot = memo(function Chatbot() {
               onPress={sendMessage}
               disabled={!input.trim() || isLoading}
             >
-              <Send size={20} color="#FFFFFF" strokeWidth={2} />
+              <Send size={20} color={themeMode === 'dark' ? theme.colors.light : theme.colors.dark} strokeWidth={2} />
             </TouchableOpacity>
           </KeyboardAvoidingView>
         </Animated.View>
