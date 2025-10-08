@@ -28,9 +28,6 @@ const ProductCard = memo(function ProductCard({ name, description, isRTL, color,
   const isDark = themeMode === 'dark';
   return (
     <View
-      accessible={true}
-      accessibilityRole="button"
-      accessibilityLabel={`${name}: ${description}`}
       style={[
         styles.productCard,
         {
