@@ -2,7 +2,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { Download } from 'lucide-react-native';
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import {
   View,
   Text,
@@ -59,12 +59,12 @@ const ProductCard = memo(function ProductCard({ name, description, isRTL, color,
   );
 });
 
-export default function Products({ scrollY }: { scrollY: Animated.Value }) {
+const Products = memo(function Products({ scrollY }: { scrollY: Animated.Value }) {
   const { t, isRTL } = useLanguage();
   const { theme, themeMode } = useTheme();
   const isDark = themeMode === 'dark';
 
-  const products = [
+  const products = useMemo(() => [
     {
       name: t(translations.products.aquaPro.name),
       description: t(translations.products.aquaPro.description),
@@ -80,7 +80,7 @@ export default function Products({ scrollY }: { scrollY: Animated.Value }) {
       description: t(translations.products.aquaIndustrial.description),
       color: theme.colors.chrome,
     },
-  ];
+  ], [theme.colors.primary, theme.colors.chrome, t]);
 
   return (
     <View style={[styles.container, { backgroundColor: isDark ? theme.colors.secondary : '#F8FAFC' }]}>
@@ -110,7 +110,9 @@ export default function Products({ scrollY }: { scrollY: Animated.Value }) {
       </ScrollView>
     </View>
   );
-}
+});
+
+export default Products;
 
 const styles = StyleSheet.create({
   container: {

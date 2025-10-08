@@ -2,7 +2,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { MessageCircle } from 'lucide-react-native';
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, memo } from 'react';
 import { useRouter } from 'expo-router';
 import {
   View,
@@ -15,11 +15,11 @@ import {
 
 const { width, height } = Dimensions.get('window');
 
-function PumpVisual({ theme }: { theme: any }) {
+const PumpVisual = memo(function PumpVisual({ theme }: { theme: any }) {
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    Animated.loop(
+    const animation = Animated.loop(
       Animated.sequence([
         Animated.timing(pulseAnim, {
           toValue: 1.05,
@@ -32,8 +32,10 @@ function PumpVisual({ theme }: { theme: any }) {
           useNativeDriver: true,
         }),
       ])
-    ).start();
-  }, [pulseAnim]);
+    );
+    animation.start();
+    return () => animation.stop();
+  }, []);
 
   return (
     <View style={styles.visualContainer}>
@@ -71,7 +73,7 @@ function PumpVisual({ theme }: { theme: any }) {
       />
     </View>
   );
-}
+});
 
 
 
@@ -80,7 +82,7 @@ interface HeroProps {
   onQuotePress?: () => void;
 }
 
-export default function Hero({ scrollY, onQuotePress }: HeroProps) {
+const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
   const { t, isRTL } = useLanguage();
   const { theme, themeMode } = useTheme();
   const isDark = themeMode === 'dark';
@@ -198,7 +200,9 @@ export default function Hero({ scrollY, onQuotePress }: HeroProps) {
       </View>
     </View>
   );
-}
+});
+
+export default Hero;
 
 const styles = StyleSheet.create({
   container: {

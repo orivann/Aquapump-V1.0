@@ -10,14 +10,22 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, ScrollView, Animated, Dimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRef, useMemo, useCallback } from 'react';
+import { useRef, useCallback, memo } from 'react';
 
 const { height } = Dimensions.get('window');
+
+const MemoizedHero = memo(Hero);
+const MemoizedTechnology = memo(Technology);
+const MemoizedProducts = memo(Products);
+const MemoizedAbout = memo(About);
+const MemoizedContact = memo(Contact);
+const MemoizedNavigation = memo(Navigation);
+const MemoizedChatbot = memo(Chatbot);
 
 export default function HomeScreen() {
   const { isLoading: languageLoading } = useLanguage();
   const { theme, themeMode, isLoading: themeLoading } = useTheme();
-  const scrollY = useMemo(() => new Animated.Value(0), []);
+  const scrollY = useRef(new Animated.Value(0)).current;
   const scrollViewRef = useRef<ScrollView>(null);
 
   const scrollToContact = useCallback(() => {
@@ -35,7 +43,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.dark }]} edges={['top', 'bottom']}>
       <StatusBar style={themeMode === 'dark' ? 'light' : 'dark'} />
-      <Navigation />
+      <MemoizedNavigation />
       
       <ScrollView
         ref={scrollViewRef}
@@ -44,18 +52,18 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: false }
+          { useNativeDriver: true }
         )}
-        scrollEventThrottle={32}
+        scrollEventThrottle={16}
       >
-        <Hero scrollY={scrollY} onQuotePress={scrollToContact} />
-        <Technology scrollY={scrollY} />
-        <Products scrollY={scrollY} />
-        <About />
-        <Contact />
+        <MemoizedHero scrollY={scrollY} onQuotePress={scrollToContact} />
+        <MemoizedTechnology scrollY={scrollY} />
+        <MemoizedProducts scrollY={scrollY} />
+        <MemoizedAbout />
+        <MemoizedContact />
       </ScrollView>
 
-      <Chatbot />
+      <MemoizedChatbot />
     </SafeAreaView>
   );
 }

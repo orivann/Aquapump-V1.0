@@ -9,8 +9,9 @@ import {
   Platform,
 } from 'react-native';
 import { BlurView } from 'expo-blur';
+import { memo } from 'react';
 
-export default function Navigation() {
+const Navigation = memo(function Navigation() {
   const { language, changeLanguage, isRTL } = useLanguage();
   const { theme, themeMode, toggleTheme } = useTheme();
 
@@ -62,7 +63,9 @@ export default function Navigation() {
       </View>
     </View>
   );
-}
+});
+
+export default Navigation;
 
 const styles = StyleSheet.create({
   container: {

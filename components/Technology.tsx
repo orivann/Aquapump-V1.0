@@ -2,7 +2,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { Zap, Shield, Wifi } from 'lucide-react-native';
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import {
   View,
   Text,
@@ -46,12 +46,12 @@ const FeatureCard = memo(function FeatureCard({ icon, title, description, isRTL,
   );
 });
 
-export default function Technology({ scrollY }: { scrollY: Animated.Value }) {
+const Technology = memo(function Technology({ scrollY }: { scrollY: Animated.Value }) {
   const { t, isRTL } = useLanguage();
   const { theme, themeMode } = useTheme();
   const isDark = themeMode === 'dark';
 
-  const features = [
+  const features = useMemo(() => [
     {
       icon: <Zap size={40} color={theme.colors.primary} strokeWidth={2} />,
       title: t(translations.technology.efficiency.title),
@@ -67,7 +67,7 @@ export default function Technology({ scrollY }: { scrollY: Animated.Value }) {
       title: t(translations.technology.smart.title),
       description: t(translations.technology.smart.description),
     },
-  ];
+  ], [theme.colors.primary, t]);
 
   return (
     <View style={[styles.container, { backgroundColor: isDark ? theme.colors.dark : theme.colors.secondary }]}>
@@ -97,7 +97,9 @@ export default function Technology({ scrollY }: { scrollY: Animated.Value }) {
       </ScrollView>
     </View>
   );
-}
+});
+
+export default Technology;
 
 const styles = StyleSheet.create({
   container: {

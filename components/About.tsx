@@ -3,8 +3,9 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { Building2, MapPin, Award } from 'lucide-react-native';
+import { memo } from 'react';
 
-export default function About() {
+const About = memo(function About() {
   const { language } = useLanguage();
   const { theme, themeMode } = useTheme();
 
@@ -126,7 +127,9 @@ export default function About() {
       </View>
     </View>
   );
-}
+});
+
+export default About;
 
 const styles = StyleSheet.create({
   container: {

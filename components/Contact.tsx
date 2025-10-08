@@ -2,7 +2,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { Mail, MessageSquare } from 'lucide-react-native';
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import {
   View,
   Text,
@@ -15,7 +15,7 @@ import {
 
 const { width } = Dimensions.get('window');
 
-export default function Contact() {
+const Contact = memo(function Contact() {
   const { t, isRTL } = useLanguage();
   const { theme, themeMode } = useTheme();
   const isDark = themeMode === 'dark';
@@ -113,7 +113,9 @@ export default function Contact() {
       </View>
     </View>
   );
-}
+});
+
+export default Contact;
 
 const styles = StyleSheet.create({
   container: {

@@ -52,11 +52,11 @@ export const [LanguageProvider, useLanguage] = createContextHook(() => {
     return translations[language];
   }, [language]);
 
-  return useMemo(() => ({
+  return {
     language,
     isRTL,
     isLoading,
     changeLanguage,
     t,
-  }), [language, isRTL, isLoading, changeLanguage, t]);
+  };
 });

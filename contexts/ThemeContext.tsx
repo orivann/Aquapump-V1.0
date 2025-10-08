@@ -45,10 +45,10 @@ export const [ThemeProvider, useTheme] = createContextHook(() => {
     return themeMode === 'dark' ? darkTheme : lightTheme;
   }, [themeMode]);
 
-  return useMemo(() => ({
+  return {
     themeMode,
     theme,
     isLoading,
     toggleTheme,
-  }), [themeMode, theme, isLoading, toggleTheme]);
+  };
 });

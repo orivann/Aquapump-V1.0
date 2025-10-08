@@ -2,7 +2,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { MessageCircle, Send, X } from 'lucide-react-native';
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, memo } from 'react';
 import {
   View,
   Text,
@@ -22,7 +22,7 @@ interface Message {
   content: string;
 }
 
-export default function Chatbot() {
+const Chatbot = memo(function Chatbot() {
   const { t, isRTL, language } = useLanguage();
   const { theme, themeMode } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
@@ -264,7 +264,9 @@ export default function Chatbot() {
       )}
     </>
   );
-}
+});
+
+export default Chatbot;
 
 const styles = StyleSheet.create({
   chatButton: {
