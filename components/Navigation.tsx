@@ -42,9 +42,9 @@ const Navigation = memo(function Navigation() {
             hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
             {themeMode === 'dark' ? (
-              <Sun size={24} color={theme.colors.primary} strokeWidth={2.5} />
+              <Sun size={Platform.OS === 'web' ? 24 : 28} color={theme.colors.primary} strokeWidth={2.5} />
             ) : (
-              <Moon size={24} color={theme.colors.primary} strokeWidth={2.5} />
+              <Moon size={Platform.OS === 'web' ? 24 : 28} color={theme.colors.primary} strokeWidth={2.5} />
             )}
           </TouchableOpacity>
 
@@ -56,7 +56,7 @@ const Navigation = memo(function Navigation() {
             onPress={toggleLanguage}
             hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
-            <Globe size={24} color={theme.colors.primary} strokeWidth={2.5} />
+            <Globe size={Platform.OS === 'web' ? 24 : 28} color={theme.colors.primary} strokeWidth={2.5} />
             <Text style={[styles.langText, { color: themeMode === 'dark' ? '#FFFFFF' : theme.colors.primary }]}>{language === 'en' ? 'EN' : 'עב'}</Text>
           </TouchableOpacity>
         </View>
@@ -76,19 +76,19 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   navBar: {
-    height: 100,
+    height: Platform.OS === 'web' ? 100 : 140,
   },
   navContent: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: 100,
+    height: Platform.OS === 'web' ? 100 : 140,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Platform.OS === 'web' ? 48 : 32,
-    paddingTop: 12,
+    paddingTop: Platform.OS === 'web' ? 12 : 24,
     maxWidth: Platform.OS === 'web' ? 1400 : undefined,
     alignSelf: 'center',
     width: '100%',
@@ -97,29 +97,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
   },
   logo: {
-    fontSize: Platform.OS === 'web' ? 36 : 32,
+    fontSize: Platform.OS === 'web' ? 36 : 38,
     fontWeight: '800' as const,
     letterSpacing: -0.8,
-    marginRight: Platform.OS === 'web' ? 60 : 24,
+    marginRight: Platform.OS === 'web' ? 60 : 32,
   },
   controls: {
     flexDirection: 'row',
-    gap: Platform.OS === 'web' ? 18 : 14,
-    marginLeft: Platform.OS === 'web' ? 60 : 24,
+    gap: Platform.OS === 'web' ? 18 : 16,
+    marginLeft: Platform.OS === 'web' ? 60 : 32,
   },
   controlButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    paddingHorizontal: 18,
-    paddingVertical: 12,
+    paddingHorizontal: Platform.OS === 'web' ? 18 : 20,
+    paddingVertical: Platform.OS === 'web' ? 12 : 16,
     borderRadius: 14,
     borderWidth: 1.5,
-    minHeight: 50,
-    minWidth: 50,
+    minHeight: Platform.OS === 'web' ? 50 : 60,
+    minWidth: Platform.OS === 'web' ? 50 : 60,
   },
   langText: {
-    fontSize: 16,
+    fontSize: Platform.OS === 'web' ? 16 : 18,
     fontWeight: '700' as const,
   },
 });
