@@ -19,46 +19,47 @@ Changes made via Rork will be committed automatically to this GitHub repo.
 
 Whenever you make a change in your local code editor and push it to GitHub, it will be also reflected in Rork.
 
-### **Use your preferred code editor**
+### **Local Development**
 
-If you want to work locally using your own code editor, you can clone this repo and push changes. Pushed changes will also be reflected in Rork.
+To work on the app locally, you'll need Node.js and Bun installed.
 
-If you are new to coding and unsure which editor to use, we recommend Cursor. If you're familiar with terminals, try Claude Code.
+1.  **Clone the repository:**
+    ```bash
+    git clone <YOUR_GIT_URL>
+    cd <YOUR_PROJECT_NAME>
+    ```
 
-The only requirement is having Node.js & Bun installed - [install Node.js with nvm](https://github.com/nvm-sh/nvm) and [install Bun](https://bun.sh/docs/installation)
+2.  **Install dependencies:**
+    ```bash
+    bun install
+    ```
 
-Follow these steps:
+3.  **Start the development server:**
 
-```bash
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+    *   **For Web:**
+        ```bash
+        bun run start-web
+        ```
+        This will start the web preview at `http://localhost:8081`.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-bun i
-
-# Step 4: Start the instant web preview of your Rork app in your browser, with auto-reloading of your changes
-bun run start-web
-
-# Step 5: Start iOS preview
-# Option A (recommended):
-bun run start  # then press "i" in the terminal to open iOS Simulator
-# Option B (if supported by your environment):
-bun run start -- --ios
-```
+    *   **For Mobile (iOS/Android):**
+        ```bash
+        bun run start
+        ```
+        Then, follow the instructions in the terminal to open the app on a simulator/emulator or scan the QR code with the Expo Go app on your phone.
 
 ### **Running with Docker Compose**
 
-If you have Docker installed, you can run the application in a containerized environment. This is the recommended way to run the project as it ensures a consistent development environment.
+Using Docker is the recommended way to ensure a consistent development environment.
 
-```bash
-# Start the application
-docker-compose up
-```
+1.  **Build and start the services:**
+    ```bash
+    docker compose up --build
+    ```
+    *Note: If you encounter Docker Hub rate-limiting issues, you may need to log in with a Docker Hub account or modify the `Dockerfile` to use a different base image.*
 
-The application will be available at `http://localhost:8081`.
+2.  **Access the application:**
+    The web preview will be available at `http://localhost:8081`.
 
 ### **Edit a file directly in GitHub**
 

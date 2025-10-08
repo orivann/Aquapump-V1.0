@@ -1,17 +1,23 @@
 # Stage 1: Install dependencies
-FROM oven/bun:1 AS deps
+FROM node:20-slim AS deps
 
 WORKDIR /usr/src/app
 
-# Copy package.json and bun.lockb to leverage Docker cache
-COPY package.json bun.lockb* ./
+# Install bun
+RUN npm install -g bun
+
+# Copy package.json and bun.lock to leverage Docker cache
+COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
 
 # Stage 2: Setup runner
-FROM oven/bun:1
+FROM node:20-slim
 
 WORKDIR /usr/src/app
+
+# Install bun
+RUN npm install -g bun
 
 # Copy dependencies from deps stage
 COPY --from=deps /usr/src/app/node_modules ./node_modules
