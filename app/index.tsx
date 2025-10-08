@@ -10,17 +10,9 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, ScrollView, Animated, Dimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRef, useCallback, memo } from 'react';
+import { useRef, useCallback } from 'react';
 
 const { height } = Dimensions.get('window');
-
-const MemoizedHero = memo(Hero);
-const MemoizedTechnology = memo(Technology);
-const MemoizedProducts = memo(Products);
-const MemoizedAbout = memo(About);
-const MemoizedContact = memo(Contact);
-const MemoizedNavigation = memo(Navigation);
-const MemoizedChatbot = memo(Chatbot);
 
 export default function HomeScreen() {
   const { isLoading: languageLoading } = useLanguage();
@@ -43,7 +35,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.secondary }]} edges={['top', 'bottom']}>
       <StatusBar style={themeMode === 'dark' ? 'light' : 'dark'} />
-      <MemoizedNavigation />
+      <Navigation />
       
       <ScrollView
         ref={scrollViewRef}
@@ -56,14 +48,14 @@ export default function HomeScreen() {
         )}
         scrollEventThrottle={16}
       >
-        <MemoizedHero scrollY={scrollY} onQuotePress={scrollToContact} />
-        <MemoizedTechnology scrollY={scrollY} />
-        <MemoizedProducts scrollY={scrollY} />
-        <MemoizedAbout />
-        <MemoizedContact />
+        <Hero scrollY={scrollY} onQuotePress={scrollToContact} />
+        <Technology scrollY={scrollY} />
+        <Products scrollY={scrollY} />
+        <About />
+        <Contact />
       </ScrollView>
 
-      <MemoizedChatbot />
+      <Chatbot />
     </SafeAreaView>
   );
 }
