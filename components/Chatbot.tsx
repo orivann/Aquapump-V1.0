@@ -54,6 +54,19 @@ export default function Chatbot() {
           ],
         }),
       });
+      
+      if (!res.ok) {
+        console.error('Language detection failed:', res.status, res.statusText);
+        return language;
+      }
+      
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await res.text();
+        console.error('Language detection error: Non-JSON response:', text);
+        return language;
+      }
+      
       const data = await res.json();
       const detected = (data?.text ?? '').trim().toLowerCase();
       return detected === 'he' ? 'he' : 'en';
@@ -118,6 +131,18 @@ export default function Chatbot() {
           ],
         }),
       });
+
+      if (!res.ok) {
+        console.error('Chatbot API error:', res.status, res.statusText);
+        throw new Error(`API returned ${res.status}: ${res.statusText}`);
+      }
+
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await res.text();
+        console.error('Chatbot error: Non-JSON response:', text);
+        throw new Error('Invalid response format from API');
+      }
 
       const data = await res.json();
       const text: string = (data?.text ?? data?.message ?? data?.content ?? '').toString();
