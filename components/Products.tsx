@@ -27,11 +27,16 @@ interface ProductCardProps {
 
 function ProductCard({ name, description, delay, isRTL, color, scrollY, theme }: ProductCardProps) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const translateYAnim = useRef(new Animated.Value(30)).current;
+  const translateYAnim = useRef(new Animated.Value(50)).current;
   const rotateAnim = useRef(new Animated.Value(0)).current;
   const parallaxAnim = scrollY.interpolate({
     inputRange: [height * 1.5, height * 2.5],
-    outputRange: [0, -30],
+    outputRange: [0, -20],
+    extrapolate: 'clamp',
+  });
+  const scrollFadeAnim = scrollY.interpolate({
+    inputRange: [height * 1.2, height * 1.8],
+    outputRange: [0, 1],
     extrapolate: 'clamp',
   });
   const [isVisible, setIsVisible] = useState(false);
@@ -88,7 +93,7 @@ function ProductCard({ name, description, delay, isRTL, color, scrollY, theme }:
       style={[
         styles.productCard,
         {
-          opacity: fadeAnim,
+          opacity: Animated.multiply(fadeAnim, scrollFadeAnim),
           transform: [{ translateY: Animated.add(translateYAnim, parallaxAnim) }],
           backgroundColor: theme.colors.accent,
           borderColor: theme.colors.primary + '20',
@@ -173,10 +178,10 @@ export default function Products({ scrollY }: { scrollY: Animated.Value }) {
 const styles = StyleSheet.create({
   container: {
     width: width,
-    paddingVertical: 96,
+    paddingVertical: 64,
   },
   sectionTitle: {
-    fontSize: 40,
+    fontSize: 32,
     fontWeight: '700' as const,
     textAlign: 'center',
     marginBottom: 32,

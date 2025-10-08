@@ -8,13 +8,21 @@ import Chatbot from '@/components/Chatbot';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, ScrollView, Animated } from 'react-native';
+import { StyleSheet, ScrollView, Animated, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRef } from 'react';
+
+const { height } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const { isLoading: languageLoading } = useLanguage();
   const { theme, themeMode, isLoading: themeLoading } = useTheme();
   const scrollY = new Animated.Value(0);
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  const scrollToContact = () => {
+    scrollViewRef.current?.scrollTo({ y: height * 3.5, animated: true });
+  };
 
   if (languageLoading || themeLoading) {
     return (
@@ -28,6 +36,7 @@ export default function HomeScreen() {
       <Navigation />
       
       <ScrollView
+        ref={scrollViewRef}
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -37,7 +46,7 @@ export default function HomeScreen() {
         )}
         scrollEventThrottle={16}
       >
-        <Hero scrollY={scrollY} />
+        <Hero scrollY={scrollY} onQuotePress={scrollToContact} />
         <About scrollY={scrollY} />
         <Technology scrollY={scrollY} />
         <Products scrollY={scrollY} />

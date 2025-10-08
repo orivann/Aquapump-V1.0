@@ -33,8 +33,8 @@ export default function Chatbot() {
       content: t(translations.chatbot.greeting),
     },
   ]);
-  const toolkitUrl = process.env.EXPO_PUBLIC_TOOLKIT_URL ?? '';
-  const apiKey = process.env.ai_chat_key ?? '';
+  const toolkitUrl = process.env.EXPO_PUBLIC_TOOLKIT_URL ?? 'https://toolkit.rork.com';
+  const apiKey = process.env.EXPO_PUBLIC_AI_CHAT_KEY ?? '';
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -42,7 +42,7 @@ export default function Chatbot() {
 
   const detectLanguage = useCallback(async (text: string) => {
     try {
-      const res = await fetch(new URL('/agent/chat', (toolkitUrl || 'https://toolkit.rork.com')).toString(), {
+      const res = await fetch(new URL('/agent/chat', toolkitUrl).toString(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +57,8 @@ export default function Chatbot() {
       const data = await res.json();
       const detected = (data?.text ?? '').trim().toLowerCase();
       return detected === 'he' ? 'he' : 'en';
-    } catch {
+    } catch (error) {
+      console.error('Language detection error:', error);
       return language;
     }
   }, [language, toolkitUrl, apiKey]);
@@ -83,11 +84,8 @@ export default function Chatbot() {
   const sendMessage = useCallback(async () => {
     if (!input.trim() || isLoading) return;
 
-    if (!toolkitUrl) {
-      console.warn('Missing EXPO_PUBLIC_TOOLKIT_URL');
-    }
     if (!apiKey) {
-      console.warn('Missing ai_chat_key env var for chatbot auth');
+      console.warn('Missing EXPO_PUBLIC_AI_CHAT_KEY env var for chatbot auth');
     }
 
     const userMessage: Message = {
@@ -107,7 +105,7 @@ export default function Chatbot() {
         : 'You are AquaBot, an AI assistant for AquaPump company. You help customers with questions about smart water pumps, pricing, installation, and support. Always respond professionally and friendly in English.';
 
     try {
-      const res = await fetch(new URL('/agent/chat', toolkitUrl || 'https://toolkit.rork.com').toString(), {
+      const res = await fetch(new URL('/agent/chat', toolkitUrl).toString(), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

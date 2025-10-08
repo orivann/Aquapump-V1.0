@@ -13,14 +13,14 @@ export default function About({ scrollY }: AboutProps) {
   const { theme, themeMode } = useTheme();
 
   const opacity = scrollY.interpolate({
-    inputRange: [300, 500],
+    inputRange: [200, 400],
     outputRange: [0, 1],
     extrapolate: 'clamp',
   });
 
   const translateY = scrollY.interpolate({
-    inputRange: [300, 500],
-    outputRange: [30, 0],
+    inputRange: [200, 400],
+    outputRange: [50, 0],
     extrapolate: 'clamp',
   });
 
@@ -42,7 +42,7 @@ export default function About({ scrollY }: AboutProps) {
           style={[
             styles.title,
             {
-              color: isDark ? theme.colors.primary : theme.colors.accent,
+              color: isDark ? theme.colors.primary : '#1E40AF',
               textAlign: isRTL ? 'right' : 'left',
               writingDirection: isRTL ? 'rtl' : 'ltr',
             },
@@ -55,7 +55,7 @@ export default function About({ scrollY }: AboutProps) {
           style={[
             styles.description,
             {
-              color: isDark ? theme.colors.textSecondary : theme.colors.textDark,
+              color: isDark ? theme.colors.textSecondary : '#475569',
               textAlign: isRTL ? 'right' : 'left',
               writingDirection: isRTL ? 'rtl' : 'ltr',
             },
@@ -66,12 +66,12 @@ export default function About({ scrollY }: AboutProps) {
 
         <View style={styles.infoGrid}>
           <View style={[styles.infoCard, { backgroundColor: isDark ? theme.colors.cardDark : theme.colors.cardLight }]}>
-            <Building2 size={32} color={theme.colors.primary} style={styles.icon} />
+            <Building2 size={24} color={theme.colors.primary} style={styles.icon} />
             <Text
               style={[
                 styles.infoTitle,
                 {
-                  color: isDark ? theme.colors.text : theme.colors.accent,
+                  color: isDark ? theme.colors.text : '#1E40AF',
                   textAlign: 'center',
                 },
               ]}
@@ -82,7 +82,7 @@ export default function About({ scrollY }: AboutProps) {
               style={[
                 styles.infoText,
                 {
-                  color: isDark ? theme.colors.textSecondary : theme.colors.textDark,
+                  color: isDark ? theme.colors.textSecondary : '#475569',
                   textAlign: 'center',
                 },
               ]}
@@ -92,12 +92,12 @@ export default function About({ scrollY }: AboutProps) {
           </View>
 
           <View style={[styles.infoCard, { backgroundColor: isDark ? theme.colors.cardDark : theme.colors.cardLight }]}>
-            <MapPin size={32} color={theme.colors.primary} style={styles.icon} />
+            <MapPin size={24} color={theme.colors.primary} style={styles.icon} />
             <Text
               style={[
                 styles.infoTitle,
                 {
-                  color: isDark ? theme.colors.text : theme.colors.accent,
+                  color: isDark ? theme.colors.text : '#1E40AF',
                   textAlign: 'center',
                 },
               ]}
@@ -108,7 +108,7 @@ export default function About({ scrollY }: AboutProps) {
               style={[
                 styles.infoText,
                 {
-                  color: isDark ? theme.colors.textSecondary : theme.colors.textDark,
+                  color: isDark ? theme.colors.textSecondary : '#475569',
                   textAlign: 'center',
                 },
               ]}
@@ -118,12 +118,12 @@ export default function About({ scrollY }: AboutProps) {
           </View>
 
           <View style={[styles.infoCard, { backgroundColor: isDark ? theme.colors.cardDark : theme.colors.cardLight }]}>
-            <Award size={32} color={theme.colors.primary} style={styles.icon} />
+            <Award size={24} color={theme.colors.primary} style={styles.icon} />
             <Text
               style={[
                 styles.infoTitle,
                 {
-                  color: isDark ? theme.colors.text : theme.colors.accent,
+                  color: isDark ? theme.colors.text : '#1E40AF',
                   textAlign: 'center',
                 },
               ]}
@@ -134,7 +134,7 @@ export default function About({ scrollY }: AboutProps) {
               style={[
                 styles.infoText,
                 {
-                  color: isDark ? theme.colors.textSecondary : theme.colors.textDark,
+                  color: isDark ? theme.colors.textSecondary : '#475569',
                   textAlign: 'center',
                 },
               ]}
@@ -150,7 +150,7 @@ export default function About({ scrollY }: AboutProps) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 40,
+    paddingVertical: 32,
     paddingHorizontal: 20,
   },
   content: {
@@ -159,15 +159,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   title: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: '700' as const,
-    marginBottom: 16,
+    marginBottom: 12,
   },
   description: {
-    fontSize: 16,
-    lineHeight: 24,
-    marginBottom: 32,
-    opacity: 0.9,
+    fontSize: 15,
+    lineHeight: 22,
+    marginBottom: 24,
   },
   infoGrid: {
     flexDirection: 'row',
@@ -177,9 +176,9 @@ const styles = StyleSheet.create({
   },
   infoCard: {
     flex: 1,
-    minWidth: 200,
-    maxWidth: 280,
-    padding: 20,
+    minWidth: 180,
+    maxWidth: 240,
+    padding: 16,
     borderRadius: 12,
     alignItems: 'center',
     shadowColor: '#000',
@@ -189,15 +188,15 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   icon: {
-    marginBottom: 12,
+    marginBottom: 8,
   },
   infoTitle: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600' as const,
-    marginBottom: 6,
+    marginBottom: 4,
   },
   infoText: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 13,
+    lineHeight: 18,
   },
 });

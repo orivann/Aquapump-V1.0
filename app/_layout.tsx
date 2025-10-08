@@ -15,6 +15,7 @@ function RootLayoutNav() {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="pumps" options={{ headerShown: true, title: 'Our Pumps' }} />
       <Stack.Screen name="+not-found" />
     </Stack>
   );

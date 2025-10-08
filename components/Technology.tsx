@@ -66,7 +66,7 @@ function FeatureCard({ icon, title, description, delay, isRTL, scrollY, theme }:
         styles.card,
         {
           opacity: fadeAnim,
-          transform: [{ scale: scaleAnim }, { scale: depthAnim }],
+          transform: [{ scale: Animated.multiply(scaleAnim, depthAnim) }],
           backgroundColor: theme.colors.accent,
           borderColor: theme.colors.primary + '30',
         },

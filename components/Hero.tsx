@@ -3,6 +3,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { MessageCircle } from 'lucide-react-native';
 import React, { useRef, useEffect, useState } from 'react';
+import { useRouter } from 'expo-router';
 import {
   View,
   Text,
@@ -143,14 +144,30 @@ function MagneticButton({ children, onPress, theme }: { children: React.ReactNod
   );
 }
 
-export default function Hero({ scrollY }: { scrollY: Animated.Value }) {
+interface HeroProps {
+  scrollY: Animated.Value;
+  onQuotePress?: () => void;
+}
+
+export default function Hero({ scrollY, onQuotePress }: HeroProps) {
   const { t, isRTL } = useLanguage();
   const { theme, themeMode } = useTheme();
+  const router = useRouter();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
 
   const handleWhatsApp = () => {
     console.log('Opening WhatsApp...');
+  };
+
+  const handleExplore = () => {
+    router.push('/pumps');
+  };
+
+  const handleQuote = () => {
+    if (onQuotePress) {
+      onQuotePress();
+    }
   };
 
   useEffect(() => {
@@ -188,14 +205,14 @@ export default function Hero({ scrollY }: { scrollY: Animated.Value }) {
 
         <View style={styles.buttonsWrapper}>
           <View style={[styles.ctaContainer, isRTL && styles.rtlRow]}>
-            <MagneticButton onPress={() => console.log('Explore')} theme={theme}>
+            <MagneticButton onPress={handleExplore} theme={theme}>
               <TouchableOpacity style={[styles.primaryButton, { backgroundColor: theme.colors.primary }, theme.shadows.md]}>
                 <Text style={[styles.primaryButtonText, { color: '#FFFFFF' }]}>
                   {t(translations.hero.exploreCTA)}
                 </Text>
               </TouchableOpacity>
             </MagneticButton>
-            <MagneticButton onPress={() => console.log('Quote')} theme={theme}>
+            <MagneticButton onPress={handleQuote} theme={theme}>
               <TouchableOpacity style={[styles.secondaryButton, { borderColor: theme.colors.primary }]}>
                 <Text style={[styles.secondaryButtonText, { color: theme.colors.primary }]}>
                   {t(translations.hero.quoteCTA)}
