@@ -20,6 +20,9 @@ export const [ThemeProvider, useTheme] = createContextHook(() => {
       const stored = await AsyncStorage.getItem(THEME_KEY);
       if (stored === 'light' || stored === 'dark') {
         setThemeMode(stored);
+      } else {
+        await AsyncStorage.setItem(THEME_KEY, 'dark');
+        setThemeMode('dark');
       }
     } catch (error) {
       console.error('Failed to load theme:', error);

@@ -22,6 +22,10 @@ export const [LanguageProvider, useLanguage] = createContextHook(() => {
       if (stored === 'en' || stored === 'he') {
         setLanguage(stored);
         setIsRTL(stored === 'he');
+      } else {
+        await AsyncStorage.setItem(LANGUAGE_KEY, 'en');
+        setLanguage('en');
+        setIsRTL(false);
       }
     } catch (error) {
       console.error('Failed to load language:', error);

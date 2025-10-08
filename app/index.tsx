@@ -10,14 +10,14 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, ScrollView, Animated, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 
 const { height } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const { isLoading: languageLoading } = useLanguage();
   const { theme, themeMode, isLoading: themeLoading } = useTheme();
-  const scrollY = new Animated.Value(0);
+  const scrollY = useMemo(() => new Animated.Value(0), []);
   const scrollViewRef = useRef<ScrollView>(null);
 
   const scrollToContact = () => {
@@ -44,12 +44,12 @@ export default function HomeScreen() {
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           { useNativeDriver: false }
         )}
-        scrollEventThrottle={16}
+        scrollEventThrottle={32}
       >
         <Hero scrollY={scrollY} onQuotePress={scrollToContact} />
-        <About scrollY={scrollY} />
         <Technology scrollY={scrollY} />
         <Products scrollY={scrollY} />
+        <About />
         <Contact />
       </ScrollView>
 

@@ -2,7 +2,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { MessageCircle } from 'lucide-react-native';
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import {
   View,
@@ -11,34 +11,18 @@ import {
   Dimensions,
   Animated,
   TouchableOpacity,
-  PanResponder,
-  Platform,
 } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
-function PumpVisual({ scrollY, theme }: { scrollY: Animated.Value; theme: any }) {
-  const rotateAnim = useRef(new Animated.Value(0)).current;
+function PumpVisual({ theme }: { theme: any }) {
   const pulseAnim = useRef(new Animated.Value(1)).current;
-  const parallaxAnim = scrollY.interpolate({
-    inputRange: [0, height],
-    outputRange: [0, -50],
-    extrapolate: 'clamp',
-  });
 
   useEffect(() => {
     Animated.loop(
-      Animated.timing(rotateAnim, {
-        toValue: 1,
-        duration: 20000,
-        useNativeDriver: true,
-      })
-    ).start();
-
-    Animated.loop(
       Animated.sequence([
         Animated.timing(pulseAnim, {
-          toValue: 1.1,
+          toValue: 1.05,
           duration: 2000,
           useNativeDriver: true,
         }),
@@ -49,25 +33,15 @@ function PumpVisual({ scrollY, theme }: { scrollY: Animated.Value; theme: any })
         }),
       ])
     ).start();
-  }, [rotateAnim, pulseAnim]);
-
-  const rotation = rotateAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
+  }, [pulseAnim]);
 
   return (
-    <Animated.View
-      style={[
-        styles.visualContainer,
-        { transform: [{ translateY: parallaxAnim }] },
-      ]}
-    >
+    <View style={styles.visualContainer}>
       <Animated.View
         style={[
           styles.pumpOuter,
           {
-            transform: [{ rotate: rotation }, { scale: pulseAnim }],
+            transform: [{ scale: pulseAnim }],
             backgroundColor: theme.colors.primary + '30',
             borderColor: theme.colors.primary + '60',
           },
@@ -78,71 +52,28 @@ function PumpVisual({ scrollY, theme }: { scrollY: Animated.Value; theme: any })
         </View>
       </Animated.View>
       
-      <Animated.View
+      <View
         style={[
           styles.ring1,
           {
-            transform: [{ rotate: rotation }],
             borderColor: theme.colors.primary + '20',
           },
         ]}
       />
       
-      <Animated.View
+      <View
         style={[
           styles.ring2,
           {
-            transform: [
-              { rotate: rotateAnim.interpolate({
-                inputRange: [0, 1],
-                outputRange: ['360deg', '0deg'],
-              }) },
-            ],
             borderColor: theme.colors.chrome + '15',
           },
         ]}
       />
-    </Animated.View>
+    </View>
   );
 }
 
-function MagneticButton({ children, onPress, theme }: { children: React.ReactNode; onPress: () => void; theme: any }) {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const panResponder = useRef(
-    PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onPanResponderMove: (evt, gestureState) => {
-        if (Platform.OS === 'web') {
-          // Web magnetic effect
-          const rect = (evt.currentTarget as any).getBoundingClientRect();
-          const centerX = rect.left + rect.width / 2;
-          const centerY = rect.top + rect.height / 2;
-          const deltaX = gestureState.moveX - centerX;
-          const deltaY = gestureState.moveY - centerY;
-          const distance = Math.sqrt(deltaX ** 2 + deltaY ** 2);
-          if (distance < 100) {
-            setPosition({ x: deltaX * 0.1, y: deltaY * 0.1 });
-          }
-        }
-      },
-      onPanResponderRelease: () => {
-        setPosition({ x: 0, y: 0 });
-        onPress();
-      },
-    })
-  );
 
-  return (
-    <Animated.View
-      style={{
-        transform: [{ translateX: position.x }, { translateY: position.y }],
-      }}
-      {...panResponder.current.panHandlers}
-    >
-      {children}
-    </Animated.View>
-  );
-}
 
 interface HeroProps {
   scrollY: Animated.Value;
@@ -169,6 +100,8 @@ export default function Hero({ scrollY, onQuotePress }: HeroProps) {
       onQuotePress();
     }
   };
+
+
 
   useEffect(() => {
     Animated.parallel([
@@ -205,34 +138,40 @@ export default function Hero({ scrollY, onQuotePress }: HeroProps) {
 
         <View style={styles.buttonsWrapper}>
           <View style={[styles.ctaContainer, isRTL && styles.rtlRow]}>
-            <MagneticButton onPress={handleExplore} theme={theme}>
-              <TouchableOpacity style={[styles.primaryButton, { backgroundColor: theme.colors.primary }, theme.shadows.md]}>
-                <Text style={[styles.primaryButtonText, { color: '#FFFFFF' }]}>
-                  {t(translations.hero.exploreCTA)}
-                </Text>
-              </TouchableOpacity>
-            </MagneticButton>
-            <MagneticButton onPress={handleQuote} theme={theme}>
-              <TouchableOpacity style={[styles.secondaryButton, { borderColor: theme.colors.primary }]}>
-                <Text style={[styles.secondaryButtonText, { color: theme.colors.primary }]}>
-                  {t(translations.hero.quoteCTA)}
-                </Text>
-              </TouchableOpacity>
-            </MagneticButton>
-          </View>
-
-          <MagneticButton onPress={handleWhatsApp} theme={theme}>
-            <TouchableOpacity style={[styles.whatsappButton, { backgroundColor: theme.colors.success + '20', borderColor: theme.colors.success }]}>
-              <MessageCircle size={20} color={theme.colors.success} strokeWidth={2.5} />
-              <Text style={[styles.whatsappButtonText, { color: theme.colors.success }]}>
-                {t(translations.hero.whatsappCTA)}
+            <TouchableOpacity 
+              style={[styles.primaryButton, { backgroundColor: theme.colors.primary }, theme.shadows.md]}
+              onPress={handleExplore}
+              activeOpacity={0.8}
+            >
+              <Text style={[styles.primaryButtonText, { color: '#FFFFFF' }]}>
+                {t(translations.hero.exploreCTA)}
               </Text>
             </TouchableOpacity>
-          </MagneticButton>
+            <TouchableOpacity 
+              style={[styles.secondaryButton, { borderColor: theme.colors.primary }]}
+              onPress={handleQuote}
+              activeOpacity={0.8}
+            >
+              <Text style={[styles.secondaryButtonText, { color: theme.colors.primary }]}>
+                {t(translations.hero.quoteCTA)}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity 
+            style={[styles.whatsappButton, { backgroundColor: theme.colors.success + '20', borderColor: theme.colors.success }]}
+            onPress={handleWhatsApp}
+            activeOpacity={0.8}
+          >
+            <MessageCircle size={20} color={theme.colors.success} strokeWidth={2.5} />
+            <Text style={[styles.whatsappButtonText, { color: theme.colors.success }]}>
+              {t(translations.hero.whatsappCTA)}
+            </Text>
+          </TouchableOpacity>
         </View>
       </Animated.View>
 
-      <PumpVisual scrollY={scrollY} theme={theme} />
+      <PumpVisual theme={theme} />
 
       <View style={styles.scrollIndicator}>
         <Animated.View

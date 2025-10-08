@@ -2,7 +2,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { Zap, Shield, Wifi } from 'lucide-react-native';
-import React, { useRef, useEffect, useState } from 'react';
+import React from 'react';
 import {
   View,
   Text,
@@ -12,61 +12,22 @@ import {
   ScrollView,
 } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 interface FeatureCardProps {
   icon: React.ReactNode;
   title: string;
   description: string;
-  delay: number;
   isRTL: boolean;
-  scrollY: Animated.Value;
   theme: any;
 }
 
-function FeatureCard({ icon, title, description, delay, isRTL, scrollY, theme }: FeatureCardProps) {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.8)).current;
-  const depthAnim = scrollY.interpolate({
-    inputRange: [height * 0.5, height * 1.5],
-    outputRange: [1, 0.9],
-    extrapolate: 'clamp',
-  });
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, delay);
-
-    return () => clearTimeout(timer);
-  }, [delay]);
-
-  useEffect(() => {
-    if (isVisible) {
-      Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-        Animated.spring(scaleAnim, {
-          toValue: 1,
-          friction: 8,
-          tension: 40,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }
-  }, [isVisible, fadeAnim, scaleAnim]);
-
+function FeatureCard({ icon, title, description, isRTL, theme }: FeatureCardProps) {
   return (
-    <Animated.View
+    <View
       style={[
         styles.card,
         {
-          opacity: fadeAnim,
-          transform: [{ scale: Animated.multiply(scaleAnim, depthAnim) }],
           backgroundColor: theme.colors.accent,
           borderColor: theme.colors.primary + '30',
         },
@@ -79,7 +40,7 @@ function FeatureCard({ icon, title, description, delay, isRTL, scrollY, theme }:
       <Text style={[styles.cardDescription, isRTL && styles.rtlText, { color: theme.colors.gray }]}>
         {description}
       </Text>
-    </Animated.View>
+    </View>
   );
 }
 
@@ -123,9 +84,7 @@ export default function Technology({ scrollY }: { scrollY: Animated.Value }) {
             icon={feature.icon}
             title={feature.title}
             description={feature.description}
-            delay={index * 200}
             isRTL={isRTL}
-            scrollY={scrollY}
             theme={theme}
           />
         ))}

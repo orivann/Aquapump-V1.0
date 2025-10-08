@@ -1,39 +1,21 @@
-import { View, Text, StyleSheet, Animated } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { Building2, MapPin, Award } from 'lucide-react-native';
 
-interface AboutProps {
-  scrollY: Animated.Value;
-}
-
-export default function About({ scrollY }: AboutProps) {
-  const { language, isRTL } = useLanguage();
+export default function About() {
+  const { language } = useLanguage();
   const { theme, themeMode } = useTheme();
-
-  const opacity = scrollY.interpolate({
-    inputRange: [200, 400],
-    outputRange: [0, 1],
-    extrapolate: 'clamp',
-  });
-
-  const translateY = scrollY.interpolate({
-    inputRange: [200, 400],
-    outputRange: [50, 0],
-    extrapolate: 'clamp',
-  });
 
   const isDark = themeMode === 'dark';
 
   return (
-    <Animated.View
+    <View
       style={[
         styles.container,
         {
           backgroundColor: isDark ? theme.colors.dark : theme.colors.light,
-          opacity,
-          transform: [{ translateY }],
         },
       ]}
     >
@@ -43,8 +25,7 @@ export default function About({ scrollY }: AboutProps) {
             styles.title,
             {
               color: isDark ? theme.colors.primary : '#1E40AF',
-              textAlign: isRTL ? 'right' : 'left',
-              writingDirection: isRTL ? 'rtl' : 'ltr',
+              textAlign: 'center',
             },
           ]}
         >
@@ -56,8 +37,7 @@ export default function About({ scrollY }: AboutProps) {
             styles.description,
             {
               color: isDark ? theme.colors.textSecondary : '#475569',
-              textAlign: isRTL ? 'right' : 'left',
-              writingDirection: isRTL ? 'rtl' : 'ltr',
+              textAlign: 'center',
             },
           ]}
         >
@@ -66,91 +46,91 @@ export default function About({ scrollY }: AboutProps) {
 
         <View style={styles.infoGrid}>
           <View style={[styles.infoCard, { backgroundColor: isDark ? theme.colors.cardDark : theme.colors.cardLight }]}>
-            <Building2 size={24} color={theme.colors.primary} style={styles.icon} />
-            <Text
-              style={[
-                styles.infoTitle,
-                {
-                  color: isDark ? theme.colors.text : '#1E40AF',
-                  textAlign: 'center',
-                },
-              ]}
-            >
-              {translations.about.company[language]}
-            </Text>
-            <Text
-              style={[
-                styles.infoText,
-                {
-                  color: isDark ? theme.colors.textSecondary : '#475569',
-                  textAlign: 'center',
-                },
-              ]}
-            >
-              {translations.about.companyName[language]}
-            </Text>
+            <Building2 size={18} color={theme.colors.primary} style={styles.icon} />
+            <View style={styles.textContainer}>
+              <Text
+                style={[
+                  styles.infoTitle,
+                  {
+                    color: isDark ? theme.colors.text : '#1E40AF',
+                  },
+                ]}
+              >
+                {translations.about.company[language]}
+              </Text>
+              <Text
+                style={[
+                  styles.infoText,
+                  {
+                    color: isDark ? theme.colors.textSecondary : '#475569',
+                  },
+                ]}
+              >
+                {translations.about.companyName[language]}
+              </Text>
+            </View>
           </View>
 
           <View style={[styles.infoCard, { backgroundColor: isDark ? theme.colors.cardDark : theme.colors.cardLight }]}>
-            <MapPin size={24} color={theme.colors.primary} style={styles.icon} />
-            <Text
-              style={[
-                styles.infoTitle,
-                {
-                  color: isDark ? theme.colors.text : '#1E40AF',
-                  textAlign: 'center',
-                },
-              ]}
-            >
-              {translations.about.location[language]}
-            </Text>
-            <Text
-              style={[
-                styles.infoText,
-                {
-                  color: isDark ? theme.colors.textSecondary : '#475569',
-                  textAlign: 'center',
-                },
-              ]}
-            >
-              {translations.about.locationName[language]}
-            </Text>
+            <MapPin size={18} color={theme.colors.primary} style={styles.icon} />
+            <View style={styles.textContainer}>
+              <Text
+                style={[
+                  styles.infoTitle,
+                  {
+                    color: isDark ? theme.colors.text : '#1E40AF',
+                  },
+                ]}
+              >
+                {translations.about.location[language]}
+              </Text>
+              <Text
+                style={[
+                  styles.infoText,
+                  {
+                    color: isDark ? theme.colors.textSecondary : '#475569',
+                  },
+                ]}
+              >
+                {translations.about.locationName[language]}
+              </Text>
+            </View>
           </View>
 
           <View style={[styles.infoCard, { backgroundColor: isDark ? theme.colors.cardDark : theme.colors.cardLight }]}>
-            <Award size={24} color={theme.colors.primary} style={styles.icon} />
-            <Text
-              style={[
-                styles.infoTitle,
-                {
-                  color: isDark ? theme.colors.text : '#1E40AF',
-                  textAlign: 'center',
-                },
-              ]}
-            >
-              {translations.about.experience[language]}
-            </Text>
-            <Text
-              style={[
-                styles.infoText,
-                {
-                  color: isDark ? theme.colors.textSecondary : '#475569',
-                  textAlign: 'center',
-                },
-              ]}
-            >
-              {translations.about.experienceYears[language]}
-            </Text>
+            <Award size={18} color={theme.colors.primary} style={styles.icon} />
+            <View style={styles.textContainer}>
+              <Text
+                style={[
+                  styles.infoTitle,
+                  {
+                    color: isDark ? theme.colors.text : '#1E40AF',
+                  },
+                ]}
+              >
+                {translations.about.experience[language]}
+              </Text>
+              <Text
+                style={[
+                  styles.infoText,
+                  {
+                    color: isDark ? theme.colors.textSecondary : '#475569',
+                  },
+                ]}
+              >
+                {translations.about.experienceYears[language]}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
-    </Animated.View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 32,
+    paddingVertical: 24,
     paddingHorizontal: 20,
   },
   content: {
@@ -159,44 +139,47 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: '700' as const,
-    marginBottom: 12,
+    marginBottom: 10,
   },
   description: {
-    fontSize: 15,
-    lineHeight: 22,
-    marginBottom: 24,
+    fontSize: 14,
+    lineHeight: 20,
+    marginBottom: 20,
   },
   infoGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 16,
+    gap: 12,
     justifyContent: 'center',
   },
   infoCard: {
-    flex: 1,
-    minWidth: 180,
-    maxWidth: 240,
-    padding: 16,
-    borderRadius: 12,
+    flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 10,
+    gap: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 2,
   },
   icon: {
-    marginBottom: 8,
+    flexShrink: 0,
+  },
+  textContainer: {
+    flexDirection: 'column',
+    gap: 2,
   },
   infoTitle: {
-    fontSize: 14,
+    fontSize: 11,
     fontWeight: '600' as const,
-    marginBottom: 4,
   },
   infoText: {
-    fontSize: 13,
-    lineHeight: 18,
+    fontSize: 12,
+    lineHeight: 16,
   },
 });

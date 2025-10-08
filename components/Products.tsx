@@ -2,7 +2,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { Download } from 'lucide-react-native';
-import { useRef, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -13,101 +12,35 @@ import {
   ScrollView,
 } from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 interface ProductCardProps {
   name: string;
   description: string;
-  delay: number;
   isRTL: boolean;
   color: string;
-  scrollY: Animated.Value;
   theme: any;
 }
 
-function ProductCard({ name, description, delay, isRTL, color, scrollY, theme }: ProductCardProps) {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const translateYAnim = useRef(new Animated.Value(50)).current;
-  const rotateAnim = useRef(new Animated.Value(0)).current;
-  const parallaxAnim = scrollY.interpolate({
-    inputRange: [height * 1.5, height * 2.5],
-    outputRange: [0, -20],
-    extrapolate: 'clamp',
-  });
-  const scrollFadeAnim = scrollY.interpolate({
-    inputRange: [height * 1.2, height * 1.8],
-    outputRange: [0, 1],
-    extrapolate: 'clamp',
-  });
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, delay);
-
-    return () => clearTimeout(timer);
-  }, [delay]);
-
-  useEffect(() => {
-    if (isVisible) {
-      Animated.parallel([
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-        Animated.timing(translateYAnim, {
-          toValue: 0,
-          duration: 800,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }
-  }, [isVisible, fadeAnim, translateYAnim]);
-
-  useEffect(() => {
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(rotateAnim, {
-          toValue: 1,
-          duration: 3000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(rotateAnim, {
-          toValue: 0,
-          duration: 3000,
-          useNativeDriver: true,
-        }),
-      ])
-    ).start();
-  }, [rotateAnim]);
-
-  const rotation = rotateAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
-
+function ProductCard({ name, description, isRTL, color, theme }: ProductCardProps) {
   return (
-    <Animated.View
+    <View
       style={[
         styles.productCard,
         {
-          opacity: Animated.multiply(fadeAnim, scrollFadeAnim),
-          transform: [{ translateY: Animated.add(translateYAnim, parallaxAnim) }],
           backgroundColor: theme.colors.accent,
           borderColor: theme.colors.primary + '20',
         },
       ]}
     >
-      <Animated.View
+      <View
         style={[
           styles.productModel,
-          { backgroundColor: color, transform: [{ rotate: rotation }] },
+          { backgroundColor: color },
         ]}
       >
         <View style={styles.modelInner} />
-      </Animated.View>
+      </View>
 
       <Text style={[styles.productName, isRTL && styles.rtlText, { color: theme.colors.light }]}>{name}</Text>
       <Text style={[styles.productDescription, isRTL && styles.rtlText, { color: theme.colors.gray }]}>
@@ -120,7 +53,7 @@ function ProductCard({ name, description, delay, isRTL, color, scrollY, theme }:
           {isRTL ? translations.products.viewSpecs.he : translations.products.viewSpecs.en}
         </Text>
       </TouchableOpacity>
-    </Animated.View>
+    </View>
   );
 }
 
@@ -163,10 +96,8 @@ export default function Products({ scrollY }: { scrollY: Animated.Value }) {
             key={index}
             name={product.name}
             description={product.description}
-            delay={index * 200}
             isRTL={isRTL}
             color={product.color}
-            scrollY={scrollY}
             theme={theme}
           />
         ))}
