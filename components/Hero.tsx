@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     maxWidth: 800,
   },
   headline: {
-    fontSize: 48,
+    fontSize: 64,
     fontWeight: '700' as const,
     marginBottom: 16,
     letterSpacing: -1,
