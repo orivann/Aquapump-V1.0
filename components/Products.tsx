@@ -9,7 +9,6 @@ import {
   StyleSheet,
   Dimensions,
   Animated,
-  TouchableOpacity,
   ScrollView,
 } from 'react-native';
 
@@ -50,16 +49,12 @@ const ProductCard = memo(function ProductCard({ name, description, isRTL, color,
         {description}
       </Text>
 
-      <TouchableOpacity 
-        accessible={true}
-        accessibilityRole="button"
-        accessibilityLabel={`View specifications for ${name}`}
-        style={[styles.specsButton, { borderColor: theme.colors.primary }]}>
+      <View style={[styles.specsButton, { borderColor: theme.colors.primary }]}>
         <Download size={20} color={theme.colors.primary} strokeWidth={2} />
         <Text style={[styles.specsButtonText, { color: theme.colors.primary }]}>
           {isRTL ? translations.products.viewSpecs.he : translations.products.viewSpecs.en}
         </Text>
-      </TouchableOpacity>
+      </View>
     </View>
   );
 });

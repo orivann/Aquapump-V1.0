@@ -20,18 +20,17 @@ interface FeatureCardProps {
   description: string;
   isRTL: boolean;
   theme: any;
+  themeMode: 'light' | 'dark';
 }
 
-const FeatureCard = memo(function FeatureCard({ icon, title, description, isRTL, theme }: FeatureCardProps) {
+const FeatureCard = memo(function FeatureCard({ icon, title, description, isRTL, theme, themeMode }: FeatureCardProps) {
+  const isDark = themeMode === 'dark';
   return (
     <View
-      accessible={true}
-      accessibilityRole="button"
-      accessibilityLabel={`${title}: ${description}`}
       style={[
         styles.card,
         {
-          backgroundColor: theme.colors.accent,
+          backgroundColor: isDark ? theme.colors.accent : '#FFFFFF',
           borderColor: theme.colors.primary + '30',
         },
       ]}
@@ -39,8 +38,8 @@ const FeatureCard = memo(function FeatureCard({ icon, title, description, isRTL,
       <View style={[styles.iconContainer, { backgroundColor: theme.colors.primary + '20' }]}>
         {icon}
       </View>
-      <Text style={[styles.cardTitle, isRTL && styles.rtlText, { color: theme.colors.light }]}>{title}</Text>
-      <Text style={[styles.cardDescription, isRTL && styles.rtlText, { color: theme.colors.gray }]}>
+      <Text style={[styles.cardTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.light : '#0F172A' }]}>{title}</Text>
+      <Text style={[styles.cardDescription, isRTL && styles.rtlText, { color: isDark ? theme.colors.gray : '#475569' }]}>
         {description}
       </Text>
     </View>
@@ -92,6 +91,7 @@ export default function Technology({ scrollY }: { scrollY: Animated.Value }) {
             description={feature.description}
             isRTL={isRTL}
             theme={theme}
+            themeMode={themeMode}
           />
         ))}
       </ScrollView>
