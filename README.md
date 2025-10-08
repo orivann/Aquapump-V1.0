@@ -49,6 +49,17 @@ bun run start  # then press "i" in the terminal to open iOS Simulator
 bun run start -- --ios
 ```
 
+### **Running with Docker Compose**
+
+If you have Docker installed, you can run the application in a containerized environment. This is the recommended way to run the project as it ensures a consistent development environment.
+
+```bash
+# Start the application
+docker-compose up
+```
+
+The application will be available at `http://localhost:8081`.
+
 ### **Edit a file directly in GitHub**
 
 - Navigate to the desired file(s).
