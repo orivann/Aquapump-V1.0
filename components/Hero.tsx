@@ -83,6 +83,7 @@ interface HeroProps {
 export default function Hero({ scrollY, onQuotePress }: HeroProps) {
   const { t, isRTL } = useLanguage();
   const { theme, themeMode } = useTheme();
+  const isDark = themeMode === 'dark';
   const router = useRouter();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
@@ -129,16 +130,21 @@ export default function Hero({ scrollY, onQuotePress }: HeroProps) {
           },
         ]}
       >
-        <Text style={[styles.headline, styles.centerText, { color: themeMode === 'dark' ? theme.colors.light : '#1E40AF' }]}>
+        <Text 
+          accessibilityRole="header"
+          style={[styles.headline, styles.centerText, { color: isDark ? theme.colors.light : '#1E40AF' }]}>
           {t(translations.hero.headline)}
         </Text>
-        <Text style={[styles.subheadline, styles.centerText, { color: themeMode === 'dark' ? theme.colors.gray : '#475569' }]}>
+        <Text style={[styles.subheadline, styles.centerText, { color: isDark ? theme.colors.gray : '#475569' }]}>
           {t(translations.hero.subheadline)}
         </Text>
 
         <View style={styles.buttonsWrapper}>
           <View style={[styles.ctaContainer, isRTL && styles.rtlRow]}>
             <TouchableOpacity 
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel="Explore our pump models"
               style={[styles.primaryButton, { backgroundColor: theme.colors.primary }, theme.shadows.md]}
               onPress={handleExplore}
               activeOpacity={0.8}
@@ -148,7 +154,10 @@ export default function Hero({ scrollY, onQuotePress }: HeroProps) {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity 
-              style={[styles.secondaryButton, { borderColor: theme.colors.primary }]}
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel="Get a quote"
+              style={[styles.secondaryButton, { borderColor: theme.colors.primary, backgroundColor: isDark ? 'transparent' : '#FFFFFF' }]}
               onPress={handleQuote}
               activeOpacity={0.8}
             >
@@ -159,6 +168,9 @@ export default function Hero({ scrollY, onQuotePress }: HeroProps) {
           </View>
 
           <TouchableOpacity 
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Chat on WhatsApp"
             style={[styles.whatsappButton, { backgroundColor: theme.colors.success + '20', borderColor: theme.colors.success }]}
             onPress={handleWhatsApp}
             activeOpacity={0.8}

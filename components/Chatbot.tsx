@@ -24,7 +24,7 @@ interface Message {
 
 export default function Chatbot() {
   const { t, isRTL, language } = useLanguage();
-  const { theme } = useTheme();
+  const { theme, themeMode } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -191,18 +191,18 @@ export default function Chatbot() {
           style={[
             styles.chatContainer,
             isRTL && styles.chatContainerRTL,
-            { transform: [{ translateY: slideAnim }], backgroundColor: theme.colors.accent },
+            { transform: [{ translateY: slideAnim }], backgroundColor: themeMode === 'dark' ? theme.colors.accent : '#FFFFFF' },
           ]}
         >
-          <View style={[styles.chatHeader, { backgroundColor: theme.colors.secondary, borderBottomColor: theme.colors.primary + '30' }]}>
+          <View style={[styles.chatHeader, { backgroundColor: themeMode === 'dark' ? theme.colors.secondary : '#F8FAFC', borderBottomColor: theme.colors.primary + '30' }]}>
             <View style={styles.headerLeft}>
               <View style={[styles.botAvatar, { backgroundColor: theme.colors.primary }]}>
                 <Text style={styles.botAvatarText}>💧</Text>
               </View>
-              <Text style={[styles.chatTitle, { color: theme.colors.light }]}>AquaBot</Text>
+              <Text style={[styles.chatTitle, { color: themeMode === 'dark' ? theme.colors.light : '#0F172A' }]}>AquaBot</Text>
             </View>
             <TouchableOpacity testID="chatbot-close" accessibilityRole="button" accessibilityLabel="Close chat" onPress={toggleChat} style={styles.closeButton}>
-              <X size={24} color={theme.colors.light} strokeWidth={2} />
+              <X size={24} color={themeMode === 'dark' ? theme.colors.light : '#0F172A'} strokeWidth={2} />
             </TouchableOpacity>
           </View>
 
@@ -212,14 +212,14 @@ export default function Chatbot() {
                 key={message.id}
                 style={[
                   styles.messageBubble,
-                  message.role === 'user' ? [styles.userBubble, { backgroundColor: theme.colors.primary }] : [styles.assistantBubble, { backgroundColor: theme.colors.secondary, borderColor: theme.colors.primary + '30' }],
+                  message.role === 'user' ? [styles.userBubble, { backgroundColor: theme.colors.primary }] : [styles.assistantBubble, { backgroundColor: themeMode === 'dark' ? theme.colors.secondary : '#F1F5F9', borderColor: theme.colors.primary + '30' }],
                   isRTL && styles.messageBubbleRTL,
                 ]}
               >
                 <Text
                   style={[
                     styles.messageText,
-                    message.role === 'user' ? [styles.userText, { color: theme.colors.dark }] : [styles.assistantText, { color: theme.colors.light }],
+                    message.role === 'user' ? [styles.userText, { color: '#FFFFFF' }] : [styles.assistantText, { color: themeMode === 'dark' ? theme.colors.light : '#0F172A' }],
                     isRTL && styles.rtlText,
                   ]}
                 >
@@ -235,16 +235,17 @@ export default function Chatbot() {
           </ScrollView>
 
           <KeyboardAvoidingView
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={[styles.inputContainer, { backgroundColor: theme.colors.secondary, borderTopColor: theme.colors.primary + '30' }]}
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+            style={[styles.inputContainer, { backgroundColor: themeMode === 'dark' ? theme.colors.secondary : '#F8FAFC', borderTopColor: theme.colors.primary + '30' }]}
           >
             <TextInput
               testID="chatbot-input"
-              style={[styles.input, isRTL && styles.inputRTL, { color: theme.colors.light, backgroundColor: theme.colors.accent, borderColor: theme.colors.primary + '30' }]}
+              style={[styles.input, isRTL && styles.inputRTL, { color: themeMode === 'dark' ? theme.colors.light : '#0F172A', backgroundColor: themeMode === 'dark' ? theme.colors.accent : '#FFFFFF', borderColor: theme.colors.primary + '30' }]}
               value={input}
               onChangeText={setInput}
               placeholder={t(translations.chatbot.placeholder)}
-              placeholderTextColor={theme.colors.gray}
+              placeholderTextColor={themeMode === 'dark' ? theme.colors.gray : '#94A3B8'}
               multiline
               maxLength={500}
             />
@@ -256,7 +257,7 @@ export default function Chatbot() {
               onPress={sendMessage}
               disabled={!input.trim() || isLoading}
             >
-              <Send size={20} color={theme.colors.dark} strokeWidth={2} />
+              <Send size={20} color="#FFFFFF" strokeWidth={2} />
             </TouchableOpacity>
           </KeyboardAvoidingView>
         </Animated.View>

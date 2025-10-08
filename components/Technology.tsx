@@ -2,7 +2,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { Zap, Shield, Wifi } from 'lucide-react-native';
-import React from 'react';
+import React, { memo } from 'react';
 import {
   View,
   Text,
@@ -22,9 +22,12 @@ interface FeatureCardProps {
   theme: any;
 }
 
-function FeatureCard({ icon, title, description, isRTL, theme }: FeatureCardProps) {
+const FeatureCard = memo(function FeatureCard({ icon, title, description, isRTL, theme }: FeatureCardProps) {
   return (
     <View
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={`${title}: ${description}`}
       style={[
         styles.card,
         {
@@ -34,7 +37,7 @@ function FeatureCard({ icon, title, description, isRTL, theme }: FeatureCardProp
       ]}
     >
       <View style={[styles.iconContainer, { backgroundColor: theme.colors.primary + '20' }]}>
-        <Text>{icon}</Text>
+        {icon}
       </View>
       <Text style={[styles.cardTitle, isRTL && styles.rtlText, { color: theme.colors.light }]}>{title}</Text>
       <Text style={[styles.cardDescription, isRTL && styles.rtlText, { color: theme.colors.gray }]}>
@@ -42,11 +45,12 @@ function FeatureCard({ icon, title, description, isRTL, theme }: FeatureCardProp
       </Text>
     </View>
   );
-}
+});
 
 export default function Technology({ scrollY }: { scrollY: Animated.Value }) {
   const { t, isRTL } = useLanguage();
   const { theme, themeMode } = useTheme();
+  const isDark = themeMode === 'dark';
 
   const features = [
     {
@@ -67,8 +71,10 @@ export default function Technology({ scrollY }: { scrollY: Animated.Value }) {
   ];
 
   return (
-    <View style={[styles.container, { backgroundColor: themeMode === 'dark' ? theme.colors.dark : theme.colors.secondary }]}>
-      <Text style={[styles.sectionTitle, isRTL && styles.rtlText, { color: themeMode === 'dark' ? theme.colors.light : '#1E40AF' }]}>
+    <View style={[styles.container, { backgroundColor: isDark ? theme.colors.dark : theme.colors.secondary }]}>
+      <Text 
+        accessibilityRole="header"
+        style={[styles.sectionTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.light : '#1E40AF' }]}>
         {t(translations.technology.title)}
       </Text>
 

@@ -2,6 +2,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { Download } from 'lucide-react-native';
+import { memo } from 'react';
 import {
   View,
   Text,
@@ -20,15 +21,20 @@ interface ProductCardProps {
   isRTL: boolean;
   color: string;
   theme: any;
+  themeMode: 'light' | 'dark';
 }
 
-function ProductCard({ name, description, isRTL, color, theme }: ProductCardProps) {
+const ProductCard = memo(function ProductCard({ name, description, isRTL, color, theme, themeMode }: ProductCardProps) {
+  const isDark = themeMode === 'dark';
   return (
     <View
+      accessible={true}
+      accessibilityRole="button"
+      accessibilityLabel={`${name}: ${description}`}
       style={[
         styles.productCard,
         {
-          backgroundColor: theme.colors.accent,
+          backgroundColor: isDark ? theme.colors.accent : '#FFFFFF',
           borderColor: theme.colors.primary + '20',
         },
       ]}
@@ -42,12 +48,16 @@ function ProductCard({ name, description, isRTL, color, theme }: ProductCardProp
         <View style={styles.modelInner} />
       </View>
 
-      <Text style={[styles.productName, isRTL && styles.rtlText, { color: theme.colors.light }]}>{name}</Text>
-      <Text style={[styles.productDescription, isRTL && styles.rtlText, { color: theme.colors.gray }]}>
+      <Text style={[styles.productName, isRTL && styles.rtlText, { color: isDark ? theme.colors.light : '#0F172A' }]}>{name}</Text>
+      <Text style={[styles.productDescription, isRTL && styles.rtlText, { color: isDark ? theme.colors.gray : '#475569' }]}>
         {description}
       </Text>
 
-      <TouchableOpacity style={[styles.specsButton, { borderColor: theme.colors.primary }]}>
+      <TouchableOpacity 
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel={`View specifications for ${name}`}
+        style={[styles.specsButton, { borderColor: theme.colors.primary }]}>
         <Download size={20} color={theme.colors.primary} strokeWidth={2} />
         <Text style={[styles.specsButtonText, { color: theme.colors.primary }]}>
           {isRTL ? translations.products.viewSpecs.he : translations.products.viewSpecs.en}
@@ -55,11 +65,12 @@ function ProductCard({ name, description, isRTL, color, theme }: ProductCardProp
       </TouchableOpacity>
     </View>
   );
-}
+});
 
 export default function Products({ scrollY }: { scrollY: Animated.Value }) {
   const { t, isRTL } = useLanguage();
   const { theme, themeMode } = useTheme();
+  const isDark = themeMode === 'dark';
 
   const products = [
     {
@@ -80,8 +91,10 @@ export default function Products({ scrollY }: { scrollY: Animated.Value }) {
   ];
 
   return (
-    <View style={[styles.container, { backgroundColor: themeMode === 'dark' ? theme.colors.secondary : '#FFFFFF' }]}>
-      <Text style={[styles.sectionTitle, isRTL && styles.rtlText, { color: themeMode === 'dark' ? theme.colors.light : '#1E40AF' }]}>
+    <View style={[styles.container, { backgroundColor: isDark ? theme.colors.secondary : '#F8FAFC' }]}>
+      <Text 
+        accessibilityRole="header"
+        style={[styles.sectionTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.light : '#1E40AF' }]}>
         {t(translations.products.title)}
       </Text>
 
@@ -99,6 +112,7 @@ export default function Products({ scrollY }: { scrollY: Animated.Value }) {
             isRTL={isRTL}
             color={product.color}
             theme={theme}
+            themeMode={themeMode}
           />
         ))}
       </ScrollView>

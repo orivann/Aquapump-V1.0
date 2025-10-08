@@ -8,9 +8,9 @@ import Chatbot from '@/components/Chatbot';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, ScrollView, Animated, Dimensions } from 'react-native';
+import { StyleSheet, ScrollView, Animated, Dimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useCallback } from 'react';
 
 const { height } = Dimensions.get('window');
 
@@ -20,13 +20,15 @@ export default function HomeScreen() {
   const scrollY = useMemo(() => new Animated.Value(0), []);
   const scrollViewRef = useRef<ScrollView>(null);
 
-  const scrollToContact = () => {
+  const scrollToContact = useCallback(() => {
     scrollViewRef.current?.scrollTo({ y: height * 3.5, animated: true });
-  };
+  }, []);
 
   if (languageLoading || themeLoading) {
     return (
-      <SafeAreaView style={[styles.loading, { backgroundColor: theme.colors.dark }]} edges={['top', 'bottom']} />
+      <SafeAreaView style={[styles.loading, { backgroundColor: '#0A1929' }]} edges={['top', 'bottom']}>
+        <View style={styles.loadingContainer} />
+      </SafeAreaView>
     );
   }
 
@@ -64,6 +66,12 @@ const styles = StyleSheet.create({
   },
   loading: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingContainer: {
+    width: 50,
+    height: 50,
   },
   scrollView: {
     flex: 1,

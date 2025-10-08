@@ -18,6 +18,7 @@ const { width } = Dimensions.get('window');
 export default function Contact() {
   const { t, isRTL } = useLanguage();
   const { theme, themeMode } = useTheme();
+  const isDark = themeMode === 'dark';
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -41,54 +42,65 @@ export default function Contact() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: themeMode === 'dark' ? theme.colors.dark : theme.colors.secondary }]}>
-      <Text style={[styles.sectionTitle, styles.centerText, { color: themeMode === 'dark' ? theme.colors.light : '#1E40AF' }]}>
+    <View style={[styles.container, { backgroundColor: isDark ? theme.colors.dark : theme.colors.secondary }]}>
+      <Text 
+        accessibilityRole="header"
+        style={[styles.sectionTitle, styles.centerText, { color: isDark ? theme.colors.light : '#1E40AF' }]}>
         {t(translations.contact.title)}
       </Text>
 
       <View style={styles.formContainer}>
-        <View style={[styles.inputGroup, { backgroundColor: theme.colors.accent }]}>
+        <View style={[styles.inputGroup, { backgroundColor: isDark ? theme.colors.accent : '#FFFFFF', borderColor: isDark ? 'transparent' : theme.colors.primary + '20' }]}>
           <Mail size={20} color={theme.colors.primary} strokeWidth={2} />
           <TextInput
-            style={[styles.input, isRTL && styles.inputRTL, { color: theme.colors.light }]}
+            style={[styles.input, isRTL && styles.inputRTL, { color: isDark ? theme.colors.light : '#0F172A' }]}
             value={name}
             onChangeText={setName}
             placeholder={t(translations.contact.name)}
-            placeholderTextColor={theme.colors.gray}
+            placeholderTextColor={isDark ? theme.colors.gray : '#94A3B8'}
           />
         </View>
 
-        <View style={[styles.inputGroup, { backgroundColor: theme.colors.accent }]}>
+        <View style={[styles.inputGroup, { backgroundColor: isDark ? theme.colors.accent : '#FFFFFF', borderColor: isDark ? 'transparent' : theme.colors.primary + '20' }]}>
           <Mail size={20} color={theme.colors.primary} strokeWidth={2} />
           <TextInput
-            style={[styles.input, isRTL && styles.inputRTL, { color: theme.colors.light }]}
+            style={[styles.input, isRTL && styles.inputRTL, { color: isDark ? theme.colors.light : '#0F172A' }]}
             value={email}
             onChangeText={setEmail}
             placeholder={t(translations.contact.email)}
-            placeholderTextColor={theme.colors.gray}
+            placeholderTextColor={isDark ? theme.colors.gray : '#94A3B8'}
             keyboardType="email-address"
             autoCapitalize="none"
           />
         </View>
 
-        <View style={[styles.inputGroup, { backgroundColor: theme.colors.accent }]}>
+        <View style={[styles.inputGroup, { backgroundColor: isDark ? theme.colors.accent : '#FFFFFF', borderColor: isDark ? 'transparent' : theme.colors.primary + '20' }]}>
           <MessageSquare size={20} color={theme.colors.primary} strokeWidth={2} />
           <TextInput
-            style={[styles.input, styles.textArea, isRTL && styles.inputRTL, { color: theme.colors.light }]}
+            style={[styles.input, styles.textArea, isRTL && styles.inputRTL, { color: isDark ? theme.colors.light : '#0F172A' }]}
             value={message}
             onChangeText={setMessage}
             placeholder={t(translations.contact.message)}
-            placeholderTextColor={theme.colors.gray}
+            placeholderTextColor={isDark ? theme.colors.gray : '#94A3B8'}
             multiline
             numberOfLines={4}
           />
         </View>
 
-        <TouchableOpacity style={[styles.submitButton, { backgroundColor: theme.colors.primary }, theme.shadows.md]} onPress={handleSubmit}>
-          <Text style={[styles.submitButtonText, { color: theme.colors.dark }]}>{t(translations.contact.send)}</Text>
+        <TouchableOpacity 
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel="Submit contact form"
+          style={[styles.submitButton, { backgroundColor: theme.colors.primary }, theme.shadows.md]} 
+          onPress={handleSubmit}>
+          <Text style={[styles.submitButtonText, { color: '#FFFFFF' }]}>{t(translations.contact.send)}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.whatsappButton, { borderColor: theme.colors.success }]}>
+        <TouchableOpacity 
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel="Contact via WhatsApp"
+          style={[styles.whatsappButton, { borderColor: theme.colors.success, backgroundColor: isDark ? 'transparent' : theme.colors.success + '10' }]}>
           <MessageSquare size={20} color={theme.colors.success} strokeWidth={2} />
           <Text style={[styles.whatsappButtonText, { color: theme.colors.success }]}>{t(translations.contact.whatsapp)}</Text>
         </TouchableOpacity>

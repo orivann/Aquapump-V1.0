@@ -27,27 +27,35 @@ export default function Navigation() {
       )}
       
       <View style={[styles.navContent, isRTL && styles.navContentRTL]}>
-        <Text style={[styles.logo, { color: themeMode === 'dark' ? theme.colors.primary : '#1E40AF' }]}>AquaPump</Text>
+        <Text 
+          accessibilityRole="header"
+          style={[styles.logo, { color: themeMode === 'dark' ? theme.colors.primary : '#1E40AF' }]}>AquaPump</Text>
 
         <View style={styles.controls}>
           <TouchableOpacity
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel={themeMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             style={[styles.controlButton, { borderColor: theme.colors.primary + '40', backgroundColor: themeMode === 'dark' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.8)' }]}
             onPress={toggleTheme}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
             {themeMode === 'dark' ? (
-              <Sun size={22} color={theme.colors.primary} strokeWidth={2.5} />
+              <Sun size={24} color={theme.colors.primary} strokeWidth={2.5} />
             ) : (
-              <Moon size={22} color={theme.colors.primary} strokeWidth={2.5} />
+              <Moon size={24} color={theme.colors.primary} strokeWidth={2.5} />
             )}
           </TouchableOpacity>
 
           <TouchableOpacity
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel={language === 'en' ? 'Switch to Hebrew' : 'Switch to English'}
             style={[styles.controlButton, { borderColor: theme.colors.primary + '40', backgroundColor: themeMode === 'dark' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.8)' }]}
             onPress={toggleLanguage}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
-            <Globe size={22} color={theme.colors.primary} strokeWidth={2.5} />
+            <Globe size={24} color={theme.colors.primary} strokeWidth={2.5} />
             <Text style={[styles.langText, { color: themeMode === 'dark' ? '#FFFFFF' : theme.colors.primary }]}>{language === 'en' ? 'EN' : 'עב'}</Text>
           </TouchableOpacity>
         </View>
@@ -65,24 +73,25 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   navBar: {
-    height: 110,
+    height: 80,
   },
   navContent: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: 110,
+    height: 80,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 28,
+    paddingHorizontal: 24,
+    paddingTop: 8,
   },
   navContentRTL: {
     flexDirection: 'row-reverse',
   },
   logo: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: '800' as const,
     letterSpacing: -0.8,
   },
@@ -94,14 +103,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderRadius: 14,
-    borderWidth: 1,
-    minHeight: 50,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    minHeight: 44,
+    minWidth: 44,
   },
   langText: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700' as const,
   },
 });
