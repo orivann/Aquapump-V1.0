@@ -37,9 +37,9 @@ const Navigation = memo(function Navigation() {
             hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
             {themeMode === 'dark' ? (
-              <Sun size={Platform.OS === 'web' ? 24 : 28} color={theme.colors.primary} strokeWidth={2.5} />
+              <Sun size={20} color={theme.colors.primary} strokeWidth={2.5} />
             ) : (
-              <Moon size={Platform.OS === 'web' ? 24 : 28} color={theme.colors.primary} strokeWidth={2.5} />
+              <Moon size={20} color={theme.colors.primary} strokeWidth={2.5} />
             )}
           </TouchableOpacity>
 
@@ -51,7 +51,7 @@ const Navigation = memo(function Navigation() {
             onPress={toggleLanguage}
             hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
-            <Globe size={Platform.OS === 'web' ? 24 : 28} color={theme.colors.primary} strokeWidth={2.5} />
+            <Globe size={20} color={theme.colors.primary} strokeWidth={2.5} />
             <Text style={[styles.langText, { color: themeMode === 'dark' ? '#FFFFFF' : theme.colors.primary }]}>{language === 'en' ? 'EN' : 'עב'}</Text>
           </TouchableOpacity>
         </View>
@@ -71,19 +71,19 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   navBar: {
-    height: Platform.OS === 'web' ? 100 : 140,
+    height: Platform.OS === 'web' ? 70 : 80,
   },
   navContent: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: Platform.OS === 'web' ? 100 : 140,
+    height: Platform.OS === 'web' ? 70 : 80,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: Platform.OS === 'web' ? 48 : 24,
-    paddingTop: Platform.OS === 'web' ? 12 : 24,
+    paddingHorizontal: Platform.OS === 'web' ? 48 : 20,
+    paddingTop: Platform.OS === 'web' ? 0 : 10,
     maxWidth: Platform.OS === 'web' ? 1400 : undefined,
     alignSelf: 'center',
     width: '100%',
@@ -92,16 +92,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
   },
   logo: {
-    fontSize: Platform.OS === 'web' ? 36 : 38,
+    fontSize: Platform.OS === 'web' ? 28 : 24,
     fontWeight: '800' as const,
-    letterSpacing: -0.8,
+    letterSpacing: -0.5,
     flex: 0,
     flexShrink: 0,
-    marginRight: Platform.OS === 'web' ? 32 : 20,
+    marginRight: 24,
   },
   controls: {
     flexDirection: 'row',
-    gap: Platform.OS === 'web' ? 18 : 16,
+    gap: 12,
     flex: 0,
     flexShrink: 0,
     alignItems: 'center',
@@ -109,16 +109,17 @@ const styles = StyleSheet.create({
   controlButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    paddingHorizontal: Platform.OS === 'web' ? 18 : 20,
-    paddingVertical: Platform.OS === 'web' ? 12 : 16,
-    borderRadius: 14,
+    justifyContent: 'center',
+    gap: 8,
+    paddingHorizontal: Platform.OS === 'web' ? 14 : 12,
+    paddingVertical: Platform.OS === 'web' ? 10 : 10,
+    borderRadius: 12,
     borderWidth: 1.5,
-    minHeight: Platform.OS === 'web' ? 50 : 60,
-    minWidth: Platform.OS === 'web' ? 50 : 60,
+    minHeight: Platform.OS === 'web' ? 44 : 44,
+    minWidth: Platform.OS === 'web' ? 44 : 44,
   },
   langText: {
-    fontSize: Platform.OS === 'web' ? 16 : 18,
+    fontSize: Platform.OS === 'web' ? 14 : 14,
     fontWeight: '700' as const,
   },
 });
