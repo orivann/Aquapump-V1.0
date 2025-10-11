@@ -1,7 +1,9 @@
-import createContextHook from '@nkzw/create-context-hook';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useState } from 'react';
 import { I18nManager, Platform } from 'react-native';
+import * as CreateContextHookModule from '@nkzw/create-context-hook';
+
+const createContextHook = (CreateContextHookModule as any).default || CreateContextHookModule;
 
 export type Language = 'en' | 'he';
 

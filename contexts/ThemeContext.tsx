@@ -1,7 +1,9 @@
-import createContextHook from '@nkzw/create-context-hook';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { lightTheme, darkTheme, Theme } from '@/constants/theme';
+import * as CreateContextHookModule from '@nkzw/create-context-hook';
+
+const createContextHook = (CreateContextHookModule as any).default || CreateContextHookModule;
 
 export type ThemeMode = 'light' | 'dark';
 
