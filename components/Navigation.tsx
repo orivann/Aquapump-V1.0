@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { memo } from 'react';
 
-const Navigation = memo(function Navigation() {
+function NavigationComponent() {
   const { language, changeLanguage, isRTL } = useLanguage();
   const { theme, themeMode, toggleTheme } = useTheme();
 
@@ -37,9 +37,9 @@ const Navigation = memo(function Navigation() {
             hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
             {themeMode === 'dark' ? (
-              <Sun size={20} color={theme.colors.primary} strokeWidth={2.5} />
+              <Sun size={22} color={theme.colors.primary} strokeWidth={2.5} />
             ) : (
-              <Moon size={20} color={theme.colors.primary} strokeWidth={2.5} />
+              <Moon size={22} color={theme.colors.primary} strokeWidth={2.5} />
             )}
           </TouchableOpacity>
 
@@ -51,15 +51,16 @@ const Navigation = memo(function Navigation() {
             onPress={toggleLanguage}
             hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
-            <Globe size={20} color={theme.colors.primary} strokeWidth={2.5} />
+            <Globe size={22} color={theme.colors.primary} strokeWidth={2.5} />
             <Text style={[styles.langText, { color: themeMode === 'dark' ? '#FFFFFF' : theme.colors.primary }]}>{language === 'en' ? 'EN' : 'עב'}</Text>
           </TouchableOpacity>
         </View>
       </View>
     </View>
   );
-});
+}
 
+const Navigation = memo(NavigationComponent);
 export default Navigation;
 
 const styles = StyleSheet.create({
@@ -71,19 +72,19 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   navBar: {
-    height: Platform.OS === 'web' ? 80 : 90,
+    height: Platform.OS === 'web' ? 70 : 75,
   },
   navContent: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: Platform.OS === 'web' ? 80 : 90,
+    height: Platform.OS === 'web' ? 70 : 75,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Platform.OS === 'web' ? 48 : 20,
-    paddingTop: Platform.OS === 'web' ? 0 : 10,
+    paddingTop: Platform.OS === 'web' ? 0 : 8,
     maxWidth: Platform.OS === 'web' ? 1400 : undefined,
     alignSelf: 'center',
     width: '100%',
@@ -92,17 +93,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
   },
   logo: {
-    fontSize: Platform.OS === 'web' ? 32 : 26,
+    fontSize: Platform.OS === 'web' ? 28 : 24,
     fontWeight: '800' as const,
     letterSpacing: -0.5,
     flex: 0,
     flexShrink: 0,
-    marginRight: 24,
-    paddingRight: 16,
   },
   controls: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 10,
     flex: 0,
     flexShrink: 0,
     alignItems: 'center',
@@ -111,16 +110,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-    paddingHorizontal: Platform.OS === 'web' ? 16 : 14,
-    paddingVertical: Platform.OS === 'web' ? 12 : 12,
-    borderRadius: 12,
+    gap: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 10,
     borderWidth: 1.5,
-    minHeight: Platform.OS === 'web' ? 48 : 48,
-    minWidth: Platform.OS === 'web' ? 48 : 48,
+    minHeight: 44,
+    minWidth: 44,
   },
   langText: {
-    fontSize: Platform.OS === 'web' ? 15 : 15,
+    fontSize: 14,
     fontWeight: '700' as const,
   },
 });
