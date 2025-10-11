@@ -1,6 +1,7 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Globe, Sun, Moon } from 'lucide-react-native';
+import React from 'react';
 import {
   View,
   Text,
@@ -8,9 +9,8 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import { memo } from 'react';
 
-function NavigationComponent() {
+export default function Navigation() {
   const { language, changeLanguage, isRTL } = useLanguage();
   const { theme, themeMode, toggleTheme } = useTheme();
 
@@ -37,9 +37,9 @@ function NavigationComponent() {
             hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
             {themeMode === 'dark' ? (
-              <Sun size={22} color={theme.colors.primary} strokeWidth={2.5} />
+              <Sun size={24} color={theme.colors.primary} strokeWidth={2.5} />
             ) : (
-              <Moon size={22} color={theme.colors.primary} strokeWidth={2.5} />
+              <Moon size={24} color={theme.colors.primary} strokeWidth={2.5} />
             )}
           </TouchableOpacity>
 
@@ -51,7 +51,7 @@ function NavigationComponent() {
             onPress={toggleLanguage}
             hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
           >
-            <Globe size={22} color={theme.colors.primary} strokeWidth={2.5} />
+            <Globe size={24} color={theme.colors.primary} strokeWidth={2.5} />
             <Text style={[styles.langText, { color: themeMode === 'dark' ? '#FFFFFF' : theme.colors.primary }]}>{language === 'en' ? 'EN' : 'עב'}</Text>
           </TouchableOpacity>
         </View>
@@ -59,9 +59,6 @@ function NavigationComponent() {
     </View>
   );
 }
-
-const Navigation = memo(NavigationComponent);
-export default Navigation;
 
 const styles = StyleSheet.create({
   container: {
@@ -72,19 +69,19 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   navBar: {
-    height: Platform.OS === 'web' ? 70 : 75,
+    height: Platform.OS === 'web' ? 90 : 95,
   },
   navContent: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: Platform.OS === 'web' ? 70 : 75,
+    height: Platform.OS === 'web' ? 90 : 95,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: Platform.OS === 'web' ? 48 : 20,
-    paddingTop: Platform.OS === 'web' ? 0 : 8,
+    paddingHorizontal: Platform.OS === 'web' ? 48 : 24,
+    paddingTop: Platform.OS === 'web' ? 0 : 12,
     maxWidth: Platform.OS === 'web' ? 1400 : undefined,
     alignSelf: 'center',
     width: '100%',
@@ -93,7 +90,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
   },
   logo: {
-    fontSize: Platform.OS === 'web' ? 28 : 24,
+    fontSize: Platform.OS === 'web' ? 32 : 28,
     fontWeight: '800' as const,
     letterSpacing: -0.5,
     flex: 0,
@@ -101,7 +98,7 @@ const styles = StyleSheet.create({
   },
   controls: {
     flexDirection: 'row',
-    gap: 10,
+    gap: 12,
     flex: 0,
     flexShrink: 0,
     alignItems: 'center',
@@ -110,16 +107,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 10,
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderRadius: 12,
     borderWidth: 1.5,
-    minHeight: 44,
-    minWidth: 44,
+    minHeight: 48,
+    minWidth: 48,
   },
   langText: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '700' as const,
   },
 });
