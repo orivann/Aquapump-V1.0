@@ -1,13 +1,34 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, createContext, useContext, ReactNode } from 'react';
 import { lightTheme, darkTheme, Theme } from '@/constants/theme';
-import createContextHook from '@nkzw/create-context-hook';
 
 export type ThemeMode = 'light' | 'dark';
 
 const THEME_KEY = '@aquapump_theme';
 
-export const [ThemeProvider, useTheme] = createContextHook(() => {
+interface ThemeContextType {
+  themeMode: ThemeMode;
+  theme: Theme;
+  isLoading: boolean;
+  toggleTheme: () => Promise<void>;
+}
+
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const value = useThemeValue();
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+}
+
+export function useTheme() {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme must be used within ThemeProvider');
+  }
+  return context;
+}
+
+function useThemeValue() {
   const [themeMode, setThemeMode] = useState<ThemeMode>('dark');
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -51,4 +72,4 @@ export const [ThemeProvider, useTheme] = createContextHook(() => {
     isLoading,
     toggleTheme,
   };
-});
+}
