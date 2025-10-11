@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import { BlurView } from 'expo-blur';
 import { memo } from 'react';
 
 const Navigation = memo(function Navigation() {
@@ -21,11 +20,7 @@ const Navigation = memo(function Navigation() {
 
   return (
     <View style={styles.container}>
-      {Platform.OS === 'web' ? (
-        <View style={[styles.navBar, { backgroundColor: themeMode === 'dark' ? theme.colors.secondary + '95' : theme.colors.secondary + 'F5' }]} />
-      ) : (
-        <BlurView intensity={90} style={styles.navBar} tint={themeMode === 'dark' ? 'dark' : 'light'} />
-      )}
+      <View style={[styles.navBar, { backgroundColor: themeMode === 'dark' ? 'rgba(10, 25, 41, 0.95)' : 'rgba(255, 255, 255, 0.95)' }]} />
       
       <View style={[styles.navContent, isRTL && styles.navContentRTL]}>
         <Text 
