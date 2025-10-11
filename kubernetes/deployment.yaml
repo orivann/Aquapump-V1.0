@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aquapump-app
+  labels:
+    app: aquapump
+    tier: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: aquapump
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: aquapump
+        tier: frontend
+    spec:
+      containers:
+      - name: aquapump-app
+        image: aquapump:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8081
+          name: http
+          protocol: TCP
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "8081"
+        envFrom:
+        - configMapRef:
+            name: aquapump-config
+        - secretRef:
+            name: aquapump-secrets
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /api
+            port: 8081
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /api
+            port: 8081
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 30
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aquapump-service
+  labels:
+    app: aquapump
+spec:
+  type: LoadBalancer
+  selector:
+    app: aquapump
+    tier: frontend
+  ports:
+  - port: 80
+    targetPort: 8081
+    protocol: TCP
+    name: http
+  sessionAffinity: ClientIP

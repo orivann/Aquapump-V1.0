@@ -8,25 +8,45 @@ RUN npm install -g bun
 
 # Copy package.json and bun.lock to leverage Docker cache
 COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile
+RUN bun install --frozen-lockfile --production=false
 
-
-# Stage 2: Setup runner
-FROM node:20-slim
+# Stage 2: Build stage (if needed for optimizations)
+FROM node:20-slim AS builder
 
 WORKDIR /usr/src/app
 
 # Install bun
 RUN npm install -g bun
 
-# Copy dependencies from deps stage
+# Copy dependencies
 COPY --from=deps /usr/src/app/node_modules ./node_modules
-
-# Copy the rest of the application code
 COPY . .
 
-# Expose the port the app runs on
+# Stage 3: Production runner
+FROM node:20-slim AS runner
+
+WORKDIR /usr/src/app
+
+# Install bun and production dependencies only
+RUN npm install -g bun
+
+# Create non-root user for security
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 expouser
+
+# Copy dependencies and application
+COPY --from=builder --chown=expouser:nodejs /usr/src/app/node_modules ./node_modules
+COPY --chown=expouser:nodejs . .
+
+# Switch to non-root user
+USER expouser
+
+# Expose the port
 EXPOSE 8081
 
-# Define the command to start the app
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:8081/api', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+
+# Start the application
 CMD ["bun", "run", "start-web-docker"]

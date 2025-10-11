@@ -6,16 +6,15 @@ services:
       context: .
       dockerfile: Dockerfile
       target: runner
-    container_name: aquapump-app
-    restart: unless-stopped
+    container_name: aquapump-app-prod
+    restart: always
     ports:
       - "8081:8081"
     environment:
       - NODE_ENV=production
       - PORT=8081
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+    env_file:
+      - .env.production
     healthcheck:
       test: ["CMD", "node", "-e", "require('http').get('http://localhost:8081/api', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
       interval: 30s
@@ -24,6 +23,20 @@ services:
       start_period: 40s
     networks:
       - aquapump-network
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
 
 networks:
   aquapump-network:

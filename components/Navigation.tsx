@@ -97,12 +97,14 @@ const styles = StyleSheet.create({
     letterSpacing: -0.8,
     flex: 0,
     flexShrink: 0,
+    marginRight: Platform.OS === 'web' ? 32 : 20,
   },
   controls: {
     flexDirection: 'row',
-    gap: Platform.OS === 'web' ? 18 : 12,
+    gap: Platform.OS === 'web' ? 18 : 16,
     flex: 0,
     flexShrink: 0,
+    alignItems: 'center',
   },
   controlButton: {
     flexDirection: 'row',
