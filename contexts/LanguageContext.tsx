@@ -44,29 +44,10 @@ function useLanguageValue() {
       if (stored === 'en' || stored === 'he') {
         setLanguage(stored);
         setIsRTL(stored === 'he');
-        if (Platform.OS === 'web') {
-          try {
-            const dir = stored === 'he' ? 'rtl' : 'ltr';
-            if (typeof document !== 'undefined') {
-              document.documentElement?.setAttribute('dir', dir);
-            }
-          } catch (e) {
-            console.log('[Language] Failed to set dir on web during load', e);
-          }
-        }
       } else {
         await AsyncStorage.setItem(LANGUAGE_KEY, 'en');
         setLanguage('en');
         setIsRTL(false);
-        if (Platform.OS === 'web') {
-          try {
-            if (typeof document !== 'undefined') {
-              document.documentElement?.setAttribute('dir', 'ltr');
-            }
-          } catch (e) {
-            console.log('[Language] Failed to set default dir on web', e);
-          }
-        }
       }
     } catch (error) {
       console.error('Failed to load language:', error);
@@ -83,15 +64,6 @@ function useLanguageValue() {
       
       if (Platform.OS !== 'web') {
         I18nManager.forceRTL(newLanguage === 'he');
-      } else {
-        try {
-          const dir = newLanguage === 'he' ? 'rtl' : 'ltr';
-          if (typeof document !== 'undefined') {
-            document.documentElement?.setAttribute('dir', dir);
-          }
-        } catch (e) {
-          console.log('[Language] Failed to set dir on web during change', e);
-        }
       }
     } catch (error) {
       console.error('Failed to save language:', error);
