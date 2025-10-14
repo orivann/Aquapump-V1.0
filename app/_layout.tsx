@@ -7,6 +7,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import Head from "expo-router/head";
+import Navigation from "@/components/Navigation";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -35,9 +36,10 @@ function RootLayoutNav() {
           <link rel="canonical" href="https://aquapump.com" />
         </Head>
       )}
+      <Navigation />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="pumps" options={{ headerShown: true, title: 'Our Pumps' }} />
+        <Stack.Screen name="pumps" options={{ headerShown: false, title: 'Our Pumps' }} />
         <Stack.Screen name="+not-found" />
       </Stack>
     </>

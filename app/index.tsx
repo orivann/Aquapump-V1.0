@@ -3,7 +3,7 @@ import About from '@/components/About';
 import Technology from '@/components/Technology';
 import Products from '@/components/Products';
 import Contact from '@/components/Contact';
-import Navigation from '@/components/Navigation';
+
 import Chatbot from '@/components/Chatbot';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -35,18 +35,22 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.secondary }]} edges={['top', 'bottom']}>
       <StatusBar style={themeMode === 'dark' ? 'light' : 'dark'} />
-      <Navigation />
-      
       <ScrollView
         ref={scrollViewRef}
         style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, { paddingTop: 100 }]}
         showsVerticalScrollIndicator={false}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: true }
-        )}
+        onScroll={(e) => {
+          try {
+            const y = e?.nativeEvent?.contentOffset?.y ?? 0;
+            console.log('[HomeScreen] onScroll y=', y);
+            scrollY.setValue(y);
+          } catch (err) {
+            console.log('[HomeScreen] onScroll error', err);
+          }
+        }}
         scrollEventThrottle={16}
+        testID="home-scroll"
       >
         <Hero scrollY={scrollY} onQuotePress={scrollToContact} />
         <Technology scrollY={scrollY} />
