@@ -38,7 +38,7 @@ export default function HomeScreen() {
       <ScrollView
         ref={scrollViewRef}
         style={styles.scrollView}
-        contentContainerStyle={[styles.scrollContent, { paddingTop: 100 }]}
+        contentContainerStyle={[styles.scrollContent, { paddingTop: 110 }]}
         showsVerticalScrollIndicator={false}
         onScroll={(e) => {
           try {
@@ -49,6 +49,8 @@ export default function HomeScreen() {
             console.log('[HomeScreen] onScroll error', err);
           }
         }}
+        onScrollBeginDrag={() => {}}
+        onScrollEndDrag={() => {}}
         scrollEventThrottle={16}
         testID="home-scroll"
       >

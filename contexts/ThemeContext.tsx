@@ -29,28 +29,22 @@ export function useTheme() {
 }
 
 function useThemeValue() {
-  const [themeMode, setThemeMode] = useState<ThemeMode>('dark');
+  const [themeMode, setThemeMode] = useState<ThemeMode>('light');
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    loadTheme();
-  }, []);
-
-  const loadTheme = async () => {
-    try {
-      const stored = await AsyncStorage.getItem(THEME_KEY);
-      if (stored === 'light' || stored === 'dark') {
-        setThemeMode(stored);
-      } else {
-        await AsyncStorage.setItem(THEME_KEY, 'dark');
-        setThemeMode('dark');
+    // Always start in light mode as requested
+    (async () => {
+      try {
+        await AsyncStorage.setItem(THEME_KEY, 'light');
+        setThemeMode('light');
+      } catch (error) {
+        console.error('Failed to initialize theme:', error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Failed to load theme:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    })();
+  }, []);
 
   const toggleTheme = useCallback(async () => {
     const newMode = themeMode === 'dark' ? 'light' : 'dark';

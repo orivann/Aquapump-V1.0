@@ -22,17 +22,18 @@ function RootLayoutNav() {
           <meta name="author" content="AquaTech Group" />
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
           <meta name="theme-color" content="#19C3E6" />
-          
+          <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+
           <meta property="og:type" content="website" />
           <meta property="og:title" content="AquaPump - Smart Water Pumps by AquaTech Group" />
           <meta property="og:description" content="Industry-leading smart water pumps from AquaTech Group. 20+ years of excellence in Ramla, Israel. Advanced IoT technology, real-time monitoring, and energy-efficient solutions." />
           <meta property="og:site_name" content="AquaPump" />
           <meta property="og:locale" content="en_US" />
-          
+
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content="AquaPump - Smart Water Pumps by AquaTech Group" />
           <meta name="twitter:description" content="Industry-leading smart water pumps from AquaTech Group. 20+ years of excellence in Ramla, Israel." />
-          
+
           <link rel="canonical" href="https://aquapump.com" />
         </Head>
       )}

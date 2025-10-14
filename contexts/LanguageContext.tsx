@@ -35,33 +35,28 @@ function useLanguageValue() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    loadLanguage();
-  }, []);
-
-  const loadLanguage = async () => {
-    try {
-      const stored = await AsyncStorage.getItem(LANGUAGE_KEY);
-      if (stored === 'en' || stored === 'he') {
-        setLanguage(stored);
-        setIsRTL(stored === 'he');
-      } else {
+    // Always start in English as requested
+    (async () => {
+      try {
         await AsyncStorage.setItem(LANGUAGE_KEY, 'en');
         setLanguage('en');
         setIsRTL(false);
+        if (Platform.OS !== 'web') {
+          I18nManager.forceRTL(false);
+        }
+      } catch (error) {
+        console.error('Failed to initialize language:', error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('Failed to load language:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    })();
+  }, []);
 
   const changeLanguage = useCallback(async (newLanguage: Language) => {
     try {
       await AsyncStorage.setItem(LANGUAGE_KEY, newLanguage);
       setLanguage(newLanguage);
       setIsRTL(newLanguage === 'he');
-      
       if (Platform.OS !== 'web') {
         I18nManager.forceRTL(newLanguage === 'he');
       }
