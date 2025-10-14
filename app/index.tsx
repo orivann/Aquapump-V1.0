@@ -3,12 +3,11 @@ import About from '@/components/About';
 import Technology from '@/components/Technology';
 import Products from '@/components/Products';
 import Contact from '@/components/Contact';
-
 import Chatbot from '@/components/Chatbot';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, ScrollView, Animated, Dimensions, View } from 'react-native';
+import { StyleSheet, ScrollView, Animated, Dimensions, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRef, useCallback } from 'react';
 
@@ -24,10 +23,21 @@ export default function HomeScreen() {
     scrollViewRef.current?.scrollTo({ y: height * 3.5, animated: true });
   }, []);
 
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    {
+      useNativeDriver: false,
+      listener: (event: any) => {
+        const y = event?.nativeEvent?.contentOffset?.y ?? 0;
+        console.log('[HomeScreen] Scroll position:', y);
+      },
+    }
+  );
+
   if (languageLoading || themeLoading) {
     return (
-      <SafeAreaView style={[styles.loading, { backgroundColor: '#0A1929' }]} edges={['top', 'bottom']}>
-        <View style={styles.loadingContainer} />
+      <SafeAreaView style={[styles.loading, { backgroundColor: themeMode === 'dark' ? '#0A1929' : '#F8FAFC' }]} edges={['top', 'bottom']}>
+        <ActivityIndicator size="large" color={theme.colors.primary} />
       </SafeAreaView>
     );
   }
@@ -35,22 +45,12 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.secondary }]} edges={['top', 'bottom']}>
       <StatusBar style={themeMode === 'dark' ? 'light' : 'dark'} />
-      <ScrollView
+      <Animated.ScrollView
         ref={scrollViewRef}
         style={styles.scrollView}
-        contentContainerStyle={[styles.scrollContent, { paddingTop: 110 }]}
+        contentContainerStyle={[styles.scrollContent, { paddingTop: 72 }]}
         showsVerticalScrollIndicator={false}
-        onScroll={(e) => {
-          try {
-            const y = e?.nativeEvent?.contentOffset?.y ?? 0;
-            console.log('[HomeScreen] onScroll y=', y);
-            scrollY.setValue(y);
-          } catch (err) {
-            console.log('[HomeScreen] onScroll error', err);
-          }
-        }}
-        onScrollBeginDrag={() => {}}
-        onScrollEndDrag={() => {}}
+        onScroll={handleScroll}
         scrollEventThrottle={16}
         testID="home-scroll"
       >
@@ -59,7 +59,7 @@ export default function HomeScreen() {
         <Products scrollY={scrollY} />
         <About />
         <Contact />
-      </ScrollView>
+      </Animated.ScrollView>
 
       <Chatbot />
     </SafeAreaView>
@@ -74,10 +74,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  loadingContainer: {
-    width: 50,
-    height: 50,
   },
   scrollView: {
     flex: 1,

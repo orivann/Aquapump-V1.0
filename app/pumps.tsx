@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Platform } from 'react-native';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Zap, Droplet, Factory, Download, ArrowRight } from 'lucide-react-native';
 import { Stack } from 'expo-router';
+import { useRef, useEffect } from 'react';
 
 interface PumpModel {
   id: string;
@@ -126,6 +127,24 @@ export default function PumpsScreen() {
   const { theme, themeMode } = useTheme();
   const { isRTL } = useLanguage();
   const isDark = themeMode === 'dark';
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(30)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.spring(slideAnim, {
+        toValue: 0,
+        tension: 50,
+        friction: 8,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -141,37 +160,51 @@ export default function PumpsScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: isDark ? theme.colors.dark : '#F8FAFC' }]} edges={['bottom']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: isDark ? '#0A1929' : '#F8FAFC' }]} edges={['bottom']}>
       <Stack.Screen
         options={{
-          headerStyle: { backgroundColor: isDark ? theme.colors.secondary : '#FFFFFF' },
-          headerTintColor: isDark ? theme.colors.light : '#1E40AF',
-          headerTitleStyle: { fontWeight: '700' as const },
+          headerStyle: {
+            backgroundColor: isDark ? 'rgba(10, 25, 41, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+          },
+          headerTintColor: isDark ? theme.colors.primary : '#1E40AF',
+          headerTitleStyle: { fontWeight: '700' as const, fontSize: 18 },
+          headerShadowVisible: false,
         }}
       />
       
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-        <View style={styles.header}>
+        <Animated.View
+          style={[
+            styles.header,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }],
+            },
+          ]}
+        >
           <Text style={[styles.title, { color: isDark ? theme.colors.primary : '#1E40AF' }]}>
             {isRTL ? 'מגוון המשאבות שלנו' : 'Our Pump Models'}
           </Text>
-          <Text style={[styles.subtitle, { color: isDark ? theme.colors.textSecondary : '#475569' }]}>
+          <Text style={[styles.subtitle, { color: isDark ? '#94A3B8' : '#64748B' }]}>
             {isRTL
               ? 'בחר את המשאבה המושלמת לצרכים שלך'
               : 'Choose the perfect pump for your needs'}
           </Text>
-        </View>
+        </Animated.View>
 
         <View style={styles.grid}>
-          {pumpModels.map((pump) => (
-            <View
+          {pumpModels.map((pump, index) => (
+            <Animated.View
               key={pump.id}
               style={[
                 styles.card,
                 {
-                  backgroundColor: isDark ? theme.colors.accent : '#FFFFFF',
-                  borderColor: theme.colors.primary + '20',
+                  backgroundColor: isDark ? 'rgba(16, 36, 58, 0.8)' : '#FFFFFF',
+                  borderColor: isDark ? 'rgba(25, 195, 230, 0.2)' : 'rgba(14, 165, 233, 0.2)',
+                  opacity: fadeAnim,
+                  transform: [{ translateY: slideAnim }],
                 },
+                Platform.OS === 'web' && styles.cardWeb,
               ]}
             >
               <View style={styles.cardHeader}>
@@ -256,7 +289,7 @@ export default function PumpsScreen() {
                   </Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </Animated.View>
           ))}
         </View>
       </ScrollView>
@@ -301,6 +334,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 12,
     elevation: 4,
+  },
+  cardWeb: {
+    ...(Platform.OS === 'web' && {
+      transition: 'all 0.3s ease',
+    } as any),
   },
   cardHeader: {
     flexDirection: 'row',

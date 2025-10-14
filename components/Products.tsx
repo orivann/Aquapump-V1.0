@@ -2,7 +2,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { Download } from 'lucide-react-native';
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,9 +10,11 @@ import {
   Dimensions,
   Animated,
   ScrollView,
+  TouchableOpacity,
+  Platform,
 } from 'react-native';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 interface ProductCardProps {
   name: string;
@@ -21,18 +23,54 @@ interface ProductCardProps {
   color: string;
   theme: any;
   themeMode: 'light' | 'dark';
+  index: number;
 }
 
-const ProductCard = memo(function ProductCard({ name, description, isRTL, color, theme, themeMode }: ProductCardProps) {
+const ProductCard = memo(function ProductCard({ name, description, isRTL, color, theme, themeMode, index }: ProductCardProps) {
   const isDark = themeMode === 'dark';
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(60)).current;
+  const scaleAnim = useRef(new Animated.Value(0.9)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 900,
+        delay: index * 250,
+        useNativeDriver: true,
+      }),
+      Animated.spring(slideAnim, {
+        toValue: 0,
+        tension: 45,
+        friction: 8,
+        delay: index * 250,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        tension: 50,
+        friction: 7,
+        delay: index * 250,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [index]);
+
   return (
-    <View
+    <Animated.View
       style={[
         styles.productCard,
         {
-          backgroundColor: isDark ? theme.colors.accent : '#FFFFFF',
-          borderColor: theme.colors.primary + '20',
+          backgroundColor: isDark ? 'rgba(16, 36, 58, 0.8)' : '#FFFFFF',
+          borderColor: isDark ? 'rgba(25, 195, 230, 0.2)' : 'rgba(14, 165, 233, 0.2)',
+          opacity: fadeAnim,
+          transform: [
+            { translateY: slideAnim },
+            { scale: scaleAnim },
+          ],
         },
+        Platform.OS === 'web' && styles.productCardWeb,
       ]}
     >
       <View
@@ -41,25 +79,40 @@ const ProductCard = memo(function ProductCard({ name, description, isRTL, color,
           { backgroundColor: color },
         ]}
       >
-        <View style={styles.modelInner} />
+        <View style={[styles.modelInner, { borderColor: 'rgba(255, 255, 255, 0.5)' }]} />
       </View>
 
-      <Text style={[styles.productName, isRTL && styles.rtlText, { color: isDark ? theme.colors.light : '#0F172A' }]}>{name}</Text>
-      <Text style={[styles.productDescription, isRTL && styles.rtlText, { color: isDark ? theme.colors.gray : '#475569' }]}>
+      <Text style={[styles.productName, isRTL && styles.rtlText, { color: isDark ? theme.colors.light : '#1E40AF' }]}>
+        {name}
+      </Text>
+      <Text style={[styles.productDescription, isRTL && styles.rtlText, { color: isDark ? '#94A3B8' : '#64748B' }]}>
         {description}
       </Text>
 
-      <View style={[styles.specsButton, { borderColor: theme.colors.primary }]}>
+      <TouchableOpacity
+        style={[
+          styles.specsButton,
+          {
+            borderColor: theme.colors.primary,
+            backgroundColor: isDark ? 'rgba(25, 195, 230, 0.1)' : 'rgba(14, 165, 233, 0.08)',
+          },
+        ]}
+        activeOpacity={0.8}
+      >
         <Download size={20} color={theme.colors.primary} strokeWidth={2} />
         <Text style={[styles.specsButtonText, { color: theme.colors.primary }]}>
           {isRTL ? translations.products.viewSpecs.he : translations.products.viewSpecs.en}
         </Text>
-      </View>
-    </View>
+      </TouchableOpacity>
+    </Animated.View>
   );
 });
 
-const Products = memo(function Products({ scrollY }: { scrollY: Animated.Value }) {
+interface ProductsProps {
+  scrollY: Animated.Value;
+}
+
+const Products = memo(function Products({ scrollY }: ProductsProps) {
   const { t, isRTL } = useLanguage();
   const { theme, themeMode } = useTheme();
   const isDark = themeMode === 'dark';
@@ -78,15 +131,29 @@ const Products = memo(function Products({ scrollY }: { scrollY: Animated.Value }
     {
       name: t(translations.products.aquaIndustrial.name),
       description: t(translations.products.aquaIndustrial.description),
-      color: theme.colors.chrome,
+      color: '#6366F1',
     },
-  ], [theme.colors.primary, theme.colors.chrome, t]);
+  ], [theme.colors.primary, t]);
+
+  const parallaxY = scrollY.interpolate({
+    inputRange: [height * 1.5, height * 2.5],
+    outputRange: [50, -50],
+    extrapolate: 'clamp',
+  });
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? theme.colors.secondary : '#F8FAFC' }]}>
+    <Animated.View
+      style={[
+        styles.container,
+        {
+          backgroundColor: isDark ? '#10243A' : '#FFFFFF',
+          transform: [{ translateY: parallaxY }],
+        },
+      ]}
+    >
       <Text 
         accessibilityRole="header"
-        style={[styles.sectionTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.light : '#1E40AF' }]}>
+        style={[styles.sectionTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.primary : '#1E40AF' }]}>
         {t(translations.products.title)}
       </Text>
 
@@ -95,6 +162,9 @@ const Products = memo(function Products({ scrollY }: { scrollY: Animated.Value }
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.productsContainer}
         style={styles.scrollView}
+        decelerationRate="fast"
+        snapToInterval={width * 0.85 + 24}
+        snapToAlignment="start"
       >
         {products.map((product, index) => (
           <ProductCard
@@ -105,10 +175,11 @@ const Products = memo(function Products({ scrollY }: { scrollY: Animated.Value }
             color={product.color}
             theme={theme}
             themeMode={themeMode}
+            index={index}
           />
         ))}
       </ScrollView>
-    </View>
+    </Animated.View>
   );
 });
 
@@ -117,14 +188,15 @@ export default Products;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    paddingVertical: 64,
+    paddingVertical: 100,
   },
   sectionTitle: {
-    fontSize: 32,
+    fontSize: 44,
     fontWeight: '700' as const,
     textAlign: 'center',
-    marginBottom: 32,
+    marginBottom: 48,
     paddingHorizontal: 24,
+    letterSpacing: -1,
   },
   rtlText: {
     textAlign: 'right',
@@ -138,57 +210,63 @@ const styles = StyleSheet.create({
   },
   productCard: {
     width: width * 0.85,
-    maxWidth: 380,
-    borderRadius: 24,
-    padding: 24,
+    maxWidth: 400,
+    borderRadius: 28,
+    padding: 28,
     marginRight: 24,
     borderWidth: 1,
-    shadowColor: '#00D4FF',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.4,
-    shadowRadius: 16,
-    elevation: 8,
+    shadowColor: '#0EA5E9',
+    shadowOffset: { width: 0, height: 16 },
+    shadowOpacity: 0.2,
+    shadowRadius: 32,
+    elevation: 12,
+  },
+  productCardWeb: {
+    ...(Platform.OS === 'web' && {
+      transition: 'all 0.3s ease',
+    } as any),
   },
   productModel: {
     width: '100%',
-    height: 200,
-    borderRadius: 16,
-    marginBottom: 24,
+    height: 220,
+    borderRadius: 20,
+    marginBottom: 28,
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
   },
   modelInner: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    width: 130,
+    height: 130,
+    borderRadius: 65,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
     borderWidth: 3,
-    borderColor: 'rgba(255, 255, 255, 0.4)',
   },
   productName: {
-    fontSize: 26,
+    fontSize: 28,
     fontWeight: '700' as const,
-    marginBottom: 8,
+    marginBottom: 12,
+    letterSpacing: -0.5,
   },
   productDescription: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '400' as const,
-    lineHeight: 24,
-    marginBottom: 24,
+    lineHeight: 28,
+    marginBottom: 28,
   },
   specsButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
+    gap: 10,
+    paddingVertical: 18,
+    paddingHorizontal: 28,
     borderRadius: 16,
-    borderWidth: 2,
+    borderWidth: 1.5,
   },
   specsButtonText: {
     fontSize: 16,
     fontWeight: '600' as const,
+    letterSpacing: 0.3,
   },
 });

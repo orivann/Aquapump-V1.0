@@ -33,13 +33,12 @@ function useThemeValue() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Always start in light mode as requested
     (async () => {
       try {
         await AsyncStorage.setItem(THEME_KEY, 'light');
         setThemeMode('light');
       } catch (error) {
-        console.error('Failed to initialize theme:', error);
+        console.error('[ThemeContext] Failed to initialize:', error);
       } finally {
         setIsLoading(false);
       }
@@ -49,10 +48,11 @@ function useThemeValue() {
   const toggleTheme = useCallback(async () => {
     const newMode = themeMode === 'dark' ? 'light' : 'dark';
     try {
+      console.log('[ThemeContext] Toggling theme to:', newMode);
       await AsyncStorage.setItem(THEME_KEY, newMode);
       setThemeMode(newMode);
     } catch (error) {
-      console.error('Failed to save theme:', error);
+      console.error('[ThemeContext] Failed to save theme:', error);
     }
   }, [themeMode]);
 

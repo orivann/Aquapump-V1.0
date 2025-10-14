@@ -2,7 +2,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { Zap, Shield, Wifi } from 'lucide-react-native';
-import React, { memo, useMemo } from 'react';
+import React, { memo, useMemo, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,9 +10,10 @@ import {
   Dimensions,
   Animated,
   ScrollView,
+  Platform,
 } from 'react-native';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 interface FeatureCardProps {
   icon: React.ReactNode;
@@ -21,59 +22,104 @@ interface FeatureCardProps {
   isRTL: boolean;
   theme: any;
   themeMode: 'light' | 'dark';
+  index: number;
 }
 
-const FeatureCard = memo(function FeatureCard({ icon, title, description, isRTL, theme, themeMode }: FeatureCardProps) {
+const FeatureCard = memo(function FeatureCard({ icon, title, description, isRTL, theme, themeMode, index }: FeatureCardProps) {
   const isDark = themeMode === 'dark';
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(50)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        delay: index * 200,
+        useNativeDriver: true,
+      }),
+      Animated.spring(slideAnim, {
+        toValue: 0,
+        tension: 50,
+        friction: 8,
+        delay: index * 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [index]);
+
   return (
-    <View
+    <Animated.View
       style={[
         styles.card,
         {
-          backgroundColor: isDark ? theme.colors.accent : '#FFFFFF',
-          borderColor: theme.colors.primary + '30',
+          backgroundColor: isDark ? 'rgba(16, 36, 58, 0.8)' : '#FFFFFF',
+          borderColor: isDark ? 'rgba(25, 195, 230, 0.2)' : 'rgba(14, 165, 233, 0.2)',
+          opacity: fadeAnim,
+          transform: [{ translateY: slideAnim }],
         },
+        Platform.OS === 'web' && styles.cardWeb,
       ]}
     >
-      <View style={[styles.iconContainer, { backgroundColor: theme.colors.primary + '20' }]}>
+      <View style={[styles.iconContainer, { backgroundColor: theme.colors.primary + '15' }]}>
         {icon}
       </View>
-      <Text style={[styles.cardTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.light : '#0F172A' }]}>{title}</Text>
-      <Text style={[styles.cardDescription, isRTL && styles.rtlText, { color: isDark ? theme.colors.gray : '#475569' }]}>
+      <Text style={[styles.cardTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.light : '#1E40AF' }]}>
+        {title}
+      </Text>
+      <Text style={[styles.cardDescription, isRTL && styles.rtlText, { color: isDark ? '#94A3B8' : '#64748B' }]}>
         {description}
       </Text>
-    </View>
+    </Animated.View>
   );
 });
 
-const Technology = memo(function Technology({ scrollY }: { scrollY: Animated.Value }) {
+interface TechnologyProps {
+  scrollY: Animated.Value;
+}
+
+const Technology = memo(function Technology({ scrollY }: TechnologyProps) {
   const { t, isRTL } = useLanguage();
   const { theme, themeMode } = useTheme();
   const isDark = themeMode === 'dark';
 
   const features = useMemo(() => [
     {
-      icon: <Zap size={40} color={theme.colors.primary} strokeWidth={2} />,
+      icon: <Zap size={44} color={theme.colors.primary} strokeWidth={2} />,
       title: t(translations.technology.efficiency.title),
       description: t(translations.technology.efficiency.description),
     },
     {
-      icon: <Shield size={40} color={theme.colors.primary} strokeWidth={2} />,
+      icon: <Shield size={44} color={theme.colors.primary} strokeWidth={2} />,
       title: t(translations.technology.durability.title),
       description: t(translations.technology.durability.description),
     },
     {
-      icon: <Wifi size={40} color={theme.colors.primary} strokeWidth={2} />,
+      icon: <Wifi size={44} color={theme.colors.primary} strokeWidth={2} />,
       title: t(translations.technology.smart.title),
       description: t(translations.technology.smart.description),
     },
   ], [theme.colors.primary, t]);
 
+  const parallaxY = scrollY.interpolate({
+    inputRange: [height * 0.5, height * 1.5],
+    outputRange: [50, -50],
+    extrapolate: 'clamp',
+  });
+
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? theme.colors.dark : theme.colors.secondary }]}>
+    <Animated.View
+      style={[
+        styles.container,
+        {
+          backgroundColor: isDark ? '#0A1929' : '#F8FAFC',
+          transform: [{ translateY: parallaxY }],
+        },
+      ]}
+    >
       <Text 
         accessibilityRole="header"
-        style={[styles.sectionTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.light : '#1E40AF' }]}>
+        style={[styles.sectionTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.primary : '#1E40AF' }]}>
         {t(translations.technology.title)}
       </Text>
 
@@ -82,6 +128,9 @@ const Technology = memo(function Technology({ scrollY }: { scrollY: Animated.Val
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.cardsContainer}
         style={styles.scrollView}
+        decelerationRate="fast"
+        snapToInterval={width * 0.8 + 24}
+        snapToAlignment="start"
       >
         {features.map((feature, index) => (
           <FeatureCard
@@ -92,10 +141,11 @@ const Technology = memo(function Technology({ scrollY }: { scrollY: Animated.Val
             isRTL={isRTL}
             theme={theme}
             themeMode={themeMode}
+            index={index}
           />
         ))}
       </ScrollView>
-    </View>
+    </Animated.View>
   );
 });
 
@@ -104,14 +154,15 @@ export default Technology;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    paddingVertical: 96,
+    paddingVertical: 100,
   },
   sectionTitle: {
-    fontSize: 40,
+    fontSize: 44,
     fontWeight: '700' as const,
     textAlign: 'center',
-    marginBottom: 32,
+    marginBottom: 48,
     paddingHorizontal: 24,
+    letterSpacing: -1,
   },
   rtlText: {
     textAlign: 'right',
@@ -125,33 +176,39 @@ const styles = StyleSheet.create({
   },
   card: {
     width: width * 0.8,
-    maxWidth: 350,
+    maxWidth: 380,
     borderRadius: 24,
-    padding: 24,
+    padding: 32,
     marginRight: 24,
     borderWidth: 1,
-    shadowColor: '#00D4FF',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowColor: '#0EA5E9',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.15,
+    shadowRadius: 24,
+    elevation: 8,
+  },
+  cardWeb: {
+    ...(Platform.OS === 'web' && {
+      transition: 'all 0.3s ease',
+    } as any),
   },
   iconContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: 88,
+    height: 88,
+    borderRadius: 44,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 24,
   },
   cardTitle: {
-    fontSize: 24,
-    fontWeight: '600' as const,
-    marginBottom: 8,
+    fontSize: 26,
+    fontWeight: '700' as const,
+    marginBottom: 12,
+    letterSpacing: -0.5,
   },
   cardDescription: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '400' as const,
-    lineHeight: 24,
+    lineHeight: 28,
   },
 });

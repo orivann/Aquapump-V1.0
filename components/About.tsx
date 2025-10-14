@@ -1,27 +1,56 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Animated, Platform } from 'react-native';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
 import { Building2, MapPin, Award } from 'lucide-react-native';
-import { memo } from 'react';
+import { memo, useRef, useEffect } from 'react';
+
+const { width } = Dimensions.get('window');
 
 const About = memo(function About() {
   const { language } = useLanguage();
   const { theme, themeMode } = useTheme();
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(40)).current;
 
   const isDark = themeMode === 'dark';
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.spring(slideAnim, {
+        toValue: 0,
+        tension: 45,
+        friction: 8,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
 
   return (
     <View
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? theme.colors.dark : theme.colors.light,
+          backgroundColor: isDark ? '#10243A' : '#FFFFFF',
         },
       ]}
     >
-      <View style={styles.content}>
+      <Animated.View
+        style={[
+          styles.content,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }],
+          },
+        ]}
+      >
         <Text
+          accessibilityRole="header"
           style={[
             styles.title,
             {
@@ -37,7 +66,7 @@ const About = memo(function About() {
           style={[
             styles.description,
             {
-              color: isDark ? theme.colors.textSecondary : '#475569',
+              color: isDark ? '#94A3B8' : '#64748B',
               textAlign: 'center',
             },
           ]}
@@ -46,14 +75,25 @@ const About = memo(function About() {
         </Text>
 
         <View style={styles.infoGrid}>
-          <View style={[styles.infoCard, { backgroundColor: isDark ? theme.colors.cardDark : theme.colors.cardLight }]}>
-            <Building2 size={18} color={theme.colors.primary} style={styles.icon} />
+          <View
+            style={[
+              styles.infoCard,
+              {
+                backgroundColor: isDark ? 'rgba(10, 25, 41, 0.8)' : '#F8FAFC',
+                borderColor: isDark ? 'rgba(25, 195, 230, 0.2)' : 'rgba(14, 165, 233, 0.15)',
+              },
+              Platform.OS === 'web' && styles.infoCardWeb,
+            ]}
+          >
+            <View style={[styles.iconContainer, { backgroundColor: theme.colors.primary + '15' }]}>
+              <Building2 size={24} color={theme.colors.primary} strokeWidth={2} />
+            </View>
             <View style={styles.textContainer}>
               <Text
                 style={[
                   styles.infoTitle,
                   {
-                    color: isDark ? theme.colors.text : '#1E40AF',
+                    color: isDark ? theme.colors.light : '#1E40AF',
                   },
                 ]}
               >
@@ -63,7 +103,7 @@ const About = memo(function About() {
                 style={[
                   styles.infoText,
                   {
-                    color: isDark ? theme.colors.textSecondary : '#475569',
+                    color: isDark ? '#94A3B8' : '#64748B',
                   },
                 ]}
               >
@@ -72,14 +112,25 @@ const About = memo(function About() {
             </View>
           </View>
 
-          <View style={[styles.infoCard, { backgroundColor: isDark ? theme.colors.cardDark : theme.colors.cardLight }]}>
-            <MapPin size={18} color={theme.colors.primary} style={styles.icon} />
+          <View
+            style={[
+              styles.infoCard,
+              {
+                backgroundColor: isDark ? 'rgba(10, 25, 41, 0.8)' : '#F8FAFC',
+                borderColor: isDark ? 'rgba(25, 195, 230, 0.2)' : 'rgba(14, 165, 233, 0.15)',
+              },
+              Platform.OS === 'web' && styles.infoCardWeb,
+            ]}
+          >
+            <View style={[styles.iconContainer, { backgroundColor: theme.colors.primary + '15' }]}>
+              <MapPin size={24} color={theme.colors.primary} strokeWidth={2} />
+            </View>
             <View style={styles.textContainer}>
               <Text
                 style={[
                   styles.infoTitle,
                   {
-                    color: isDark ? theme.colors.text : '#1E40AF',
+                    color: isDark ? theme.colors.light : '#1E40AF',
                   },
                 ]}
               >
@@ -89,7 +140,7 @@ const About = memo(function About() {
                 style={[
                   styles.infoText,
                   {
-                    color: isDark ? theme.colors.textSecondary : '#475569',
+                    color: isDark ? '#94A3B8' : '#64748B',
                   },
                 ]}
               >
@@ -98,14 +149,25 @@ const About = memo(function About() {
             </View>
           </View>
 
-          <View style={[styles.infoCard, { backgroundColor: isDark ? theme.colors.cardDark : theme.colors.cardLight }]}>
-            <Award size={18} color={theme.colors.primary} style={styles.icon} />
+          <View
+            style={[
+              styles.infoCard,
+              {
+                backgroundColor: isDark ? 'rgba(10, 25, 41, 0.8)' : '#F8FAFC',
+                borderColor: isDark ? 'rgba(25, 195, 230, 0.2)' : 'rgba(14, 165, 233, 0.15)',
+              },
+              Platform.OS === 'web' && styles.infoCardWeb,
+            ]}
+          >
+            <View style={[styles.iconContainer, { backgroundColor: theme.colors.primary + '15' }]}>
+              <Award size={24} color={theme.colors.primary} strokeWidth={2} />
+            </View>
             <View style={styles.textContainer}>
               <Text
                 style={[
                   styles.infoTitle,
                   {
-                    color: isDark ? theme.colors.text : '#1E40AF',
+                    color: isDark ? theme.colors.light : '#1E40AF',
                   },
                 ]}
               >
@@ -115,7 +177,7 @@ const About = memo(function About() {
                 style={[
                   styles.infoText,
                   {
-                    color: isDark ? theme.colors.textSecondary : '#475569',
+                    color: isDark ? '#94A3B8' : '#64748B',
                   },
                 ]}
               >
@@ -124,7 +186,7 @@ const About = memo(function About() {
             </View>
           </View>
         </View>
-      </View>
+      </Animated.View>
     </View>
   );
 });
@@ -133,56 +195,76 @@ export default About;
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 24,
-    paddingHorizontal: 20,
+    width: width,
+    paddingVertical: 100,
+    paddingHorizontal: 24,
   },
   content: {
-    maxWidth: 1000,
+    maxWidth: 1200,
     width: '100%',
     alignSelf: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 44,
     fontWeight: '700' as const,
-    marginBottom: 10,
+    marginBottom: 20,
+    letterSpacing: -1,
   },
   description: {
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: 20,
+    fontSize: 18,
+    lineHeight: 30,
+    marginBottom: 56,
+    maxWidth: 800,
+    alignSelf: 'center',
   },
   infoGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: 20,
     justifyContent: 'center',
   },
   infoCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 10,
-    gap: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    paddingHorizontal: 24,
+    paddingVertical: 20,
+    borderRadius: 20,
+    gap: 16,
+    borderWidth: 1,
+    shadowColor: '#0EA5E9',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    elevation: 4,
+    minWidth: 280,
   },
-  icon: {
+  infoCardWeb: {
+    ...(Platform.OS === 'web' && {
+      transition: 'all 0.3s ease',
+    } as any),
+  },
+  iconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
     flexShrink: 0,
   },
   textContainer: {
     flexDirection: 'column',
-    gap: 2,
+    gap: 4,
+    flex: 1,
   },
   infoTitle: {
-    fontSize: 11,
+    fontSize: 14,
     fontWeight: '600' as const,
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
   },
   infoText: {
-    fontSize: 12,
-    lineHeight: 16,
+    fontSize: 18,
+    lineHeight: 24,
+    fontWeight: '600' as const,
   },
 });

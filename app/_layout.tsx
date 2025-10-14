@@ -18,23 +18,45 @@ function RootLayoutNav() {
         <Head>
           <title>AquaPump - Smart Water Pumps by AquaTech Group</title>
           <meta name="description" content="Industry-leading smart water pumps from AquaTech Group. 20+ years of excellence in Ramla, Israel. Advanced IoT technology, real-time monitoring, and energy-efficient solutions." />
-          <meta name="keywords" content="water pumps, smart pumps, IoT pumps, AquaTech, Ramla Israel, industrial pumps, energy efficient pumps" />
+          <meta name="keywords" content="water pumps, smart pumps, IoT pumps, AquaTech, Ramla Israel, industrial pumps, energy efficient pumps, commercial water pumps, residential pumps" />
           <meta name="author" content="AquaTech Group" />
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-          <meta name="theme-color" content="#19C3E6" />
+          <meta name="theme-color" content="#0EA5E9" />
           <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
-
+          
           <meta property="og:type" content="website" />
           <meta property="og:title" content="AquaPump - Smart Water Pumps by AquaTech Group" />
           <meta property="og:description" content="Industry-leading smart water pumps from AquaTech Group. 20+ years of excellence in Ramla, Israel. Advanced IoT technology, real-time monitoring, and energy-efficient solutions." />
           <meta property="og:site_name" content="AquaPump" />
           <meta property="og:locale" content="en_US" />
+          <meta property="og:url" content="https://aquapump.com" />
 
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content="AquaPump - Smart Water Pumps by AquaTech Group" />
           <meta name="twitter:description" content="Industry-leading smart water pumps from AquaTech Group. 20+ years of excellence in Ramla, Israel." />
 
           <link rel="canonical" href="https://aquapump.com" />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          
+          <script type="application/ld+json">
+            {JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "AquaTech Group",
+              "url": "https://aquapump.com",
+              "logo": "https://aquapump.com/logo.png",
+              "description": "Industry-leading smart water pumps manufacturer with 20+ years of excellence",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Ramla",
+                "addressCountry": "IL"
+              },
+              "sameAs": [
+                "https://www.linkedin.com/company/aquatech-group",
+                "https://twitter.com/aquatechgroup"
+              ]
+            })}
+          </script>
         </Head>
       )}
       <Navigation />

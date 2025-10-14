@@ -1,7 +1,7 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { translations } from '@/constants/translations';
-import { MessageCircle } from 'lucide-react-native';
+import { MessageCircle, ChevronDown } from 'lucide-react-native';
 import React, { useRef, useEffect, memo } from 'react';
 import { useRouter } from 'expo-router';
 import {
@@ -11,71 +11,112 @@ import {
   Dimensions,
   Animated,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
-const PumpVisual = memo(function PumpVisual({ theme }: { theme: any }) {
+const PumpVisual = memo(function PumpVisual({ theme, scrollY }: { theme: any; scrollY: Animated.Value }) {
   const pulseAnim = useRef(new Animated.Value(1)).current;
+  const rotateAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    const animation = Animated.loop(
+    const pulseAnimation = Animated.loop(
       Animated.sequence([
         Animated.timing(pulseAnim, {
-          toValue: 1.05,
-          duration: 2000,
+          toValue: 1.08,
+          duration: 3000,
           useNativeDriver: true,
         }),
         Animated.timing(pulseAnim, {
           toValue: 1,
-          duration: 2000,
+          duration: 3000,
           useNativeDriver: true,
         }),
       ])
     );
-    animation.start();
-    return () => animation.stop();
+
+    const rotateAnimation = Animated.loop(
+      Animated.timing(rotateAnim, {
+        toValue: 1,
+        duration: 20000,
+        useNativeDriver: true,
+      })
+    );
+
+    pulseAnimation.start();
+    rotateAnimation.start();
+
+    return () => {
+      pulseAnimation.stop();
+      rotateAnimation.stop();
+    };
   }, []);
 
+  const rotate = rotateAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '360deg'],
+  });
+
+  const parallaxScale = scrollY.interpolate({
+    inputRange: [0, height],
+    outputRange: [1, 1.3],
+    extrapolate: 'clamp',
+  });
+
+  const parallaxOpacity = scrollY.interpolate({
+    inputRange: [0, height * 0.5],
+    outputRange: [0.4, 0],
+    extrapolate: 'clamp',
+  });
+
   return (
-    <View style={styles.visualContainer}>
+    <Animated.View
+      style={[
+        styles.visualContainer,
+        {
+          opacity: parallaxOpacity,
+          transform: [{ scale: parallaxScale }],
+        },
+      ]}
+    >
       <Animated.View
         style={[
           styles.pumpOuter,
           {
-            transform: [{ scale: pulseAnim }],
-            backgroundColor: theme.colors.primary + '30',
-            borderColor: theme.colors.primary + '60',
+            transform: [{ scale: pulseAnim }, { rotate }],
+            backgroundColor: theme.colors.primary + '20',
+            borderColor: theme.colors.primary + '40',
           },
         ]}
       >
-        <View style={[styles.pumpMiddle, { backgroundColor: theme.colors.accent + '80', borderColor: theme.colors.chrome + '40' }]}>
+        <View style={[styles.pumpMiddle, { backgroundColor: theme.colors.primary + '30', borderColor: theme.colors.primary + '50' }]}>
           <View style={[styles.pumpInner, { backgroundColor: theme.colors.primary }]} />
         </View>
       </Animated.View>
       
-      <View
+      <Animated.View
         style={[
           styles.ring1,
           {
-            borderColor: theme.colors.primary + '20',
+            borderColor: theme.colors.primary + '15',
+            transform: [{ rotate }],
           },
         ]}
       />
       
-      <View
+      <Animated.View
         style={[
           styles.ring2,
           {
-            borderColor: theme.colors.chrome + '15',
+            borderColor: theme.colors.primary + '10',
+            transform: [{ rotate: '-45deg' }],
           },
         ]}
       />
-    </View>
+    </Animated.View>
   );
 });
-
-
 
 interface HeroProps {
   scrollY: Animated.Value;
@@ -88,7 +129,7 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
   const isDark = themeMode === 'dark';
   const router = useRouter();
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const slideAnim = useRef(new Animated.Value(50)).current;
+  const slideAnim = useRef(new Animated.Value(60)).current;
 
   const handleWhatsApp = () => {
     console.log('Opening WhatsApp...');
@@ -104,40 +145,55 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
     }
   };
 
-
-
   useEffect(() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 1200,
-        useNativeDriver: true,
-      }),
-      Animated.timing(slideAnim, {
-        toValue: 0,
         duration: 1000,
         useNativeDriver: true,
       }),
+      Animated.spring(slideAnim, {
+        toValue: 0,
+        tension: 40,
+        friction: 8,
+        useNativeDriver: true,
+      }),
     ]).start();
-  }, [fadeAnim, slideAnim]);
+  }, []);
+
+  const parallaxY = scrollY.interpolate({
+    inputRange: [0, height],
+    outputRange: [0, -height * 0.3],
+    extrapolate: 'clamp',
+  });
+
+  const contentOpacity = scrollY.interpolate({
+    inputRange: [0, height * 0.5],
+    outputRange: [1, 0],
+    extrapolate: 'clamp',
+  });
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.gradients.hero[0] }]}>
+    <View style={[styles.container, { backgroundColor: isDark ? '#0A1929' : '#F8FAFC' }]}>
+      <PumpVisual theme={theme} scrollY={scrollY} />
+
       <Animated.View
         style={[
           styles.content,
           {
-            opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }],
+            opacity: Animated.multiply(fadeAnim, contentOpacity),
+            transform: [
+              { translateY: Animated.add(slideAnim, parallaxY) },
+            ],
           },
         ]}
       >
         <Text 
           accessibilityRole="header"
-          style={[styles.headline, styles.centerText, { color: isDark ? theme.colors.light : '#1E40AF' }]}>
+          style={[styles.headline, styles.centerText, { color: isDark ? theme.colors.primary : '#1E40AF' }]}>
           {t(translations.hero.headline)}
         </Text>
-        <Text style={[styles.subheadline, styles.centerText, { color: isDark ? theme.colors.gray : '#475569' }]}>
+        <Text style={[styles.subheadline, styles.centerText, { color: isDark ? '#94A3B8' : '#64748B' }]}>
           {t(translations.hero.subheadline)}
         </Text>
 
@@ -147,9 +203,13 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
               accessible={true}
               accessibilityRole="button"
               accessibilityLabel="Explore our pump models"
-              style={[styles.primaryButton, { backgroundColor: theme.colors.primary }, theme.shadows.md]}
+              style={[
+                styles.primaryButton,
+                { backgroundColor: theme.colors.primary },
+                Platform.OS === 'web' && styles.primaryButtonWeb,
+              ]}
               onPress={handleExplore}
-              activeOpacity={0.8}
+              activeOpacity={0.85}
             >
               <Text style={[styles.primaryButtonText, { color: '#FFFFFF' }]}>
                 {t(translations.hero.exploreCTA)}
@@ -159,9 +219,16 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
               accessible={true}
               accessibilityRole="button"
               accessibilityLabel="Get a quote"
-              style={[styles.secondaryButton, { borderColor: theme.colors.primary, backgroundColor: isDark ? 'transparent' : '#FFFFFF' }]}
+              style={[
+                styles.secondaryButton,
+                {
+                  borderColor: theme.colors.primary,
+                  backgroundColor: isDark ? 'rgba(25, 195, 230, 0.1)' : 'rgba(14, 165, 233, 0.08)',
+                },
+                Platform.OS === 'web' && styles.secondaryButtonWeb,
+              ]}
               onPress={handleQuote}
-              activeOpacity={0.8}
+              activeOpacity={0.85}
             >
               <Text style={[styles.secondaryButtonText, { color: theme.colors.primary }]}>
                 {t(translations.hero.quoteCTA)}
@@ -173,31 +240,34 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
             accessible={true}
             accessibilityRole="button"
             accessibilityLabel="Chat on WhatsApp"
-            style={[styles.whatsappButton, { backgroundColor: theme.colors.success + '20', borderColor: theme.colors.success }]}
+            style={[
+              styles.whatsappButton,
+              {
+                backgroundColor: isDark ? 'rgba(0, 255, 136, 0.15)' : 'rgba(16, 185, 129, 0.1)',
+                borderColor: isDark ? '#00FF88' : '#10B981',
+              },
+            ]}
             onPress={handleWhatsApp}
-            activeOpacity={0.8}
+            activeOpacity={0.85}
           >
-            <MessageCircle size={20} color={theme.colors.success} strokeWidth={2.5} />
-            <Text style={[styles.whatsappButtonText, { color: theme.colors.success }]}>
+            <MessageCircle size={20} color={isDark ? '#00FF88' : '#10B981'} strokeWidth={2.5} />
+            <Text style={[styles.whatsappButtonText, { color: isDark ? '#00FF88' : '#10B981' }]}>
               {t(translations.hero.whatsappCTA)}
             </Text>
           </TouchableOpacity>
         </View>
       </Animated.View>
 
-      <PumpVisual theme={theme} />
-
-      <View style={styles.scrollIndicator}>
-        <Animated.View
-          style={[
-            styles.scrollDot,
-            {
-              opacity: fadeAnim,
-              backgroundColor: theme.colors.primary,
-            },
-          ]}
-        />
-      </View>
+      <Animated.View
+        style={[
+          styles.scrollIndicator,
+          {
+            opacity: contentOpacity,
+          },
+        ]}
+      >
+        <ChevronDown size={24} color={theme.colors.primary} strokeWidth={2} />
+      </Animated.View>
     </View>
   );
 });
@@ -207,9 +277,10 @@ export default Hero;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    height: height,
+    minHeight: height,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
   },
   visualContainer: {
     position: 'absolute',
@@ -217,42 +288,41 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    opacity: 0.4,
   },
   pumpOuter: {
-    width: 300,
-    height: 300,
-    borderRadius: 150,
+    width: 280,
+    height: 280,
+    borderRadius: 140,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 3,
+    borderWidth: 2,
   },
   pumpMiddle: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
+    width: 180,
+    height: 180,
+    borderRadius: 90,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
   },
   pumpInner: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 90,
+    height: 90,
+    borderRadius: 45,
   },
   ring1: {
     position: 'absolute',
     width: 400,
     height: 400,
     borderRadius: 200,
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderStyle: 'dashed',
   },
   ring2: {
     position: 'absolute',
-    width: 500,
-    height: 500,
-    borderRadius: 250,
+    width: 520,
+    height: 520,
+    borderRadius: 260,
     borderWidth: 1,
     borderStyle: 'dashed',
   },
@@ -260,19 +330,22 @@ const styles = StyleSheet.create({
     zIndex: 10,
     alignItems: 'center',
     paddingHorizontal: 24,
-    maxWidth: 800,
+    maxWidth: 900,
+    width: '100%',
   },
   headline: {
-    fontSize: 48,
+    fontSize: 52,
     fontWeight: '700' as const,
-    marginBottom: 16,
-    letterSpacing: -1,
+    marginBottom: 20,
+    letterSpacing: -1.5,
+    lineHeight: 60,
   },
   subheadline: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '400' as const,
-    marginBottom: 40,
-    lineHeight: 28,
+    marginBottom: 48,
+    lineHeight: 32,
+    maxWidth: 700,
   },
   centerText: {
     textAlign: 'center',
@@ -292,48 +365,59 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
   },
   primaryButton: {
-    paddingHorizontal: 32,
-    paddingVertical: 16,
-    borderRadius: 16,
+    paddingHorizontal: 36,
+    paddingVertical: 18,
+    borderRadius: 14,
+    shadowColor: '#0EA5E9',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 8,
+  },
+  primaryButtonWeb: {
+    ...(Platform.OS === 'web' && {
+      transition: 'all 0.3s ease',
+    } as any),
   },
   primaryButtonText: {
-    color: '#050A14',
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '600' as const,
+    letterSpacing: 0.3,
   },
   secondaryButton: {
-    paddingHorizontal: 32,
-    paddingVertical: 16,
-    borderRadius: 16,
+    paddingHorizontal: 36,
+    paddingVertical: 18,
+    borderRadius: 14,
     borderWidth: 2,
-    backgroundColor: 'transparent',
+  },
+  secondaryButtonWeb: {
+    ...(Platform.OS === 'web' && {
+      transition: 'all 0.3s ease',
+    } as any),
   },
   secondaryButtonText: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '600' as const,
+    letterSpacing: 0.3,
   },
   whatsappButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    paddingHorizontal: 28,
-    paddingVertical: 14,
-    borderRadius: 16,
-    borderWidth: 2,
+    paddingHorizontal: 32,
+    paddingVertical: 16,
+    borderRadius: 14,
+    borderWidth: 1.5,
   },
   whatsappButtonText: {
     fontSize: 16,
     fontWeight: '600' as const,
+    letterSpacing: 0.3,
   },
   scrollIndicator: {
     position: 'absolute',
     bottom: 40,
     alignItems: 'center',
-  },
-  scrollDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
   },
 });
