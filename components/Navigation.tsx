@@ -1,12 +1,13 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Globe, Sun, Moon } from 'lucide-react-native';
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -15,8 +16,11 @@ export default function Navigation() {
   const { theme, themeMode, toggleTheme } = useTheme();
 
   const toggleLanguage = () => {
+    console.log('[Navigation] Toggling language from', language);
     changeLanguage(language === 'en' ? 'he' : 'en');
   };
+
+  const langLabel = useMemo(() => (language === 'en' ? 'EN' : (Platform.OS === 'web' ? 'HE' : 'עב')), [language]);
 
   return (
     <View style={styles.container} testID="navbar-root">
@@ -58,7 +62,7 @@ export default function Navigation() {
             activeOpacity={0.8}
           >
             <Globe size={24} color={theme.colors.primary} strokeWidth={2.5} />
-            <Text style={[styles.langText, { color: themeMode === 'dark' ? '#FFFFFF' : theme.colors.primary }]}>{language === 'en' ? 'EN' : 'עב'}</Text>
+            <Text style={[styles.langText, { color: themeMode === 'dark' ? '#FFFFFF' : theme.colors.primary }]}>{langLabel}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -74,24 +78,26 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 100,
+    pointerEvents: 'box-none' as const,
   },
   navBar: {
-    height: 90,
+    height: 96,
   },
   navContent: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: 90,
+    height: 96,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
     paddingTop: 8,
     maxWidth: 1400,
     alignSelf: 'center',
     width: '100%',
+    gap: 12,
   },
   safeArea: {
     width: '100%',
@@ -104,14 +110,16 @@ const styles = StyleSheet.create({
     fontWeight: '800' as const,
     letterSpacing: -0.5,
     flex: 0,
-    flexShrink: 0,
+    flexShrink: 1,
+    minWidth: 0,
   },
   controls: {
     flexDirection: 'row',
     gap: 12,
     flex: 0,
-    flexShrink: 0,
+    flexShrink: 1,
     alignItems: 'center',
+    minWidth: 0,
   },
   controlButton: {
     flexDirection: 'row',
@@ -123,10 +131,11 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1.5,
     minHeight: 48,
-    minWidth: 48,
+    minWidth: 56,
   },
   langText: {
-    fontSize: 15,
-    fontWeight: '700' as const,
+    fontSize: 16,
+    fontWeight: '800' as const,
+    letterSpacing: 0.5,
   },
 });
