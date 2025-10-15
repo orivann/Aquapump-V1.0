@@ -130,6 +130,7 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
   const router = useRouter();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(60)).current;
+  const headlineFadeAnim = useRef(new Animated.Value(1)).current;
 
   const handleWhatsApp = () => {
     console.log('Opening WhatsApp...');
@@ -161,6 +162,21 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
     ]).start();
   }, []);
 
+  useEffect(() => {
+    Animated.sequence([
+      Animated.timing(headlineFadeAnim, {
+        toValue: 0.3,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(headlineFadeAnim, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [isRTL]);
+
   const parallaxY = scrollY.interpolate({
     inputRange: [0, height],
     outputRange: [0, -height * 0.3],
@@ -188,14 +204,16 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
           },
         ]}
       >
-        <Text 
-          accessibilityRole="header"
-          style={[styles.headline, styles.centerText, { color: isDark ? theme.colors.primary : '#1E40AF' }]}>
-          {t(translations.hero.headline)}
-        </Text>
-        <Text style={[styles.subheadline, styles.centerText, { color: isDark ? '#94A3B8' : '#64748B' }]}>
-          {t(translations.hero.subheadline)}
-        </Text>
+        <Animated.View style={[styles.headlineContainer, { opacity: headlineFadeAnim }]}>
+          <Text 
+            accessibilityRole="header"
+            style={[styles.headline, isRTL && styles.rtlText, { color: isDark ? theme.colors.primary : '#1E40AF' }]}>
+            {t(translations.hero.headline)}
+          </Text>
+          <Text style={[styles.subheadline, isRTL && styles.rtlText, { color: isDark ? '#94A3B8' : '#64748B' }]}>
+            {t(translations.hero.subheadline)}
+          </Text>
+        </Animated.View>
 
         <View style={styles.buttonsWrapper}>
           <View style={[styles.ctaContainer, isRTL && styles.rtlRow]}>
@@ -333,19 +351,28 @@ const styles = StyleSheet.create({
     maxWidth: 900,
     width: '100%',
   },
+  headlineContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 48,
+  },
   headline: {
     fontSize: 52,
     fontWeight: '700' as const,
     marginBottom: 20,
     letterSpacing: -1.5,
     lineHeight: 60,
+    textAlign: 'center',
   },
   subheadline: {
     fontSize: 20,
     fontWeight: '400' as const,
-    marginBottom: 48,
     lineHeight: 32,
     maxWidth: 700,
+    textAlign: 'center',
+  },
+  rtlText: {
+    writingDirection: 'rtl' as const,
   },
   centerText: {
     textAlign: 'center',

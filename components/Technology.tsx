@@ -82,6 +82,22 @@ const Technology = memo(function Technology({ scrollY }: TechnologyProps) {
   const { t, isRTL } = useLanguage();
   const { theme, themeMode } = useTheme();
   const isDark = themeMode === 'dark';
+  const titleFadeAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    Animated.sequence([
+      Animated.timing(titleFadeAnim, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(titleFadeAnim, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [isRTL]);
 
   const features = useMemo(() => [
     {
@@ -117,11 +133,13 @@ const Technology = memo(function Technology({ scrollY }: TechnologyProps) {
         },
       ]}
     >
-      <Text 
-        accessibilityRole="header"
-        style={[styles.sectionTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.primary : '#1E40AF' }]}>
-        {t(translations.technology.title)}
-      </Text>
+      <Animated.View style={[styles.titleContainer, { opacity: titleFadeAnim }]}>
+        <Text 
+          accessibilityRole="header"
+          style={[styles.sectionTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.primary : '#1E40AF' }]}>
+          {t(translations.technology.title)}
+        </Text>
+      </Animated.View>
 
       <ScrollView
         horizontal
@@ -155,17 +173,22 @@ const styles = StyleSheet.create({
   container: {
     width: width,
     paddingVertical: 100,
+    alignItems: 'center',
+  },
+  titleContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 48,
   },
   sectionTitle: {
     fontSize: 44,
     fontWeight: '700' as const,
     textAlign: 'center',
-    marginBottom: 48,
     paddingHorizontal: 24,
     letterSpacing: -1,
   },
   rtlText: {
-    textAlign: 'right',
+    writingDirection: 'rtl' as const,
   },
   scrollView: {
     width: '100%',

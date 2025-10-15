@@ -18,6 +18,8 @@ function NavigationInner() {
   const { theme, themeMode, toggleTheme } = useTheme();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(-20)).current;
+  const logoFadeAnim = useRef(new Animated.Value(1)).current;
+  const controlsFadeAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     Animated.parallel([
@@ -34,6 +36,35 @@ function NavigationInner() {
       }),
     ]).start();
   }, []);
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.sequence([
+        Animated.timing(logoFadeAnim, {
+          toValue: 0.3,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(logoFadeAnim, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.sequence([
+        Animated.timing(controlsFadeAnim, {
+          toValue: 0.3,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(controlsFadeAnim, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start();
+  }, [isRTL]);
 
   const toggleLanguage = () => {
     changeLanguage(language === 'en' ? 'he' : 'en');
@@ -57,7 +88,6 @@ function NavigationInner() {
             <Animated.View
               style={[
                 styles.navContent,
-                isRTL && styles.navContentRTL,
                 {
                   opacity: fadeAnim,
                   transform: [{ translateY: slideAnim }],
@@ -65,15 +95,17 @@ function NavigationInner() {
               ]}
               testID="navbar-content"
             >
-              <Text
-                accessibilityRole="header"
-                testID="navbar-logo"
-                style={[styles.logo, { color: isDark ? theme.colors.primary : '#1E40AF' }]}
-              >
-                AquaPump
-              </Text>
+              <Animated.View style={{ opacity: logoFadeAnim }}>
+                <Text
+                  accessibilityRole="header"
+                  testID="navbar-logo"
+                  style={[styles.logo, { color: isDark ? theme.colors.primary : '#1E40AF' }]}
+                >
+                  AquaPump
+                </Text>
+              </Animated.View>
 
-              <View style={styles.controls}>
+              <Animated.View style={[styles.controls, { opacity: controlsFadeAnim }]}>
                 <TouchableOpacity
                   testID="btn-toggle-theme"
                   accessible={true}
@@ -119,7 +151,7 @@ function NavigationInner() {
                     {language === 'en' ? 'EN' : 'עב'}
                   </Text>
                 </TouchableOpacity>
-              </View>
+              </Animated.View>
             </Animated.View>
           </View>
         ) : (
@@ -136,7 +168,6 @@ function NavigationInner() {
             <Animated.View
               style={[
                 styles.navContent,
-                isRTL && styles.navContentRTL,
                 {
                   opacity: fadeAnim,
                   transform: [{ translateY: slideAnim }],
@@ -144,15 +175,17 @@ function NavigationInner() {
               ]}
               testID="navbar-content"
             >
-              <Text
-                accessibilityRole="header"
-                testID="navbar-logo"
-                style={[styles.logo, { color: isDark ? theme.colors.primary : '#1E40AF' }]}
-              >
-                AquaPump
-              </Text>
+              <Animated.View style={{ opacity: logoFadeAnim }}>
+                <Text
+                  accessibilityRole="header"
+                  testID="navbar-logo"
+                  style={[styles.logo, { color: isDark ? theme.colors.primary : '#1E40AF' }]}
+                >
+                  AquaPump
+                </Text>
+              </Animated.View>
 
-              <View style={styles.controls}>
+              <Animated.View style={[styles.controls, { opacity: controlsFadeAnim }]}>
                 <TouchableOpacity
                   testID="btn-toggle-theme"
                   accessible={true}
@@ -198,7 +231,7 @@ function NavigationInner() {
                     {language === 'en' ? 'EN' : 'עב'}
                   </Text>
                 </TouchableOpacity>
-              </View>
+              </Animated.View>
             </Animated.View>
           </BlurView>
         )}
@@ -243,9 +276,6 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     width: '100%',
-  },
-  navContentRTL: {
-    flexDirection: 'row-reverse',
   },
   logo: {
     fontSize: 26,

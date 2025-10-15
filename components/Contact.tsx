@@ -26,6 +26,7 @@ const Contact = memo(function Contact() {
   const [message, setMessage] = useState('');
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
+  const titleFadeAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     Animated.parallel([
@@ -42,6 +43,21 @@ const Contact = memo(function Contact() {
       }),
     ]).start();
   }, []);
+
+  useEffect(() => {
+    Animated.sequence([
+      Animated.timing(titleFadeAnim, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(titleFadeAnim, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [isRTL]);
 
   const handleSubmit = () => {
     if (!name.trim() || !email.trim() || !message.trim()) {
@@ -72,11 +88,13 @@ const Contact = memo(function Contact() {
           },
         ]}
       >
-        <Text 
-          accessibilityRole="header"
-          style={[styles.sectionTitle, styles.centerText, { color: isDark ? theme.colors.primary : '#1E40AF' }]}>
-          {t(translations.contact.title)}
-        </Text>
+        <Animated.View style={[styles.titleContainer, { opacity: titleFadeAnim }]}>
+          <Text 
+            accessibilityRole="header"
+            style={[styles.sectionTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.primary : '#1E40AF' }]}>
+            {t(translations.contact.title)}
+          </Text>
+        </Animated.View>
 
         <View style={styles.formContainer}>
           <View
@@ -201,12 +219,20 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
   },
+  titleContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 56,
+  },
   sectionTitle: {
     fontSize: 44,
     fontWeight: '700' as const,
-    marginBottom: 56,
     paddingHorizontal: 24,
     letterSpacing: -1,
+    textAlign: 'center',
+  },
+  rtlText: {
+    writingDirection: 'rtl' as const,
   },
   centerText: {
     textAlign: 'center',

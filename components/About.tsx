@@ -8,10 +8,11 @@ import { memo, useRef, useEffect } from 'react';
 const { width } = Dimensions.get('window');
 
 const About = memo(function About() {
-  const { language } = useLanguage();
+  const { language, isRTL } = useLanguage();
   const { theme, themeMode } = useTheme();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(40)).current;
+  const titleFadeAnim = useRef(new Animated.Value(1)).current;
 
   const isDark = themeMode === 'dark';
 
@@ -31,6 +32,21 @@ const About = memo(function About() {
     ]).start();
   }, []);
 
+  useEffect(() => {
+    Animated.sequence([
+      Animated.timing(titleFadeAnim, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(titleFadeAnim, {
+        toValue: 1,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [isRTL]);
+
   return (
     <View
       style={[
@@ -49,18 +65,20 @@ const About = memo(function About() {
           },
         ]}
       >
-        <Text
-          accessibilityRole="header"
-          style={[
-            styles.title,
-            {
-              color: isDark ? theme.colors.primary : '#1E40AF',
-              textAlign: 'center',
-            },
-          ]}
-        >
-          {translations.about.title[language]}
-        </Text>
+        <Animated.View style={[styles.titleContainer, { opacity: titleFadeAnim }]}>
+          <Text
+            accessibilityRole="header"
+            style={[
+              styles.title,
+              isRTL && styles.rtlText,
+              {
+                color: isDark ? theme.colors.primary : '#1E40AF',
+              },
+            ]}
+          >
+            {translations.about.title[language]}
+          </Text>
+        </Animated.View>
 
         <Text
           style={[
@@ -203,12 +221,21 @@ const styles = StyleSheet.create({
     maxWidth: 1200,
     width: '100%',
     alignSelf: 'center',
+    alignItems: 'center',
+  },
+  titleContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 20,
   },
   title: {
     fontSize: 44,
     fontWeight: '700' as const,
-    marginBottom: 20,
     letterSpacing: -1,
+    textAlign: 'center',
+  },
+  rtlText: {
+    writingDirection: 'rtl' as const,
   },
   description: {
     fontSize: 18,
