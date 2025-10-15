@@ -190,7 +190,7 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
   });
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#0A1929' : '#F8FAFC' }]}>
+    <View style={[styles.container, { backgroundColor: isDark ? '#0F1419' : '#F8FAFC' }]}>
       <PumpVisual theme={theme} scrollY={scrollY} />
 
       <Animated.View
@@ -207,10 +207,18 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
         <Animated.View style={[styles.headlineContainer, { opacity: headlineFadeAnim }]}>
           <Text 
             accessibilityRole="header"
-            style={[styles.headline, isRTL && styles.rtlText, { color: isDark ? theme.colors.primary : '#1E40AF' }]}>
+            style={[
+              styles.headline,
+              isRTL && styles.rtlText,
+              { color: isDark ? '#38BDF8' : '#1E40AF' },
+            ]}>
             {t(translations.hero.headline)}
           </Text>
-          <Text style={[styles.subheadline, isRTL && styles.rtlText, { color: isDark ? '#94A3B8' : '#64748B' }]}>
+          <Text style={[
+              styles.subheadline,
+              isRTL && styles.rtlText,
+              { color: isDark ? '#CBD5E1' : '#64748B' },
+            ]}>
             {t(translations.hero.subheadline)}
           </Text>
         </Animated.View>

@@ -52,7 +52,7 @@ const About = memo(function About() {
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? '#10243A' : '#FFFFFF',
+          backgroundColor: isDark ? '#1A1F2E' : '#FFFFFF',
         },
       ]}
     >
@@ -72,7 +72,7 @@ const About = memo(function About() {
               styles.title,
               isRTL && styles.rtlText,
               {
-                color: isDark ? theme.colors.primary : '#1E40AF',
+                color: isDark ? '#38BDF8' : '#1E40AF',
               },
             ]}
           >
@@ -84,7 +84,7 @@ const About = memo(function About() {
           style={[
             styles.description,
             {
-              color: isDark ? '#94A3B8' : '#64748B',
+              color: isDark ? '#CBD5E1' : '#64748B',
               textAlign: 'center',
             },
           ]}
@@ -97,8 +97,8 @@ const About = memo(function About() {
             style={[
               styles.infoCard,
               {
-                backgroundColor: isDark ? 'rgba(10, 25, 41, 0.8)' : '#F8FAFC',
-                borderColor: isDark ? 'rgba(25, 195, 230, 0.2)' : 'rgba(14, 165, 233, 0.15)',
+                backgroundColor: isDark ? 'rgba(30, 41, 59, 0.9)' : '#F8FAFC',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.25)' : 'rgba(14, 165, 233, 0.15)',
               },
               Platform.OS === 'web' && styles.infoCardWeb,
             ]}
@@ -111,7 +111,7 @@ const About = memo(function About() {
                 style={[
                   styles.infoTitle,
                   {
-                    color: isDark ? theme.colors.light : '#1E40AF',
+                    color: isDark ? '#F0F9FF' : '#1E40AF',
                   },
                 ]}
               >
@@ -121,7 +121,7 @@ const About = memo(function About() {
                 style={[
                   styles.infoText,
                   {
-                    color: isDark ? '#94A3B8' : '#64748B',
+                    color: isDark ? '#CBD5E1' : '#64748B',
                   },
                 ]}
               >
@@ -134,8 +134,8 @@ const About = memo(function About() {
             style={[
               styles.infoCard,
               {
-                backgroundColor: isDark ? 'rgba(10, 25, 41, 0.8)' : '#F8FAFC',
-                borderColor: isDark ? 'rgba(25, 195, 230, 0.2)' : 'rgba(14, 165, 233, 0.15)',
+                backgroundColor: isDark ? 'rgba(30, 41, 59, 0.9)' : '#F8FAFC',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.25)' : 'rgba(14, 165, 233, 0.15)',
               },
               Platform.OS === 'web' && styles.infoCardWeb,
             ]}
@@ -148,7 +148,7 @@ const About = memo(function About() {
                 style={[
                   styles.infoTitle,
                   {
-                    color: isDark ? theme.colors.light : '#1E40AF',
+                    color: isDark ? '#F0F9FF' : '#1E40AF',
                   },
                 ]}
               >
@@ -158,7 +158,7 @@ const About = memo(function About() {
                 style={[
                   styles.infoText,
                   {
-                    color: isDark ? '#94A3B8' : '#64748B',
+                    color: isDark ? '#CBD5E1' : '#64748B',
                   },
                 ]}
               >
@@ -171,8 +171,8 @@ const About = memo(function About() {
             style={[
               styles.infoCard,
               {
-                backgroundColor: isDark ? 'rgba(10, 25, 41, 0.8)' : '#F8FAFC',
-                borderColor: isDark ? 'rgba(25, 195, 230, 0.2)' : 'rgba(14, 165, 233, 0.15)',
+                backgroundColor: isDark ? 'rgba(30, 41, 59, 0.9)' : '#F8FAFC',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.25)' : 'rgba(14, 165, 233, 0.15)',
               },
               Platform.OS === 'web' && styles.infoCardWeb,
             ]}
@@ -185,7 +185,7 @@ const About = memo(function About() {
                 style={[
                   styles.infoTitle,
                   {
-                    color: isDark ? theme.colors.light : '#1E40AF',
+                    color: isDark ? '#F0F9FF' : '#1E40AF',
                   },
                 ]}
               >
@@ -195,7 +195,7 @@ const About = memo(function About() {
                 style={[
                   styles.infoText,
                   {
-                    color: isDark ? '#94A3B8' : '#64748B',
+                    color: isDark ? '#CBD5E1' : '#64748B',
                   },
                 ]}
               >

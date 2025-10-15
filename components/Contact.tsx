@@ -78,7 +78,7 @@ const Contact = memo(function Contact() {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? '#0A1929' : '#F8FAFC' }]}>
+    <View style={[styles.container, { backgroundColor: isDark ? '#0F1419' : '#F8FAFC' }]}>
       <Animated.View
         style={[
           styles.contentWrapper,
@@ -91,7 +91,7 @@ const Contact = memo(function Contact() {
         <Animated.View style={[styles.titleContainer, { opacity: titleFadeAnim }]}>
           <Text 
             accessibilityRole="header"
-            style={[styles.sectionTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.primary : '#1E40AF' }]}>
+            style={[styles.sectionTitle, isRTL && styles.rtlText, { color: isDark ? '#38BDF8' : '#1E40AF' }]}>
             {t(translations.contact.title)}
           </Text>
         </Animated.View>
@@ -101,14 +101,14 @@ const Contact = memo(function Contact() {
             style={[
               styles.inputGroup,
               {
-                backgroundColor: isDark ? 'rgba(16, 36, 58, 0.8)' : '#FFFFFF',
-                borderColor: isDark ? 'rgba(25, 195, 230, 0.2)' : 'rgba(14, 165, 233, 0.2)',
+                backgroundColor: isDark ? 'rgba(30, 41, 59, 0.9)' : '#FFFFFF',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.25)' : 'rgba(14, 165, 233, 0.2)',
               },
             ]}
           >
             <Mail size={22} color={theme.colors.primary} strokeWidth={2} />
             <TextInput
-              style={[styles.input, isRTL && styles.inputRTL, { color: isDark ? theme.colors.light : '#0F172A' }]}
+              style={[styles.input, isRTL && styles.inputRTL, { color: isDark ? '#F0F9FF' : '#0F172A' }]}
               value={name}
               onChangeText={setName}
               placeholder={t(translations.contact.name)}
@@ -120,14 +120,14 @@ const Contact = memo(function Contact() {
             style={[
               styles.inputGroup,
               {
-                backgroundColor: isDark ? 'rgba(16, 36, 58, 0.8)' : '#FFFFFF',
-                borderColor: isDark ? 'rgba(25, 195, 230, 0.2)' : 'rgba(14, 165, 233, 0.2)',
+                backgroundColor: isDark ? 'rgba(30, 41, 59, 0.9)' : '#FFFFFF',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.25)' : 'rgba(14, 165, 233, 0.2)',
               },
             ]}
           >
             <Mail size={22} color={theme.colors.primary} strokeWidth={2} />
             <TextInput
-              style={[styles.input, isRTL && styles.inputRTL, { color: isDark ? theme.colors.light : '#0F172A' }]}
+              style={[styles.input, isRTL && styles.inputRTL, { color: isDark ? '#F0F9FF' : '#0F172A' }]}
               value={email}
               onChangeText={setEmail}
               placeholder={t(translations.contact.email)}
@@ -142,8 +142,8 @@ const Contact = memo(function Contact() {
               styles.inputGroup,
               styles.textAreaGroup,
               {
-                backgroundColor: isDark ? 'rgba(16, 36, 58, 0.8)' : '#FFFFFF',
-                borderColor: isDark ? 'rgba(25, 195, 230, 0.2)' : 'rgba(14, 165, 233, 0.2)',
+                backgroundColor: isDark ? 'rgba(30, 41, 59, 0.9)' : '#FFFFFF',
+                borderColor: isDark ? 'rgba(34, 211, 238, 0.25)' : 'rgba(14, 165, 233, 0.2)',
               },
             ]}
           >

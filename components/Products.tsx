@@ -62,8 +62,8 @@ const ProductCard = memo(function ProductCard({ name, description, isRTL, color,
       style={[
         styles.productCard,
         {
-          backgroundColor: isDark ? 'rgba(16, 36, 58, 0.8)' : '#FFFFFF',
-          borderColor: isDark ? 'rgba(25, 195, 230, 0.2)' : 'rgba(14, 165, 233, 0.2)',
+          backgroundColor: isDark ? 'rgba(30, 41, 59, 0.9)' : '#FFFFFF',
+          borderColor: isDark ? 'rgba(34, 211, 238, 0.25)' : 'rgba(14, 165, 233, 0.2)',
           opacity: fadeAnim,
           transform: [
             { translateY: slideAnim },
@@ -82,10 +82,10 @@ const ProductCard = memo(function ProductCard({ name, description, isRTL, color,
         <View style={[styles.modelInner, { borderColor: 'rgba(255, 255, 255, 0.5)' }]} />
       </View>
 
-      <Text style={[styles.productName, isRTL && styles.rtlText, { color: isDark ? theme.colors.light : '#1E40AF' }]}>
+      <Text style={[styles.productName, isRTL && styles.rtlText, { color: isDark ? '#F0F9FF' : '#1E40AF' }]}>
         {name}
       </Text>
-      <Text style={[styles.productDescription, isRTL && styles.rtlText, { color: isDark ? '#94A3B8' : '#64748B' }]}>
+      <Text style={[styles.productDescription, isRTL && styles.rtlText, { color: isDark ? '#CBD5E1' : '#64748B' }]}>
         {description}
       </Text>
 
@@ -94,7 +94,7 @@ const ProductCard = memo(function ProductCard({ name, description, isRTL, color,
           styles.specsButton,
           {
             borderColor: theme.colors.primary,
-            backgroundColor: isDark ? 'rgba(25, 195, 230, 0.1)' : 'rgba(14, 165, 233, 0.08)',
+            backgroundColor: isDark ? 'rgba(34, 211, 238, 0.15)' : 'rgba(14, 165, 233, 0.08)',
           },
         ]}
         activeOpacity={0.8}
@@ -162,7 +162,7 @@ const Products = memo(function Products({ scrollY }: ProductsProps) {
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? '#10243A' : '#FFFFFF',
+          backgroundColor: isDark ? '#1A1F2E' : '#FFFFFF',
           transform: [{ translateY: parallaxY }],
         },
       ]}
@@ -170,7 +170,7 @@ const Products = memo(function Products({ scrollY }: ProductsProps) {
       <Animated.View style={[styles.titleContainer, { opacity: titleFadeAnim }]}>
         <Text 
           accessibilityRole="header"
-          style={[styles.sectionTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.primary : '#1E40AF' }]}>
+          style={[styles.sectionTitle, isRTL && styles.rtlText, { color: isDark ? '#38BDF8' : '#1E40AF' }]}>
           {t(translations.products.title)}
         </Text>
       </Animated.View>

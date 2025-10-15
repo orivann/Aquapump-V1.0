@@ -53,8 +53,8 @@ const FeatureCard = memo(function FeatureCard({ icon, title, description, isRTL,
       style={[
         styles.card,
         {
-          backgroundColor: isDark ? 'rgba(16, 36, 58, 0.8)' : '#FFFFFF',
-          borderColor: isDark ? 'rgba(25, 195, 230, 0.2)' : 'rgba(14, 165, 233, 0.2)',
+          backgroundColor: isDark ? 'rgba(30, 41, 59, 0.9)' : '#FFFFFF',
+          borderColor: isDark ? 'rgba(34, 211, 238, 0.25)' : 'rgba(14, 165, 233, 0.2)',
           opacity: fadeAnim,
           transform: [{ translateY: slideAnim }],
         },
@@ -64,10 +64,10 @@ const FeatureCard = memo(function FeatureCard({ icon, title, description, isRTL,
       <View style={[styles.iconContainer, { backgroundColor: theme.colors.primary + '15' }]}>
         {icon}
       </View>
-      <Text style={[styles.cardTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.light : '#1E40AF' }]}>
+      <Text style={[styles.cardTitle, isRTL && styles.rtlText, { color: isDark ? '#F0F9FF' : '#1E40AF' }]}>
         {title}
       </Text>
-      <Text style={[styles.cardDescription, isRTL && styles.rtlText, { color: isDark ? '#94A3B8' : '#64748B' }]}>
+      <Text style={[styles.cardDescription, isRTL && styles.rtlText, { color: isDark ? '#CBD5E1' : '#64748B' }]}>
         {description}
       </Text>
     </Animated.View>
@@ -128,7 +128,7 @@ const Technology = memo(function Technology({ scrollY }: TechnologyProps) {
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? '#0A1929' : '#F8FAFC',
+          backgroundColor: isDark ? '#0F1419' : '#F8FAFC',
           transform: [{ translateY: parallaxY }],
         },
       ]}
@@ -136,7 +136,7 @@ const Technology = memo(function Technology({ scrollY }: TechnologyProps) {
       <Animated.View style={[styles.titleContainer, { opacity: titleFadeAnim }]}>
         <Text 
           accessibilityRole="header"
-          style={[styles.sectionTitle, isRTL && styles.rtlText, { color: isDark ? theme.colors.primary : '#1E40AF' }]}>
+          style={[styles.sectionTitle, isRTL && styles.rtlText, { color: isDark ? '#38BDF8' : '#1E40AF' }]}>
           {t(translations.technology.title)}
         </Text>
       </Animated.View>
