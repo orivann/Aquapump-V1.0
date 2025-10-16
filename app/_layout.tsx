@@ -9,8 +9,6 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import Head from "expo-router/head";
 import Navigation from "@/components/Navigation";
 
-SplashScreen.preventAutoHideAsync();
-
 function RootLayoutNav() {
   return (
     <>
@@ -70,11 +68,39 @@ function RootLayoutNav() {
 }
 
 export default function RootLayout() {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(() => new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: 1,
+        staleTime: 5 * 60 * 1000,
+        refetchOnWindowFocus: false,
+      },
+    },
+  }));
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
-    SplashScreen.hideAsync();
+    async function prepare() {
+      try {
+        if (Platform.OS !== 'web') {
+          await SplashScreen.preventAutoHideAsync();
+        }
+      } catch (e) {
+        console.warn('[RootLayout] Splash screen error:', e);
+      } finally {
+        setIsReady(true);
+        if (Platform.OS !== 'web') {
+          await SplashScreen.hideAsync();
+        }
+      }
+    }
+
+    prepare();
   }, []);
+
+  if (!isReady) {
+    return null;
+  }
 
   return (
     <QueryClientProvider client={queryClient}>

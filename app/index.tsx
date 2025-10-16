@@ -4,18 +4,17 @@ import Technology from '@/components/Technology';
 import Products from '@/components/Products';
 import Contact from '@/components/Contact';
 import Chatbot from '@/components/Chatbot';
-import { useLanguage } from '@/contexts/LanguageContext';
+
 import { useTheme } from '@/contexts/ThemeContext';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, ScrollView, Animated, Dimensions, ActivityIndicator } from 'react-native';
+import { StyleSheet, ScrollView, Animated, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRef, useCallback } from 'react';
 
 const { height } = Dimensions.get('window');
 
 export default function HomeScreen() {
-  const { isLoading: languageLoading } = useLanguage();
-  const { theme, themeMode, isLoading: themeLoading } = useTheme();
+  const { theme, themeMode } = useTheme();
   const scrollY = useRef(new Animated.Value(0)).current;
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -33,14 +32,6 @@ export default function HomeScreen() {
       },
     }
   );
-
-  if (languageLoading || themeLoading) {
-    return (
-      <SafeAreaView style={[styles.loading, { backgroundColor: themeMode === 'dark' ? '#0A1929' : '#F8FAFC' }]} edges={['top', 'bottom']}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-      </SafeAreaView>
-    );
-  }
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.secondary }]} edges={['top', 'bottom']}>
@@ -69,11 +60,6 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  loading: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   scrollView: {
     flex: 1,

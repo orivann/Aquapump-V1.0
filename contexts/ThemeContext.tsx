@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useMemo, useState, createContext, useContext, ReactNode } from 'react';
+import { Platform } from 'react-native';
 import { lightTheme, darkTheme, Theme } from '@/constants/theme';
 
 export type ThemeMode = 'light' | 'dark';
@@ -30,17 +31,23 @@ export function useTheme() {
 
 function useThemeValue() {
   const [themeMode, setThemeMode] = useState<ThemeMode>('light');
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const isLoading = false;
 
   useEffect(() => {
+    if (Platform.OS === 'web') {
+      return;
+    }
+
     (async () => {
       try {
-        await AsyncStorage.setItem(THEME_KEY, 'light');
-        setThemeMode('light');
+        const stored = await AsyncStorage.getItem(THEME_KEY);
+        if (stored && (stored === 'light' || stored === 'dark')) {
+          setThemeMode(stored as ThemeMode);
+        } else {
+          await AsyncStorage.setItem(THEME_KEY, 'light');
+        }
       } catch (error) {
         console.error('[ThemeContext] Failed to initialize:', error);
-      } finally {
-        setIsLoading(false);
       }
     })();
   }, []);
