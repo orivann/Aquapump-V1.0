@@ -1,0 +1,39 @@
+replicaCount: 2
+
+image:
+  tag: "staging-latest"
+
+resources:
+  limits:
+    cpu: 750m
+    memory: 1.5Gi
+  requests:
+    cpu: 200m
+    memory: 384Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+
+ingress:
+  hosts:
+    - host: staging.aquapump.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: aquapump-staging-tls
+      hosts:
+        - staging.aquapump.example.com
+
+env:
+  NODE_ENV: staging
+  LOG_LEVEL: info
+
+configMap:
+  EXPO_PUBLIC_API_URL: "https://staging.aquapump.example.com/api"
+  CORS_ORIGIN: "https://staging.aquapump.example.com"
+
+podDisruptionBudget:
+  minAvailable: 1

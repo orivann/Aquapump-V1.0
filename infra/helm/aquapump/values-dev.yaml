@@ -1,0 +1,37 @@
+replicaCount: 1
+
+image:
+  tag: "dev-latest"
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 1Gi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+autoscaling:
+  enabled: false
+
+ingress:
+  hosts:
+    - host: dev.aquapump.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: aquapump-dev-tls
+      hosts:
+        - dev.aquapump.example.com
+
+env:
+  NODE_ENV: development
+  LOG_LEVEL: debug
+
+configMap:
+  EXPO_PUBLIC_API_URL: "https://dev.aquapump.example.com/api"
+  CORS_ORIGIN: "*"
+
+podDisruptionBudget:
+  enabled: false

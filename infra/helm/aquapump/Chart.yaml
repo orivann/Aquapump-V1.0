@@ -1,0 +1,15 @@
+apiVersion: v2
+name: aquapump
+description: AquaPump - Smart Water Pumps Management Platform
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - aquapump
+  - water-pumps
+  - iot
+  - monitoring
+home: https://aquapump.com
+maintainers:
+  - name: AquaTech Team
+    email: tech@aquapump.com

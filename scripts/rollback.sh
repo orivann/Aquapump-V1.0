@@ -1,26 +1,29 @@
 #!/bin/bash
 
-# AquaPump Rollback Script
-# Usage: ./scripts/rollback.sh [revision]
-
 set -e
 
-REVISION=${1:-0}
+ENVIRONMENT=${1:-dev}
+NAMESPACE="aquapump-${ENVIRONMENT}"
+RELEASE_NAME="aquapump"
+REVISION=${2:-0}
 
-echo "🔄 Rolling back AquaPump deployment..."
-
-if [ "$REVISION" -eq 0 ]; then
-    echo "Rolling back to previous version..."
-    kubectl rollout undo deployment/aquapump-app
-else
-    echo "Rolling back to revision $REVISION..."
-    kubectl rollout undo deployment/aquapump-app --to-revision=$REVISION
+if [ "$ENVIRONMENT" != "dev" ] && [ "$ENVIRONMENT" != "staging" ] && [ "$ENVIRONMENT" != "production" ]; then
+  echo "❌ Invalid environment. Use: dev, staging, or production"
+  exit 1
 fi
 
-echo "Waiting for rollback to complete..."
-kubectl rollout status deployment/aquapump-app
+echo "🔄 Rolling back AquaPump in ${ENVIRONMENT}..."
 
-echo "✓ Rollback completed successfully!"
+if [ "$REVISION" = "0" ]; then
+  echo "Rolling back to previous revision..."
+  helm rollback ${RELEASE_NAME} -n ${NAMESPACE} --wait --timeout 5m
+else
+  echo "Rolling back to revision ${REVISION}..."
+  helm rollback ${RELEASE_NAME} ${REVISION} -n ${NAMESPACE} --wait --timeout 5m
+fi
+
+echo "✅ Rollback complete!"
 echo ""
-echo "Current status:"
-kubectl get pods -l app=aquapump
+echo "Check status:"
+echo "  kubectl get pods -n ${NAMESPACE}"
+echo "  helm history ${RELEASE_NAME} -n ${NAMESPACE}"
