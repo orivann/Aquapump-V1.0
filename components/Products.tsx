@@ -1,6 +1,6 @@
-import { useLanguage } from '@/src/contexts/LanguageContext';
-import { useTheme } from '@/src/contexts/ThemeContext';
-import { translations } from '@/src/config/translations';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useTheme } from '@/contexts/ThemeContext';
+import { translations } from '@/constants/translations';
 import { Download } from 'lucide-react-native';
 import { memo, useMemo, useRef, useEffect } from 'react';
 import {
