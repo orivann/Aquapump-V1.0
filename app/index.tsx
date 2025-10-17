@@ -1,11 +1,11 @@
-import Hero from '@/components/Hero';
-import About from '@/components/About';
-import Technology from '@/components/Technology';
-import Products from '@/components/Products';
-import Contact from '@/components/Contact';
-import Chatbot from '@/components/Chatbot';
+import Hero from '@/src/components/Hero';
+import About from '@/src/components/About';
+import Technology from '@/src/components/Technology';
+import Products from '@/src/components/Products';
+import Contact from '@/src/components/Contact';
+import Chatbot from '@/src/components/Chatbot';
 
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@/src/contexts/ThemeContext';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, ScrollView, Animated, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

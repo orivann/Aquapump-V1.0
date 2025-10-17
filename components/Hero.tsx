@@ -1,6 +1,6 @@
-import { useLanguage } from '@/contexts/LanguageContext';
-import { useTheme } from '@/contexts/ThemeContext';
-import { translations } from '@/constants/translations';
+import { useLanguage } from '@/src/contexts/LanguageContext';
+import { useTheme } from '@/src/contexts/ThemeContext';
+import { translations } from '@/src/config/translations';
 import { MessageCircle, ChevronDown } from 'lucide-react-native';
 import React, { useRef, useEffect, memo } from 'react';
 import { useRouter } from 'expo-router';

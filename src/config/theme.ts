@@ -1,0 +1,123 @@
+export const lightTheme = {
+  colors: {
+    primary: '#0EA5E9',
+    secondary: '#F8FAFC',
+    accent: '#FFFFFF',
+    dark: '#0F172A',
+    light: '#F8FAFC',
+    gray: '#475569',
+    chrome: '#64748B',
+    success: '#10B981',
+    headline: '#1E40AF',
+    text: '#0F172A',
+    textSecondary: '#475569',
+    textDark: '#334155',
+    cardLight: '#FFFFFF',
+    cardDark: '#F1F5F9',
+  },
+  gradients: {
+    hero: ['#F8FAFC', '#F1F5F9', '#F8FAFC'],
+    chrome: ['#CBD5E1', '#94A3B8', '#CBD5E1'],
+    water: ['#0EA5E9', '#0284C7', '#0EA5E9'],
+  },
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+    xxl: 48,
+  },
+  borderRadius: {
+    sm: 8,
+    md: 16,
+    lg: 24,
+    full: 9999,
+  },
+  shadows: {
+    sm: {
+      shadowColor: '#0F172A',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.08,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    md: {
+      shadowColor: '#0F172A',
+      shadowOffset: { width: 0, height: 6 },
+      shadowOpacity: 0.12,
+      shadowRadius: 10,
+      elevation: 4,
+    },
+    lg: {
+      shadowColor: '#0F172A',
+      shadowOffset: { width: 0, height: 12 },
+      shadowOpacity: 0.16,
+      shadowRadius: 20,
+      elevation: 8,
+    },
+  },
+};
+
+export const darkTheme = {
+  colors: {
+    primary: '#22D3EE',
+    secondary: '#0F1419',
+    accent: '#1A1F2E',
+    dark: '#0A0E14',
+    light: '#F0F9FF',
+    gray: '#A0AEC0',
+    chrome: '#CBD5E1',
+    success: '#34D399',
+    headline: '#38BDF8',
+    text: '#F0F9FF',
+    textSecondary: '#94A3B8',
+    textDark: '#CBD5E1',
+    cardLight: '#1E293B',
+    cardDark: '#0F172A',
+  },
+  gradients: {
+    hero: ['#0F1419', '#1A1F2E', '#0F1419'],
+    chrome: ['#A0AEC0', '#CBD5E1', '#A0AEC0'],
+    water: ['#22D3EE', '#38BDF8', '#22D3EE'],
+  },
+  spacing: {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+    xxl: 48,
+  },
+  borderRadius: {
+    sm: 8,
+    md: 16,
+    lg: 24,
+    full: 9999,
+  },
+  shadows: {
+    sm: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 2,
+    },
+    md: {
+      shadowColor: '#19C3E6',
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.25,
+      shadowRadius: 8,
+      elevation: 4,
+    },
+    lg: {
+      shadowColor: '#19C3E6',
+      shadowOffset: { width: 0, height: 8 },
+      shadowOpacity: 0.35,
+      shadowRadius: 16,
+      elevation: 8,
+    },
+  },
+};
+
+export type Theme = typeof lightTheme;

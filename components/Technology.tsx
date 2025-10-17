@@ -1,6 +1,6 @@
-import { useLanguage } from '@/contexts/LanguageContext';
-import { useTheme } from '@/contexts/ThemeContext';
-import { translations } from '@/constants/translations';
+import { useLanguage } from '@/src/contexts/LanguageContext';
+import { useTheme } from '@/src/contexts/ThemeContext';
+import { translations } from '@/src/config/translations';
 import { Zap, Shield, Wifi } from 'lucide-react-native';
 import React, { memo, useMemo, useRef, useEffect } from 'react';
 import {

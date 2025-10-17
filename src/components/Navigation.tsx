@@ -35,7 +35,7 @@ function NavigationInner() {
         useNativeDriver: true,
       }),
     ]).start();
-  }, []);
+  }, [fadeAnim, slideAnim]);
 
   useEffect(() => {
     Animated.parallel([
@@ -64,7 +64,7 @@ function NavigationInner() {
         }),
       ]),
     ]).start();
-  }, [isRTL]);
+  }, [isRTL, logoFadeAnim, controlsFadeAnim]);
 
   const toggleLanguage = () => {
     changeLanguage(language === 'en' ? 'he' : 'en');

@@ -4,10 +4,10 @@ import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect, useState } from "react";
 import { Platform } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { LanguageProvider } from "@/contexts/LanguageContext";
-import { ThemeProvider } from "@/contexts/ThemeContext";
+import { LanguageProvider } from "@/src/contexts/LanguageContext";
+import { ThemeProvider } from "@/src/contexts/ThemeContext";
 import Head from "expo-router/head";
-import Navigation from "@/components/Navigation";
+import Navigation from "@/src/components/Navigation";
 
 function RootLayoutNav() {
   return (
