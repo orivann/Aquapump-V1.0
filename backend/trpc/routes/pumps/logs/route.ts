@@ -6,11 +6,11 @@ export const getPumpLogsProcedure = publicProcedure
   .input(
     z.object({
       pumpId: z.string().uuid(),
-      limit: z.number().min(1).max(500).default(100),
+      limit: z.number().min(1).max(500).optional(),
     })
   )
   .query(async ({ input }) => {
-    return await getPumpLogs(input.pumpId, input.limit);
+    return await getPumpLogs(input.pumpId, input.limit ?? 100);
   });
 
 export const createPumpLogProcedure = publicProcedure
@@ -19,9 +19,12 @@ export const createPumpLogProcedure = publicProcedure
       pump_id: z.string().uuid(),
       event_type: z.enum(['start', 'stop', 'maintenance', 'error', 'warning']),
       message: z.string().min(1),
-      metadata: z.record(z.unknown()).optional().default({}),
+      metadata: z.record(z.string(), z.unknown()).optional(),
     })
   )
   .mutation(async ({ input }) => {
-    return await createPumpLog(input);
+    return await createPumpLog({
+      ...input,
+      metadata: input.metadata ?? {},
+    });
   });

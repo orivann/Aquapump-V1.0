@@ -13,6 +13,9 @@ export const supabaseAdmin = createClient<Database>(supabaseUrl, supabaseService
     autoRefreshToken: false,
     persistSession: false,
   },
+  db: {
+    schema: 'public',
+  },
 });
 
 export async function getPumps() {
@@ -45,9 +48,9 @@ export async function getPumpById(id: string) {
 }
 
 export async function createPump(pump: Database['public']['Tables']['pumps']['Insert']) {
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await (supabaseAdmin as any)
     .from('pumps')
-    .insert(pump as any)
+    .insert([pump])
     .select()
     .single();
 
@@ -60,9 +63,9 @@ export async function createPump(pump: Database['public']['Tables']['pumps']['In
 }
 
 export async function updatePump(id: string, updates: Database['public']['Tables']['pumps']['Update']) {
-  const result = await supabaseAdmin
+  const result = await (supabaseAdmin as any)
     .from('pumps')
-    .update(updates as any)
+    .update(updates)
     .eq('id', id)
     .select()
     .single();
@@ -106,9 +109,9 @@ export async function getPumpLogs(pumpId: string, limit = 100) {
 }
 
 export async function createPumpLog(log: Database['public']['Tables']['pump_logs']['Insert']) {
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await (supabaseAdmin as any)
     .from('pump_logs')
-    .insert(log as any)
+    .insert([log])
     .select()
     .single();
 
