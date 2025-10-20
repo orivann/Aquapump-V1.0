@@ -12,7 +12,6 @@ import Navigation from "@/components/Navigation";
 function RootLayoutNav() {
   return (
     <>
-      <Navigation />
       {Platform.OS === 'web' && (
         <Head>
           <title>AquaPump - Smart Water Pumps by AquaTech Group</title>
@@ -63,6 +62,7 @@ function RootLayoutNav() {
         <Stack.Screen name="pumps" options={{ headerShown: false, title: 'Our Pumps' }} />
         <Stack.Screen name="+not-found" />
       </Stack>
+      <Navigation />
     </>
   );
 }
