@@ -12,6 +12,7 @@ import Navigation from "@/components/Navigation";
 function RootLayoutNav() {
   return (
     <>
+      <Navigation />
       {Platform.OS === 'web' && (
         <Head>
           <title>AquaPump - Smart Water Pumps by AquaTech Group</title>
@@ -106,7 +107,6 @@ export default function RootLayout() {
       <LanguageProvider>
         <ThemeProvider>
           <GestureHandlerRootView style={{ flex: 1 }}>
-            <Navigation />
             <RootLayoutNav />
           </GestureHandlerRootView>
         </ThemeProvider>
