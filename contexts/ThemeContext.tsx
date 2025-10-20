@@ -31,11 +31,10 @@ export function useTheme() {
 
 function useThemeValue() {
   const [themeMode, setThemeMode] = useState<ThemeMode>('light');
-  const [isLoading, setIsLoading] = useState(Platform.OS !== 'web');
+  const isLoading = false;
 
   useEffect(() => {
     if (Platform.OS === 'web') {
-      setIsLoading(false);
       return;
     }
 
@@ -49,8 +48,6 @@ function useThemeValue() {
         }
       } catch (error) {
         console.error('[ThemeContext] Failed to initialize:', error);
-      } finally {
-        setIsLoading(false);
       }
     })();
   }, []);
@@ -59,9 +56,7 @@ function useThemeValue() {
     const newMode = themeMode === 'dark' ? 'light' : 'dark';
     try {
       console.log('[ThemeContext] Toggling theme to:', newMode);
-      if (Platform.OS !== 'web') {
-        await AsyncStorage.setItem(THEME_KEY, newMode);
-      }
+      await AsyncStorage.setItem(THEME_KEY, newMode);
       setThemeMode(newMode);
     } catch (error) {
       console.error('[ThemeContext] Failed to save theme:', error);

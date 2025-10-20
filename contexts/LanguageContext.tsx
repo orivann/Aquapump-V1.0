@@ -32,11 +32,10 @@ export function useLanguage() {
 function useLanguageValue() {
   const [language, setLanguage] = useState<Language>('en');
   const [isRTL, setIsRTL] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState(Platform.OS !== 'web');
+  const isLoading = false;
 
   useEffect(() => {
     if (Platform.OS === 'web') {
-      setIsLoading(false);
       return;
     }
 
@@ -52,8 +51,6 @@ function useLanguageValue() {
         }
       } catch (error) {
         console.error('[LanguageContext] Failed to initialize:', error);
-      } finally {
-        setIsLoading(false);
       }
     })();
   }, []);
@@ -61,12 +58,12 @@ function useLanguageValue() {
   const changeLanguage = useCallback(async (newLanguage: Language) => {
     try {
       console.log('[LanguageContext] Changing language to:', newLanguage);
-      if (Platform.OS !== 'web') {
-        await AsyncStorage.setItem(LANGUAGE_KEY, newLanguage);
-        I18nManager.forceRTL(newLanguage === 'he');
-      }
+      await AsyncStorage.setItem(LANGUAGE_KEY, newLanguage);
       setLanguage(newLanguage);
       setIsRTL(newLanguage === 'he');
+      if (Platform.OS !== 'web') {
+        I18nManager.forceRTL(newLanguage === 'he');
+      }
     } catch (error) {
       console.error('[LanguageContext] Failed to save language:', error);
     }

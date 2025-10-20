@@ -11,13 +11,14 @@ const Products = lazy(() => import('@/components/Products'));
 const Contact = lazy(() => import('@/components/Contact'));
 const Chatbot = lazy(() => import('@/components/Chatbot'));
 
+const { height } = Dimensions.get('window');
+
 export default function HomeScreen() {
   const { theme, themeMode } = useTheme();
   const scrollY = useRef(new Animated.Value(0)).current;
   const scrollViewRef = useRef<ScrollView>(null);
 
   const scrollToContact = useCallback(() => {
-    const { height } = Dimensions.get('window');
     scrollViewRef.current?.scrollTo({ y: height * 3.5, animated: true });
   }, []);
 

@@ -57,12 +57,12 @@ function RootLayoutNav() {
           </script>
         </Head>
       )}
+      <Navigation />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="pumps" options={{ headerShown: false, title: 'Our Pumps' }} />
         <Stack.Screen name="+not-found" />
       </Stack>
-      <Navigation />
     </>
   );
 }
