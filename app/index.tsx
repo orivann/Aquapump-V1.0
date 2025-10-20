@@ -1,16 +1,15 @@
-import { lazy, Suspense, useRef, useCallback } from 'react';
-import { View, ActivityIndicator, StyleSheet, ScrollView, Animated, Dimensions } from 'react-native';
+import { useRef, useCallback } from 'react';
+import { StyleSheet, ScrollView, Animated, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useTheme } from '@/contexts/ThemeContext';
 import Navigation from '@/components/Navigation';
-
-const Hero = lazy(() => import('@/components/Hero'));
-const About = lazy(() => import('@/components/About'));
-const Technology = lazy(() => import('@/components/Technology'));
-const Products = lazy(() => import('@/components/Products'));
-const Contact = lazy(() => import('@/components/Contact'));
-const Chatbot = lazy(() => import('@/components/Chatbot'));
+import Hero from '@/components/Hero';
+import About from '@/components/About';
+import Technology from '@/components/Technology';
+import Products from '@/components/Products';
+import Contact from '@/components/Contact';
+import Chatbot from '@/components/Chatbot';
 
 export default function HomeScreen() {
   const { theme, themeMode } = useTheme();
@@ -46,35 +45,15 @@ export default function HomeScreen() {
         scrollEventThrottle={16}
         testID="home-scroll"
       >
-        <Suspense fallback={<LoadingComponent />}>
-          <Hero scrollY={scrollY} onQuotePress={scrollToContact} />
-        </Suspense>
-        <Suspense fallback={<LoadingComponent />}>
-          <Technology scrollY={scrollY} />
-        </Suspense>
-        <Suspense fallback={<LoadingComponent />}>
-          <Products scrollY={scrollY} />
-        </Suspense>
-        <Suspense fallback={<LoadingComponent />}>
-          <About />
-        </Suspense>
-        <Suspense fallback={<LoadingComponent />}>
-          <Contact />
-        </Suspense>
+        <Hero scrollY={scrollY} onQuotePress={scrollToContact} />
+        <Technology scrollY={scrollY} />
+        <Products scrollY={scrollY} />
+        <About />
+        <Contact />
       </Animated.ScrollView>
 
-      <Suspense fallback={null}>
-        <Chatbot />
-      </Suspense>
+      <Chatbot />
     </SafeAreaView>
-  );
-}
-
-function LoadingComponent() {
-  return (
-    <View style={loadingStyles.container}>
-      <ActivityIndicator size="large" color="#0EA5E9" />
-    </View>
   );
 }
 
@@ -87,13 +66,5 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-  },
-});
-
-const loadingStyles = StyleSheet.create({
-  container: {
-    height: 200,
-    justifyContent: 'center' as const,
-    alignItems: 'center' as const,
   },
 });
