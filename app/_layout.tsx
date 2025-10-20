@@ -57,7 +57,6 @@ function RootLayoutNav() {
           </script>
         </Head>
       )}
-      <Navigation />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="pumps" options={{ headerShown: false, title: 'Our Pumps' }} />
@@ -107,6 +106,7 @@ export default function RootLayout() {
       <LanguageProvider>
         <ThemeProvider>
           <GestureHandlerRootView style={{ flex: 1 }}>
+            <Navigation />
             <RootLayoutNav />
           </GestureHandlerRootView>
         </ThemeProvider>
