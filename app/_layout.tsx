@@ -2,16 +2,32 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect, useState } from "react";
-import { Platform } from "react-native";
+import { Platform, View, ActivityIndicator } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { LanguageProvider } from "@/contexts/LanguageContext";
-import { ThemeProvider } from "@/contexts/ThemeContext";
+import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
+import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
 import Head from "expo-router/head";
+
+function LoadingGuard({ children }: { children: React.ReactNode }) {
+  const { isLoading: langLoading } = useLanguage();
+  const { isLoading: themeLoading } = useTheme();
+
+  if (langLoading || themeLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#0A1929' }}>
+        <ActivityIndicator size="large" color="#19C3E6" />
+      </View>
+    );
+  }
+
+  return <>{children}</>;
+}
 
 function RootLayoutNav() {
   return (
     <LanguageProvider>
       <ThemeProvider>
+        <LoadingGuard>
         {Platform.OS === 'web' && (
           <Head>
             <title>AquaPump - Smart Water Pumps by AquaTech Group</title>
@@ -57,11 +73,12 @@ function RootLayoutNav() {
             </script>
           </Head>
         )}
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="pumps" options={{ headerShown: false, title: 'Our Pumps' }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="pumps" options={{ headerShown: false, title: 'Our Pumps' }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </LoadingGuard>
       </ThemeProvider>
     </LanguageProvider>
   );

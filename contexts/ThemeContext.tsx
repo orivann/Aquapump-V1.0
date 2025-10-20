@@ -31,7 +31,7 @@ export function useTheme() {
 
 function useThemeValue(): ThemeContextType {
   const [themeMode, setThemeMode] = useState<ThemeMode>('light');
-  const isLoading = false;
+  const [isLoading, setIsLoading] = useState<boolean>(Platform.OS !== 'web');
 
   useEffect(() => {
     if (Platform.OS === 'web') {
@@ -48,6 +48,8 @@ function useThemeValue(): ThemeContextType {
         }
       } catch (error) {
         console.error('[ThemeContext] Failed to initialize:', error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);

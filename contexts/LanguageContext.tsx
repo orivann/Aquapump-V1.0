@@ -32,7 +32,7 @@ export function useLanguage() {
 function useLanguageValue(): LanguageContextType {
   const [language, setLanguage] = useState<Language>('en');
   const [isRTL, setIsRTL] = useState<boolean>(false);
-  const isLoading = false;
+  const [isLoading, setIsLoading] = useState<boolean>(Platform.OS !== 'web');
 
   useEffect(() => {
     if (Platform.OS === 'web') {
@@ -51,6 +51,8 @@ function useLanguageValue(): LanguageContextType {
         }
       } catch (error) {
         console.error('[LanguageContext] Failed to initialize:', error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);
