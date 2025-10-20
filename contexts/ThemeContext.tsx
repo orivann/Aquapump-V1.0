@@ -109,7 +109,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error('useTheme must be used within ThemeProvider');
+    console.warn('[ThemeContext] useTheme called outside ThemeProvider, returning defaults');
+    return {
+      themeMode: 'light' as ThemeMode,
+      theme: lightTheme,
+      isLoading: false,
+      toggleTheme: async () => {},
+    };
   }
   return context;
 }
