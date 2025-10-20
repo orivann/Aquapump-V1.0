@@ -149,7 +149,7 @@ const Contact = memo(function Contact() {
           >
             <MessageSquare size={22} color={theme.colors.primary} strokeWidth={2} />
             <TextInput
-              style={[styles.input, styles.textArea, isRTL && styles.inputRTL, { color: isDark ? theme.colors.light : '#0F172A' }]}
+              style={[styles.input, styles.textArea, isRTL && styles.inputRTL, { color: isDark ? '#F0F9FF' : '#0F172A' }]}
               value={message}
               onChangeText={setMessage}
               placeholder={t(translations.contact.message)}
