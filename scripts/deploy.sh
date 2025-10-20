@@ -46,11 +46,38 @@ check_requirements() {
     print_status "All requirements met"
 }
 
-# Build Docker image
+# Build Docker image with retry logic
 build_image() {
     print_status "Building Docker image..."
-    docker build -t aquapump:$VERSION .
-    print_status "Docker image built successfully"
+    
+    local max_retries=3
+    local retry_count=0
+    local build_success=false
+    
+    while [ $retry_count -lt $max_retries ] && [ "$build_success" = false ]; do
+        if docker build \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            --cache-from aquapump:latest \
+            -t aquapump:$VERSION \
+            -t aquapump:latest \
+            . ; then
+            build_success=true
+            print_status "Docker image built successfully"
+        else
+            retry_count=$((retry_count + 1))
+            if [ $retry_count -lt $max_retries ]; then
+                print_warning "Build failed. Retrying ($retry_count/$max_retries)..."
+                sleep 5
+            else
+                print_error "Build failed after $max_retries attempts"
+                print_error "Docker Hub might be experiencing issues. Try:"
+                echo "  1. Wait a few minutes and retry"
+                echo "  2. Use a mirror: docker pull mirror.gcr.io/library/node:22-alpine"
+                echo "  3. Build offline if you have cached images"
+                exit 1
+            fi
+        fi
+    done
 }
 
 # Deploy to Docker
