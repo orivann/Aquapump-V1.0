@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useCallback, useEffect, useMemo, useState, createContext, useContext, ReactNode } from 'react';
-import { Platform } from 'react-native';
+import { useCallback, useEffect, useMemo, useState, createContext, useContext, ReactNode, useRef } from 'react';
+import { Platform, Animated, StyleSheet } from 'react-native';
 import { lightTheme, darkTheme, Theme } from '@/constants/theme';
 
 export type ThemeMode = 'light' | 'dark';
@@ -18,7 +18,45 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const value = useThemeValue();
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const [displayMode, setDisplayMode] = useState(value.themeMode);
+
+  useEffect(() => {
+    if (displayMode !== value.themeMode) {
+      Animated.sequence([
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+      ]).start();
+      
+      setTimeout(() => setDisplayMode(value.themeMode), 200);
+    }
+  }, [value.themeMode, displayMode, fadeAnim]);
+
+  const currentTheme = displayMode === 'dark' ? darkTheme : lightTheme;
+
+  return (
+    <ThemeContext.Provider value={value}>
+      <Animated.View 
+        style={[
+          styles.container,
+          { 
+            opacity: fadeAnim,
+            backgroundColor: currentTheme.colors.secondary 
+          }
+        ]}
+      >
+        {children}
+      </Animated.View>
+    </ThemeContext.Provider>
+  );
 }
 
 export function useTheme() {
@@ -76,3 +114,9 @@ function useThemeValue(): ThemeContextType {
     toggleTheme,
   };
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
