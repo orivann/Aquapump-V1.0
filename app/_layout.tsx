@@ -7,7 +7,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import Head from "expo-router/head";
-import Navigation from "@/components/Navigation";
 
 function RootLayoutNav() {
   return (
@@ -58,7 +57,6 @@ function RootLayoutNav() {
             </script>
           </Head>
         )}
-        <Navigation />
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="pumps" options={{ headerShown: false, title: 'Our Pumps' }} />

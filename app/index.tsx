@@ -3,6 +3,7 @@ import { View, ActivityIndicator, StyleSheet, ScrollView, Animated, Dimensions }
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { useTheme } from '@/contexts/ThemeContext';
+import Navigation from '@/components/Navigation';
 
 const Hero = lazy(() => import('@/components/Hero'));
 const About = lazy(() => import('@/components/About'));
@@ -36,6 +37,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.secondary }]} edges={['top', 'bottom']}>
       <StatusBar style={themeMode === 'dark' ? 'light' : 'dark'} />
+      <Navigation />
       <Animated.ScrollView
         ref={scrollViewRef}
         style={styles.scrollView}
