@@ -29,7 +29,7 @@ export function useLanguage() {
   return context;
 }
 
-function useLanguageValue() {
+function useLanguageValue(): LanguageContextType {
   const [language, setLanguage] = useState<Language>('en');
   const [isRTL, setIsRTL] = useState<boolean>(false);
   const isLoading = false;

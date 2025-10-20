@@ -29,7 +29,7 @@ export function useTheme() {
   return context;
 }
 
-function useThemeValue() {
+function useThemeValue(): ThemeContextType {
   const [themeMode, setThemeMode] = useState<ThemeMode>('light');
   const isLoading = false;
 

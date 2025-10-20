@@ -1,7 +1,7 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Globe, Sun, Moon } from 'lucide-react-native';
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 
 function NavigationInner() {
+  const [mounted, setMounted] = useState(false);
   const { language, changeLanguage, isRTL } = useLanguage();
   const { theme, themeMode, toggleTheme } = useTheme();
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -22,6 +23,7 @@ function NavigationInner() {
   const controlsFadeAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
+    setMounted(true);
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -35,7 +37,7 @@ function NavigationInner() {
         useNativeDriver: true,
       }),
     ]).start();
-  }, []);
+  }, [fadeAnim, slideAnim]);
 
   useEffect(() => {
     Animated.parallel([
@@ -64,13 +66,17 @@ function NavigationInner() {
         }),
       ]),
     ]).start();
-  }, [isRTL]);
+  }, [isRTL, logoFadeAnim, controlsFadeAnim]);
 
   const toggleLanguage = () => {
     changeLanguage(language === 'en' ? 'he' : 'en');
   };
 
   const isDark = themeMode === 'dark';
+
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <View style={[styles.container, Platform.OS === 'web' ? styles.fixedOnWeb : null]} testID="navbar-root">
