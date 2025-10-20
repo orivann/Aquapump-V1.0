@@ -9,7 +9,7 @@ WORKDIR /app
 FROM base AS deps
 RUN npm install -g bun@latest
 COPY package.json bun.lock* ./
-RUN bun install --frozen-lockfile --production=false
+RUN bun install --frozen-lockfile
 
 # Stage 2: Build stage
 FROM base AS builder
