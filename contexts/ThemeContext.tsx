@@ -1,1 +1,1 @@
-export * from '@frontend/contexts/ThemeContext';
+export * from '../frontend/contexts/ThemeContext';

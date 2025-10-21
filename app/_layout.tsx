@@ -1,1 +1,1 @@
-export { default } from '@frontend/app/_layout';
+export { default } from '../frontend/app/_layout';

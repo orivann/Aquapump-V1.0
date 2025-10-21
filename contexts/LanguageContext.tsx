@@ -1,1 +1,1 @@
-export * from '@frontend/contexts/LanguageContext';
+export * from '../frontend/contexts/LanguageContext';

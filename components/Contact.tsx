@@ -1,1 +1,1 @@
-export { default } from '@frontend/components/Contact';
+export { default } from '../frontend/components/Contact';

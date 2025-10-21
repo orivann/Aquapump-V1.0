@@ -1,1 +1,1 @@
-export * from '@frontend/constants/theme';
+export * from '../frontend/constants/theme';

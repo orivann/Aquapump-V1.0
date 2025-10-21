@@ -1,1 +1,1 @@
-export * from '@frontend/constants/translations';
+export * from '../frontend/constants/translations';

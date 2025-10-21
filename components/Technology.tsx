@@ -1,1 +1,1 @@
-export { default } from '@frontend/components/Technology';
+export { default } from '../frontend/components/Technology';

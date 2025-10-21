@@ -1,1 +1,1 @@
-export { default } from '@frontend/components/Navigation';
+export { default } from '../frontend/components/Navigation';

@@ -1,1 +1,1 @@
-export { default } from '@frontend/components/Hero';
+export { default } from '../frontend/components/Hero';

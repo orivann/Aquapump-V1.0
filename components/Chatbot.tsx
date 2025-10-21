@@ -1,1 +1,1 @@
-export { default } from '@frontend/components/Chatbot';
+export { default } from '../frontend/components/Chatbot';

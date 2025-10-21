@@ -13,12 +13,13 @@ RUN npm install -g bun@latest @expo/cli
 COPY --from=deps /app/node_modules ./node_modules
 COPY package.json bun.lock* tsconfig.json ./
 COPY frontend/app.json ./app.json
-COPY frontend/app ./app
+COPY app ./app
 COPY frontend/assets ./assets
-COPY frontend/components ./components
-COPY frontend/constants ./constants
-COPY frontend/contexts ./contexts
-COPY frontend/lib ./lib
+COPY components ./components
+COPY constants ./constants
+COPY contexts ./contexts
+COPY lib ./lib
+COPY frontend ./frontend
 
 ENV NODE_ENV=production
 ENV EXPO_USE_FAST_RESOLVER=1
