@@ -1,13 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-<<<<<<< HEAD:frontend/contexts/ThemeContext.tsx
-import { useCallback, useEffect, useMemo, useState, createContext, useContext, ReactNode } from 'react';
-import { Platform } from 'react-native';
-import { lightTheme, darkTheme, Theme } from '@frontend/constants/theme';
-=======
-import { useCallback, useEffect, useMemo, useState, createContext, useContext, ReactNode, useRef } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+  createContext,
+  useContext,
+  ReactNode,
+} from 'react';
 import { Platform, Animated, StyleSheet } from 'react-native';
 import { lightTheme, darkTheme, Theme } from '@/constants/theme';
->>>>>>> main:contexts/ThemeContext.tsx
 
 export type ThemeMode = 'light' | 'dark';
 
@@ -29,9 +32,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [displayMode, setDisplayMode] = useState<ThemeMode>(themeMode);
 
   useEffect(() => {
-    if (Platform.OS === 'web') {
-      return;
-    }
+    if (Platform.OS === 'web') return;
 
     (async () => {
       try {
@@ -64,7 +65,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           useNativeDriver: true,
         }),
       ]).start();
-      
+
       setTimeout(() => setDisplayMode(themeMode), 200);
     }
   }, [themeMode, displayMode, fadeAnim]);
@@ -86,24 +87,24 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return displayMode === 'dark' ? darkTheme : lightTheme;
   }, [displayMode]);
 
-  const value = useMemo(() => ({
-    themeMode: displayMode,
-    theme,
-    isLoading,
-    toggleTheme,
-  }), [displayMode, theme, isLoading, toggleTheme]);
+  const value = useMemo(
+    () => ({
+      themeMode: displayMode,
+      theme,
+      isLoading,
+      toggleTheme,
+    }),
+    [displayMode, theme, isLoading, toggleTheme]
+  );
 
   const currentTheme = displayMode === 'dark' ? darkTheme : lightTheme;
 
   return (
     <ThemeContext.Provider value={value}>
-      <Animated.View 
+      <Animated.View
         style={[
           styles.container,
-          { 
-            opacity: fadeAnim,
-            backgroundColor: currentTheme.colors.secondary 
-          }
+          { opacity: fadeAnim, backgroundColor: currentTheme.colors.secondary },
         ]}
       >
         {children}
@@ -115,7 +116,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
-    console.warn('[ThemeContext] useTheme called outside ThemeProvider, returning defaults');
+    console.warn(
+      '[ThemeContext] useTheme called outside ThemeProvider, returning defaults'
+    );
     return {
       themeMode: 'light' as ThemeMode,
       theme: lightTheme,
