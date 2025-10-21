@@ -10,7 +10,7 @@ import {
   ReactNode,
 } from 'react';
 import { Platform, Animated, StyleSheet } from 'react-native';
-import { lightTheme, darkTheme, Theme } from '@/constants/theme';
+import { lightTheme, darkTheme, Theme } from '@frontend/constants/theme';
 
 export type ThemeMode = 'light' | 'dark';
 
