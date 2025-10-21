@@ -1,8 +1,9 @@
 import { useRef, useEffect } from 'react';
 import { Animated, StyleSheet } from 'react-native';
-import { theme } from '@frontend/constants/theme';
+import { useTheme } from '@frontend/contexts/ThemeContext';
 
 export default function WaterRipple({ trigger }: { trigger: boolean }) {
+  const { theme } = useTheme();
   const scaleAnim = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current;
 
@@ -33,6 +34,8 @@ export default function WaterRipple({ trigger }: { trigger: boolean }) {
         {
           transform: [{ scale: scaleAnim }],
           opacity: opacityAnim,
+          backgroundColor: theme.colors.primary + '40',
+          borderColor: theme.colors.primary,
         },
       ]}
     />
@@ -45,8 +48,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: theme.colors.primary + '40',
     borderWidth: 2,
-    borderColor: theme.colors.primary,
   },
 });

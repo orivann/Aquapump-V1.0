@@ -12,9 +12,6 @@ const Products = lazy(() => import('@frontend/components/Products'));
 const Contact = lazy(() => import('@frontend/components/Contact'));
 const Chatbot = lazy(() => import('@frontend/components/Chatbot'));
 
-const { height } = Dimensions.get('window');
-
-
 export default function HomeScreen() {
   const { theme, themeMode } = useTheme();
   const { height } = Dimensions.get('window');
