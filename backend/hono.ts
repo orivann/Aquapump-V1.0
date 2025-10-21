@@ -12,10 +12,11 @@ app.use("*", logger());
 app.use(
   "*",
   cors({
-    origin: process.env.CORS_ORIGIN?.split(',') || '*',
+    origin: process.env.CORS_ORIGIN?.split(',').map(o => o.trim()) || '*',
     credentials: true,
     allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization'],
+    allowHeaders: ['Content-Type', 'Authorization', 'x-trpc-source'],
+    exposeHeaders: ['Content-Length', 'X-Request-Id'],
   })
 );
 

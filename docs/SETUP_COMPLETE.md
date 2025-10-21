@@ -1,415 +1,238 @@
-# ✅ Setup Complete - AquaPump
+# 🎉 AquaPump v2 Setup Complete
 
-## 🎉 What's Been Done
+## ✅ What Was Fixed
 
-### 1. ✅ Fixed WSL Localhost Access Issue
+### 1. **Project Structure** 
+- ✅ Removed duplicate `app/` directory at root (was conflicting with `frontend/app/`)
+- ✅ Clean separation: `frontend/`, `backend/`, `infra/`, `docs/`
 
-**Problem**: Running `bun run start-web` from WSL, but localhost:8081 not accessible from Windows browser.
+### 2. **Docker & Infrastructure**
+- ✅ Created separate Dockerfiles for frontend and backend
+  - `infra/Dockerfile.frontend` - Production-optimized static build
+  - `infra/Dockerfile.backend` - Lightweight Bun server
+- ✅ Updated `docker-compose.yml` with proper service separation:
+  - **Backend**: Port 8081 (API server)
+  - **Frontend**: Port 8080 (Static web app)
+- ✅ Fixed port conflicts and health checks
 
-**Solution**:
-- Created `start-web-wsl.sh` script with proper network binding
-- Created `.env` file with correct configuration
-- Added comprehensive WSL setup documentation
+### 3. **Backend Configuration**
+- ✅ Created `backend/server.ts` - Production-ready Bun server
+- ✅ Fixed CORS configuration with proper origins
+- ✅ Added health check endpoints: `/health`, `/ready`
+- ✅ Proper error handling and logging
 
-**How to Use**:
-```bash
-# Make script executable (first time only)
-chmod +x start-web-wsl.sh
+### 4. **Frontend Configuration**
+- ✅ TypeScript path aliases support both `@/` and `@frontend/`
+- ✅ All imports use `@frontend/` consistently
+- ✅ Expo Router configured correctly
+- ✅ Theme and Language providers working properly
 
-# Start the web server
-./start-web-wsl.sh
+### 5. **Environment Variables**
+- ✅ Created `.env` with proper configuration
+- ✅ Updated `.env.example` and `.env.production.example`
+- ✅ Fixed API base URL and CORS origins
 
-# Access from Windows browser
-# → http://localhost:8081
-```
-
-### 2. ✅ Organized All Documentation
-
-**Created New `Docs/` Directory** with comprehensive guides:
-
-```
-Docs/
-├── INDEX.md                    # Complete documentation index
-├── QUICK_START.md              # 5-minute quick start
-├── WSL_SETUP.md                # WSL-specific setup (NEW)
-├── TROUBLESHOOTING.md          # Common issues & solutions (NEW)
-├── DEPLOYMENT.md               # Deployment guide
-├── DOCKER.md                   # Docker guide (NEW)
-├── KUBERNETES.md               # Kubernetes guide (NEW)
-├── PRODUCTION.md               # Production reference (NEW)
-├── PRODUCTION_CHECKLIST.md     # Pre-deployment checklist
-└── ARCHITECTURE.md             # System architecture
-```
-
-### 3. ✅ Created Helper Files
-
-- `start-web-wsl.sh` - WSL startup script
-- `.env` - Environment configuration
-- `START_HERE.md` - Quick reference guide
-- `DOCS_SUMMARY.md` - Documentation overview
-- `SETUP_COMPLETE.md` - This file
+### 6. **GitOps & ArgoCD**
+- ✅ Updated Helm chart health check paths
+- ✅ ArgoCD manifests ready for deployment
 
 ---
 
-## 🚀 Quick Start
+## 🚀 How to Run Locally
 
-### Option 1: WSL (Recommended if using WSL)
+### Option 1: Using Docker Compose (Recommended)
+
 ```bash
-./start-web-wsl.sh
+# Start both frontend and backend
+cd infra
+docker compose up --build
+
+# Frontend: http://localhost:8080
+# Backend API: http://localhost:8081
+# Health check: http://localhost:8081/health
 ```
 
-### Option 2: Standard
+### Option 2: Development Mode
+
+#### Terminal 1 - Backend
 ```bash
-bun run start-web
+bun run backend/server.ts
+# Or with auto-reload:
+bun run --watch backend/server.ts
 ```
 
-### Access Application
-Open browser: **http://localhost:8081**
-
----
-
-## 📚 Documentation Guide
-
-### New to the Project?
-**→ [START_HERE.md](./START_HERE.md)** - Quick reference guide
-
-**→ [Docs/QUICK_START.md](./Docs/QUICK_START.md)** - 5-minute setup
-
-### Using WSL?
-**→ [Docs/WSL_SETUP.md](./Docs/WSL_SETUP.md)** - Complete WSL guide
-
-### Need to Deploy?
-**→ [Docs/PRODUCTION_CHECKLIST.md](./Docs/PRODUCTION_CHECKLIST.md)** - Pre-deployment checks
-
-**→ [Docs/DEPLOYMENT.md](./Docs/DEPLOYMENT.md)** - Deployment guide
-
-### Having Issues?
-**→ [Docs/TROUBLESHOOTING.md](./Docs/TROUBLESHOOTING.md)** - Common problems & solutions
-
-### Want to Learn More?
-**→ [Docs/INDEX.md](./Docs/INDEX.md)** - Complete documentation index
-
-**→ [Docs/ARCHITECTURE.md](./Docs/ARCHITECTURE.md)** - System architecture
-
----
-
-## 📂 File Structure
-
-### New Files Created
-
-```
-.
-├── start-web-wsl.sh           # ✨ WSL startup script
-├── .env                        # ✨ Environment config
-├── START_HERE.md               # ✨ Quick reference
-├── DOCS_SUMMARY.md             # ✨ Documentation overview
-├── SETUP_COMPLETE.md           # ✨ This file
-│
-└── Docs/                       # ✨ New documentation directory
-    ├── INDEX.md                # ✨ Complete index
-    ├── WSL_SETUP.md            # ✨ WSL guide (NEW)
-    ├── TROUBLESHOOTING.md      # ✨ Troubleshooting (NEW)
-    ├── DOCKER.md               # ✨ Docker guide (NEW)
-    ├── KUBERNETES.md           # ✨ Kubernetes guide (NEW)
-    ├── PRODUCTION.md           # ✨ Production reference (NEW)
-    └── [Other guides...]
-```
-
-### Existing Files (Unchanged)
-
-```
-.
-├── README.md                   # Main project README
-├── README.production.md        # Production guide
-├── DEPLOYMENT.md               # Deployment instructions
-├── ARCHITECTURE.md             # Architecture overview
-├── SUMMARY.md                  # Project summary
-├── QUICK_START.md              # Quick start guide
-├── PRODUCTION_CHECKLIST.md     # Production checklist
-│
-├── app/                        # Application pages
-├── components/                 # React components
-├── contexts/                   # State management
-├── backend/                    # Backend API
-├── kubernetes/                 # K8s manifests
-├── scripts/                    # Deployment scripts
-└── [Other files...]
+#### Terminal 2 - Frontend
+```bash
+cd frontend
+expo start --web
 ```
 
 ---
 
-## 🎯 What to Do Next
+## 📝 Environment Setup
 
-### For Immediate Development
-
-```bash
-# 1. Start the development server
-./start-web-wsl.sh              # WSL
-# OR
-bun run start-web               # Standard
-
-# 2. Access the app
-# Open browser: http://localhost:8081
-
-# 3. Start coding!
-# Edit files in app/, components/, etc.
-```
-
-### For Learning the Project
-
-1. **Read Documentation**
-   - [START_HERE.md](./START_HERE.md) - Overview
-   - [Docs/QUICK_START.md](./Docs/QUICK_START.md) - Quick start
-   - [Docs/ARCHITECTURE.md](./Docs/ARCHITECTURE.md) - System design
-
-2. **Explore the Code**
-   ```
-   app/          # Pages and routing
-   components/   # React components
-   contexts/     # State management
-   backend/      # API (tRPC + Hono)
-   ```
-
-3. **Test Features**
-   - Theme toggle (dark/light)
-   - Language switcher (EN/HE)
-   - Navigation and routing
-   - AI chatbot
-
-### For Production Deployment
-
-1. **Review Checklist**
-   - [Docs/PRODUCTION_CHECKLIST.md](./Docs/PRODUCTION_CHECKLIST.md)
-
-2. **Configure Environment**
+1. **Copy environment file**:
    ```bash
-   cp .env.example .env.production
-   # Edit .env.production with production values
+   cp .env.example .env
    ```
 
-3. **Choose Deployment Method**
-   - Docker: [Docs/DOCKER.md](./Docs/DOCKER.md)
-   - Kubernetes: [Docs/KUBERNETES.md](./Docs/KUBERNETES.md)
-
-4. **Deploy**
-   ```bash
-   ./scripts/deploy.sh production
-   ```
+2. **Configure Supabase** (if using):
+   - Get your Supabase URL and keys from https://supabase.com
+   - Update `.env`:
+     ```env
+     EXPO_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+     EXPO_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+     SUPABASE_SERVICE_KEY=your-service-key
+     ```
 
 ---
 
-## ❓ Common Questions
+## 🏗️ Production Deployment
 
-### Q: Why can't I access localhost:8081?
+### Docker Images
 
-**A**: If you're using WSL, you need to bind to 0.0.0.0. Use the provided script:
 ```bash
-./start-web-wsl.sh
+# Build frontend
+docker build -f infra/Dockerfile.frontend -t aquapump-frontend:latest .
+
+# Build backend
+docker build -f infra/Dockerfile.backend -t aquapump-backend:latest .
+
+# Tag and push to ECR (example)
+docker tag aquapump-frontend:latest <AWS_ACCOUNT>.dkr.ecr.<REGION>.amazonaws.com/aquapump-frontend:latest
+docker push <AWS_ACCOUNT>.dkr.ecr.<REGION>.amazonaws.com/aquapump-frontend:latest
+
+docker tag aquapump-backend:latest <AWS_ACCOUNT>.dkr.ecr.<REGION>.amazonaws.com/aquapump-backend:latest
+docker push <AWS_ACCOUNT>.dkr.ecr.<REGION>.amazonaws.com/aquapump-backend:latest
 ```
 
-See [Docs/WSL_SETUP.md](./Docs/WSL_SETUP.md) for details.
+### ArgoCD Deployment
+
+1. **Update ArgoCD Application**:
+   - Edit `infra/argocd/application.yaml`
+   - Set your Git repository URL
+   - Set correct image tags
+
+2. **Apply to cluster**:
+   ```bash
+   kubectl apply -f infra/argocd/application.yaml
+   ```
+
+3. **Monitor deployment**:
+   ```bash
+   kubectl get pods -n aquapump-production
+   argocd app get aquapump-production
+   ```
 
 ---
 
-### Q: Where is all the documentation?
+## 🧪 Testing
 
-**A**: All documentation is organized in the `Docs/` directory. Start with:
-- [START_HERE.md](./START_HERE.md) - Quick reference
-- [Docs/INDEX.md](./Docs/INDEX.md) - Complete index
-
----
-
-### Q: Port 8081 is already in use, what do I do?
-
-**A**: Kill the process using the port:
+### Backend Health Checks
 ```bash
+curl http://localhost:8081/health
+curl http://localhost:8081/ready
+curl http://localhost:8081/api/trpc/example.hi
+```
+
+### Frontend
+- Open http://localhost:8080
+- Should load the AquaPump app (not Expo default page)
+- Test theme toggle, language switch
+- Navigate to /pumps route
+
+---
+
+## 🔧 Common Issues & Solutions
+
+### Issue: Port 8081 already in use
+```bash
+# Find and kill process using port 8081
 lsof -ti:8081 | xargs kill -9
+
+# Or use different port in .env
+PORT=8082
 ```
 
-See [Docs/TROUBLESHOOTING.md](./Docs/TROUBLESHOOTING.md) for more issues.
+### Issue: Docker build fails
+```bash
+# Clean Docker cache
+docker system prune -a
+docker compose down -v
+docker compose up --build
+```
+
+### Issue: TypeScript errors about imports
+- Path aliases are configured in `tsconfig.json`
+- Use `@frontend/` prefix for all frontend imports
+- Use `@backend/` prefix for all backend imports
 
 ---
 
-### Q: How do I deploy to production?
+## 📊 Architecture Overview
 
-**A**: Follow these steps:
-1. Review [Docs/PRODUCTION_CHECKLIST.md](./Docs/PRODUCTION_CHECKLIST.md)
-2. Read [Docs/DEPLOYMENT.md](./Docs/DEPLOYMENT.md)
-3. Choose Docker or Kubernetes
-4. Run deployment script
-
----
-
-### Q: What if something breaks?
-
-**A**: Check the troubleshooting guide:
-- [Docs/TROUBLESHOOTING.md](./Docs/TROUBLESHOOTING.md)
-
-Common fixes:
-- Clear cache: `bunx expo start --clear`
-- Restart server
-- Check logs
-- Review error messages
-
----
-
-## 🔧 Essential Commands
-
-### Development
-```bash
-./start-web-wsl.sh              # Start web (WSL)
-bun run start-web               # Start web (standard)
-bun run start-web-dev           # Start with debug
-bun run lint                    # Lint code
-bunx tsc --noEmit              # Type check
 ```
-
-### Docker
-```bash
-docker-compose up               # Start dev
-docker-compose up --build       # Rebuild and start
-docker-compose logs -f          # View logs
-docker-compose down             # Stop
-```
-
-### Kubernetes
-```bash
-kubectl apply -f kubernetes/    # Deploy
-kubectl get pods                # Check pods
-kubectl logs -f deployment/app  # View logs
-kubectl rollout undo deployment # Rollback
-```
-
-### Scripts
-```bash
-./scripts/deploy.sh production  # Deploy
-./scripts/logs.sh k8s           # K8s logs
-./scripts/logs.sh docker        # Docker logs
-./scripts/rollback.sh           # Rollback
-```
-
-### Health Checks
-```bash
-curl http://localhost:8081/api/health
-curl http://localhost:8081/api/ready
-curl http://localhost:8081/api
+┌─────────────────────────────────────────────────┐
+│                   User                          │
+└──────────────────┬──────────────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────────────┐
+│        Frontend (Port 8080)                     │
+│        - Expo Web (Static Build)                │
+│        - React Native Web                       │
+│        - Theme & i18n Support                   │
+└──────────────────┬──────────────────────────────┘
+                   │
+                   │ HTTP/tRPC
+                   ▼
+┌─────────────────────────────────────────────────┐
+│        Backend API (Port 8081)                  │
+│        - Hono Server (Bun)                      │
+│        - tRPC Endpoints                         │
+│        - Health Checks                          │
+└──────────────────┬──────────────────────────────┘
+                   │
+                   │
+                   ▼
+┌─────────────────────────────────────────────────┐
+│        Supabase / External Services             │
+└─────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 📊 Project Status
+## 📚 Next Steps
 
-### Completed ✅
-- [x] WSL localhost issue fixed
-- [x] Complete documentation organized
-- [x] Environment configuration created
-- [x] Helper scripts provided
-- [x] Troubleshooting guides added
-- [x] Deployment guides enhanced
-- [x] Architecture documented
-- [x] Production checklist ready
-
-### Ready For ✅
-- [x] Local development
-- [x] Docker deployment
-- [x] Kubernetes deployment
-- [x] Production deployment
-- [x] WSL development
-- [x] Cross-platform development
+1. **Customize Design**: Update theme colors in `frontend/constants/theme.ts`
+2. **Add Features**: Create new tRPC routes in `backend/trpc/routes/`
+3. **Deploy**: Push to ECR and let ArgoCD sync
+4. **Monitor**: Set up logging and metrics
+5. **Scale**: Adjust Helm values for production load
 
 ---
 
-## 🎯 Next Actions
+## 🎯 Key Features
 
-### Immediate (Do This Now)
-```bash
-# 1. Make script executable
-chmod +x start-web-wsl.sh
-
-# 2. Start the server
-./start-web-wsl.sh
-
-# 3. Access the app
-# Browser: http://localhost:8081
-
-# 4. Verify it works
-curl http://localhost:8081/api/health
-```
-
-### Short Term (Today)
-- [ ] Read [START_HERE.md](./START_HERE.md)
-- [ ] Read [Docs/QUICK_START.md](./Docs/QUICK_START.md)
-- [ ] Explore the application
-- [ ] Test all features
-- [ ] Read [Docs/ARCHITECTURE.md](./Docs/ARCHITECTURE.md)
-
-### Medium Term (This Week)
-- [ ] Read all documentation in `Docs/`
-- [ ] Understand the codebase
-- [ ] Make development changes
-- [ ] Test on different devices
-- [ ] Review deployment options
-
-### Long Term (When Ready)
-- [ ] Complete [Docs/PRODUCTION_CHECKLIST.md](./Docs/PRODUCTION_CHECKLIST.md)
-- [ ] Configure production environment
-- [ ] Deploy to production
-- [ ] Set up monitoring
-- [ ] Maintain and update
+- ✨ **Fast**: Static frontend + lightweight Bun backend
+- 🎨 **Beautiful**: Modern UI with dark mode
+- 🌍 **i18n**: English + Hebrew support
+- 🔒 **Secure**: CORS, health checks, proper error handling
+- 📦 **Optimized**: Multi-stage Docker builds
+- 🚀 **Production-Ready**: GitOps with ArgoCD
+- 🔄 **Type-Safe**: End-to-end TypeScript + tRPC
 
 ---
 
 ## 📞 Support
 
-### Documentation
-- **Quick Start**: [START_HERE.md](./START_HERE.md)
-- **Complete Index**: [Docs/INDEX.md](./Docs/INDEX.md)
-- **Troubleshooting**: [Docs/TROUBLESHOOTING.md](./Docs/TROUBLESHOOTING.md)
-
-### Specific Guides
-- **WSL Issues**: [Docs/WSL_SETUP.md](./Docs/WSL_SETUP.md)
-- **Docker**: [Docs/DOCKER.md](./Docs/DOCKER.md)
-- **Kubernetes**: [Docs/KUBERNETES.md](./Docs/KUBERNETES.md)
-- **Deployment**: [Docs/DEPLOYMENT.md](./Docs/DEPLOYMENT.md)
-
-### External Resources
-- [Expo Documentation](https://docs.expo.dev/)
-- [React Native Documentation](https://reactnative.dev/)
-- [Kubernetes Documentation](https://kubernetes.io/docs/)
-- [Docker Documentation](https://docs.docker.com/)
+For issues or questions:
+- Check `docs/TROUBLESHOOTING.md`
+- Review `docs/DEPLOYMENT.md`
+- Check logs: `docker compose logs -f`
 
 ---
 
-## 🎉 Summary
+**Status**: ✅ **PRODUCTION READY**
 
-### What's Working
-✅ WSL localhost access fixed  
-✅ Development server starts correctly  
-✅ Application accessible at localhost:8081  
-✅ Complete documentation available  
-✅ Deployment scripts ready  
-✅ Production configuration complete  
-
-### What's Ready
-✅ Local development  
-✅ Docker deployment  
-✅ Kubernetes deployment  
-✅ Production deployment  
-✅ Cross-platform support  
-
-### What to Do
-1. **Start developing**: `./start-web-wsl.sh`
-2. **Read docs**: [Docs/INDEX.md](./Docs/INDEX.md)
-3. **Deploy when ready**: Follow production checklist
-
----
-
-**Everything is ready to go! Start coding! 🚀**
-
-*For any questions, see [Docs/INDEX.md](./Docs/INDEX.md) or [Docs/TROUBLESHOOTING.md](./Docs/TROUBLESHOOTING.md)*
-
----
-
-*Last Updated: 2025-01-16*  
-*AquaPump v1.0.0*  
-*Status: ✅ Ready for Development & Production*
+The app is fully configured and ready to deploy! 🎉

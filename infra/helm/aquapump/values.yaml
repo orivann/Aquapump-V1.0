@@ -92,7 +92,7 @@ affinity:
 
 livenessProbe:
   httpGet:
-    path: /api/health
+    path: /health
     port: http
   initialDelaySeconds: 30
   periodSeconds: 10
@@ -101,7 +101,7 @@ livenessProbe:
 
 readinessProbe:
   httpGet:
-    path: /api/ready
+    path: /ready
     port: http
   initialDelaySeconds: 10
   periodSeconds: 5
@@ -110,7 +110,7 @@ readinessProbe:
 
 startupProbe:
   httpGet:
-    path: /api/health
+    path: /health
     port: http
   initialDelaySeconds: 0
   periodSeconds: 10
