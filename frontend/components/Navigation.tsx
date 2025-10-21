@@ -15,7 +15,7 @@ import { BlurView } from 'expo-blur';
 
 function NavigationInner() {
   const [mounted, setMounted] = useState(false);
-  useLanguage();
+  const { language, changeLanguage } = useLanguage();
   const { theme, themeMode, toggleTheme } = useTheme();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(-20)).current;
@@ -99,6 +99,27 @@ function NavigationInner() {
 
               <View style={styles.controls}>
                 <TouchableOpacity
+                  testID="btn-toggle-language"
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel={language === 'en' ? 'Switch to Hebrew' : 'Switch to English'}
+                  style={[
+                    styles.controlButton,
+                    {
+                      borderColor: isDark ? 'rgba(25, 195, 230, 0.3)' : 'rgba(91, 103, 245, 0.15)',
+                      backgroundColor: isDark ? 'rgba(25, 195, 230, 0.1)' : 'rgba(91, 103, 245, 0.08)',
+                    },
+                  ]}
+                  onPress={() => changeLanguage(language === 'en' ? 'he' : 'en')}
+                  hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                  activeOpacity={0.7}
+                >
+                  <Text style={[styles.languageText, { color: theme.colors.primary }]}>
+                    {language === 'en' ? 'עב' : 'EN'}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
                   testID="btn-toggle-theme"
                   accessible={true}
                   accessibilityRole="button"
@@ -171,6 +192,27 @@ function NavigationInner() {
               </Text>
 
               <View style={styles.controls}>
+                <TouchableOpacity
+                  testID="btn-toggle-language"
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel={language === 'en' ? 'Switch to Hebrew' : 'Switch to English'}
+                  style={[
+                    styles.controlButton,
+                    {
+                      borderColor: isDark ? 'rgba(25, 195, 230, 0.3)' : 'rgba(91, 103, 245, 0.15)',
+                      backgroundColor: isDark ? 'rgba(25, 195, 230, 0.1)' : 'rgba(91, 103, 245, 0.08)',
+                    },
+                  ]}
+                  onPress={() => changeLanguage(language === 'en' ? 'he' : 'en')}
+                  hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                  activeOpacity={0.7}
+                >
+                  <Text style={[styles.languageText, { color: theme.colors.primary }]}>
+                    {language === 'en' ? 'עב' : 'EN'}
+                  </Text>
+                </TouchableOpacity>
+
                 <TouchableOpacity
                   testID="btn-toggle-theme"
                   accessible={true}
@@ -282,6 +324,11 @@ const styles = StyleSheet.create({
   quoteButtonText: {
     color: '#FFFFFF',
     fontSize: 15,
+    fontWeight: '600' as const,
+    letterSpacing: 0.3,
+  },
+  languageText: {
+    fontSize: 14,
     fontWeight: '600' as const,
     letterSpacing: 0.3,
   },
