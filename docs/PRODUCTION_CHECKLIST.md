@@ -1,243 +1,288 @@
-# Production Deployment Checklist
+# Production Readiness Checklist
 
-Complete checklist before deploying AquaPump to production.
+## ✅ Code Quality
 
-## ☑️ Pre-Deployment
+- [x] TypeScript strict mode enabled
+- [x] No TypeScript errors
+- [x] ESLint configured
+- [x] Error boundaries implemented
+- [x] Proper error handling throughout
+- [x] Console logs for debugging
+- [x] React.memo for performance optimization
+- [x] useMemo and useCallback where needed
 
-### Environment Setup
-- [ ] Supabase project created and configured
-- [ ] Database schema created and tested
-- [ ] RLS policies configured correctly
-- [ ] All environment variables set in Kubernetes secrets
-- [ ] API keys rotated and secured
-- [ ] TLS certificates issued (Let's Encrypt)
+## ✅ Security
 
-### Infrastructure
-- [ ] Kubernetes cluster provisioned (v1.28+)
-- [ ] Helm 3 installed
-- [ ] Argo CD installed and configured
-- [ ] Ingress controller deployed (nginx)
-- [ ] cert-manager configured for TLS
-- [ ] Namespaces created
-- [ ] Resource quotas set
+- [x] Non-root user in Docker container
+- [x] Environment variables for sensitive data
+- [x] CORS properly configured
+- [x] No hardcoded secrets
+- [x] .gitignore includes sensitive files
+- [x] Secrets management via Kubernetes secrets
+- [x] HTTPS/TLS support via Ingress
 
-### Code Quality
-- [ ] All TypeScript errors resolved
-- [ ] Linting passes (\`bun run lint\`)
-- [ ] No console.errors in production code
-- [ ] Sensitive data removed from code
-- [ ] \`.env\` not committed to Git
-- [ ] Dependencies updated and audited
+## ✅ Performance
 
-### Docker
-- [ ] Production Dockerfile optimized
-- [ ] Multi-stage build working
-- [ ] Image size < 500MB
-- [ ] Non-root user configured
-- [ ] Health checks working
-- [ ] Image scanned for vulnerabilities (Trivy)
+- [x] Component memoization
+- [x] Optimized re-renders
+- [x] Lazy loading where applicable
+- [x] Resource limits in Kubernetes
+- [x] Horizontal Pod Autoscaling configured
+- [x] Health checks implemented
 
-### Helm Charts
-- [ ] Chart linted (\`helm lint\`)
-- [ ] Values files for all environments
-- [ ] Resource limits set appropriately
-- [ ] HPA configured
-- [ ] PDB configured
-- [ ] Network policies created
-- [ ] Probes configured correctly
+## ✅ Monitoring & Observability
 
-### CI/CD
-- [ ] GitHub Actions workflow tested
-- [ ] Argo CD applications created
-- [ ] GitOps repository configured
-- [ ] Secrets configured in GitHub/Argo
-- [ ] Automated rollback working
-- [ ] Build notifications set up
+- [x] Health check endpoint (/api/health)
+- [x] Readiness probe endpoint (/api/ready)
+- [x] Logging middleware (Hono logger)
+- [x] Error logging
+- [x] Request logging
+- [x] Kubernetes probes configured
 
-## ☑️ Security
+## ✅ Deployment
 
-### Authentication & Authorization
-- [ ] Supabase RLS enabled
-- [ ] Service keys secured (backend only)
-- [ ] Anon keys restricted properly
-- [ ] CORS configured correctly
-- [ ] Rate limiting implemented
+- [x] Multi-stage Docker build
+- [x] Docker health checks
+- [x] Docker Compose for local development
+- [x] Docker Compose for production
+- [x] Kubernetes deployment manifests
+- [x] Kubernetes service configuration
+- [x] Kubernetes ingress configuration
+- [x] Horizontal Pod Autoscaler
+- [x] Resource requests and limits
+- [x] Deployment scripts
 
-### Network Security
-- [ ] HTTPS only (no HTTP)
-- [ ] TLS 1.2+ enforced
-- [ ] Security headers configured
-- [ ] Network policies applied
-- [ ] Firewall rules configured
-- [ ] DDoS protection enabled
+## ✅ Scalability
 
-### Container Security
-- [ ] Non-root containers
-- [ ] Read-only root filesystem
-- [ ] Drop all capabilities
-- [ ] No privilege escalation
-- [ ] Security context configured
-- [ ] Image scanning enabled
+- [x] Stateless application design
+- [x] Horizontal scaling ready
+- [x] Load balancer configuration
+- [x] Auto-scaling policies
+- [x] Resource optimization
 
-### Secrets Management
-- [ ] No secrets in Git
-- [ ] Kubernetes secrets encrypted at rest
-- [ ] External secrets operator (optional)
-- [ ] Secrets rotated regularly
-- [ ] Access audited
+## ✅ Reliability
 
-## ☑️ Performance
+- [x] Health checks (liveness, readiness, startup)
+- [x] Graceful shutdown handling
+- [x] Restart policies
+- [x] Rollback capability
+- [x] Zero-downtime deployments
 
-### Scaling
-- [ ] HPA tested under load
-- [ ] Resource requests/limits tuned
-- [ ] Pod anti-affinity configured
-- [ ] Multi-replica deployment (3+)
-- [ ] Load testing completed
+## ✅ Documentation
 
-### Optimization
-- [ ] Docker image optimized
-- [ ] Bundle size minimized
-- [ ] Lazy loading implemented
-- [ ] Caching configured (React Query)
-- [ ] Database queries optimized
-- [ ] Indexes created
+- [x] README.production.md
+- [x] DEPLOYMENT.md
+- [x] Environment variables documented
+- [x] API endpoints documented
+- [x] Kubernetes manifests documented
+- [x] Deployment scripts
 
-### CDN & Caching
-- [ ] Static assets CDN-ready
-- [ ] Cache headers configured
-- [ ] Image optimization enabled
-- [ ] Compression enabled (gzip/brotli)
+## ✅ Cross-Platform Support
 
-## ☑️ Monitoring & Observability
+- [x] Web compatibility
+- [x] Mobile (iOS/Android) support
+- [x] Desktop/PC responsive design
+- [x] Platform-specific optimizations
+- [x] SafeAreaView for mobile
+- [x] Responsive layouts
 
-### Logging
-- [ ] Structured logging implemented
-- [ ] Log levels configured
-- [ ] Sensitive data not logged
-- [ ] Log aggregation set up
-- [ ] Log retention configured
+## ✅ State Management
 
-### Metrics
-- [ ] Prometheus metrics exposed
-- [ ] Service monitors created
-- [ ] Grafana dashboards created
-- [ ] Alert rules configured
-- [ ] Uptime monitoring enabled
+- [x] React Query for server state
+- [x] Context API for app state
+- [x] AsyncStorage for persistence
+- [x] Proper loading states
+- [x] Error states handled
 
-### Tracing
-- [ ] OpenTelemetry configured (optional)
-- [ ] Trace sampling configured
-- [ ] Distributed tracing enabled
+## ✅ API & Backend
 
-### Health Checks
-- [ ] Liveness probe working
-- [ ] Readiness probe working
-- [ ] Startup probe working
-- [ ] Health endpoints returning correctly
+- [x] tRPC configured
+- [x] CORS configured
+- [x] Error handling middleware
+- [x] Request logging
+- [x] Health endpoints
+- [x] API versioning ready
 
-## ☑️ Backup & Recovery
+## 📋 Pre-Deployment Tasks
 
-### Database
-- [ ] Automated backups enabled (Supabase)
-- [ ] Backup retention configured
-- [ ] Point-in-time recovery tested
-- [ ] Backup restore tested
+### Before First Deployment
 
-### Application
-- [ ] Helm release history retained
-- [ ] GitOps history available
-- [ ] Rollback procedure documented
-- [ ] Rollback tested successfully
+1. **Environment Configuration**
+   - [ ] Copy `.env.example` to `.env.production`
+   - [ ] Update all environment variables with production values
+   - [ ] Create `kubernetes/secrets.yaml` from example
+   - [ ] Update domain names in ingress.yaml
 
-### Disaster Recovery
-- [ ] DR plan documented
-- [ ] RTO/RPO defined
-- [ ] Multi-region setup (optional)
-- [ ] Failover tested
+2. **DNS Configuration**
+   - [ ] Point domain to load balancer IP
+   - [ ] Configure SSL/TLS certificates
+   - [ ] Setup CDN if needed
 
-## ☑️ Documentation
+3. **Container Registry**
+   - [ ] Setup container registry (Docker Hub, GCR, ECR, etc.)
+   - [ ] Configure image pull secrets in Kubernetes
+   - [ ] Update image names in deployment.yaml
 
-- [ ] Architecture documented
-- [ ] API reference complete
-- [ ] Deployment guide updated
-- [ ] Runbooks created
-- [ ] Troubleshooting guide written
-- [ ] Environment variables documented
-- [ ] Change log maintained
+4. **Monitoring Setup**
+   - [ ] Setup monitoring solution (Prometheus, Datadog, etc.)
+   - [ ] Configure alerting
+   - [ ] Setup log aggregation
 
-## ☑️ Compliance
+5. **Backup Strategy**
+   - [ ] Configure backup for persistent data
+   - [ ] Test restore procedures
+   - [ ] Document backup/restore process
 
-- [ ] Data privacy reviewed (GDPR, etc.)
-- [ ] Security audit completed
-- [ ] Compliance requirements met
-- [ ] Terms of service updated
-- [ ] Privacy policy updated
-- [ ] Cookie consent implemented (if applicable)
+### Testing Before Production
 
-## ☑️ Testing
+1. **Local Testing**
+   ```bash
+   bun run start-web
+   ```
 
-### Functional Testing
-- [ ] All features tested in staging
-- [ ] User acceptance testing completed
-- [ ] Cross-browser testing done
-- [ ] Mobile responsiveness verified
-- [ ] Accessibility tested (WCAG 2.1)
+2. **Docker Testing**
+   ```bash
+   docker-compose up
+   # Test at http://localhost:8081
+   ```
 
-### Performance Testing
-- [ ] Load testing completed
-- [ ] Stress testing done
-- [ ] Soak testing performed
-- [ ] Performance benchmarks met
+3. **Kubernetes Testing**
+   ```bash
+   # Deploy to staging cluster first
+   kubectl apply -f kubernetes/
+   kubectl port-forward svc/aquapump-service 8080:80
+   # Test at http://localhost:8080
+   ```
 
-### Security Testing
-- [ ] Penetration testing done (optional)
-- [ ] Vulnerability scanning completed
-- [ ] Security headers verified
-- [ ] OWASP Top 10 addressed
+4. **Load Testing**
+   - [ ] Perform load testing
+   - [ ] Verify auto-scaling works
+   - [ ] Check resource usage
 
-## ☑️ Go-Live
+5. **Security Testing**
+   - [ ] Run security scans
+   - [ ] Check for vulnerabilities
+   - [ ] Verify HTTPS works
 
-### Communication
-- [ ] Stakeholders notified
-- [ ] Maintenance window scheduled
-- [ ] Support team briefed
-- [ ] Status page prepared
+## 🚀 Deployment Commands
 
-### Deployment
-- [ ] Staging deployment successful
-- [ ] Production deployment plan reviewed
-- [ ] Rollback plan ready
-- [ ] Support team on standby
+### Docker Deployment
+```bash
+# Build
+docker build -t aquapump:latest .
 
-### Post-Deployment
-- [ ] Health checks passing
-- [ ] Logs monitored for errors
-- [ ] Metrics within normal range
-- [ ] User feedback collected
-- [ ] Post-mortem scheduled
+# Run
+docker-compose -f docker-compose.prod.yml up -d
 
-## 📝 Approval
+# Check logs
+docker-compose logs -f
+```
 
-- [ ] Technical Lead: _______________ Date: ___________
-- [ ] DevOps Lead: _________________ Date: ___________
-- [ ] Product Owner: _______________ Date: ___________
-- [ ] Security Officer: _____________ Date: ___________
+### Kubernetes Deployment
+```bash
+# Create secrets first
+kubectl apply -f kubernetes/secrets.yaml
 
-## 🚨 Emergency Contacts
+# Deploy all
+kubectl apply -f kubernetes/
 
-- **On-call Engineer**: +1-XXX-XXX-XXXX
-- **DevOps Lead**: devops@aquapump.com
-- **Support Team**: support@aquapump.com
-- **Slack**: #aquapump-production
+# Check status
+kubectl get pods
+kubectl get svc
+kubectl logs -f deployment/aquapump-app
+```
 
-## 🔗 Quick Links
+### Using Scripts
+```bash
+# Make scripts executable
+chmod +x scripts/*.sh
 
-- [Argo CD](https://argocd.example.com)
-- [Grafana](https://grafana.example.com)
-- [Supabase](https://app.supabase.com)
-- [Status Page](https://status.aquapump.com)
+# Deploy
+./scripts/deploy.sh production
 
----
+# View logs
+./scripts/logs.sh k8s
 
-**Remember**: Production deployments are serious. Take your time, follow this checklist, and don't skip steps!
+# Rollback if needed
+./scripts/rollback.sh
+```
+
+## 🔍 Post-Deployment Verification
+
+1. **Health Checks**
+   ```bash
+   curl https://your-domain.com/api/health
+   curl https://your-domain.com/api/ready
+   ```
+
+2. **Functionality Testing**
+   - [ ] Test all pages load
+   - [ ] Test theme switching
+   - [ ] Test language switching
+   - [ ] Test chatbot
+   - [ ] Test contact form
+   - [ ] Test on mobile devices
+   - [ ] Test on desktop browsers
+
+3. **Performance Monitoring**
+   - [ ] Check response times
+   - [ ] Monitor resource usage
+   - [ ] Verify auto-scaling triggers
+   - [ ] Check error rates
+
+4. **Security Verification**
+   - [ ] Verify HTTPS is enforced
+   - [ ] Check CORS headers
+   - [ ] Verify no sensitive data exposed
+   - [ ] Check security headers
+
+## 📊 Monitoring Endpoints
+
+- **Health**: `GET /api/health` - Returns health status
+- **Ready**: `GET /api/ready` - Returns readiness status
+- **Status**: `GET /api` - Returns API info
+
+## 🆘 Troubleshooting
+
+### Common Issues
+
+1. **Pods not starting**
+   ```bash
+   kubectl describe pod <pod-name>
+   kubectl logs <pod-name>
+   ```
+
+2. **Service not accessible**
+   ```bash
+   kubectl get svc
+   kubectl describe svc aquapump-service
+   ```
+
+3. **Image pull errors**
+   - Check image name in deployment.yaml
+   - Verify image exists in registry
+   - Check image pull secrets
+
+4. **Health check failures**
+   - Check application logs
+   - Verify health endpoint works
+   - Adjust probe timings if needed
+
+## 📞 Support
+
+For issues or questions:
+- Check logs: `./scripts/logs.sh k8s`
+- Review documentation: README.production.md
+- Check Kubernetes events: `kubectl get events`
+
+## 🎯 Success Criteria
+
+Your deployment is successful when:
+- ✅ All pods are running
+- ✅ Health checks pass
+- ✅ Application is accessible via domain
+- ✅ HTTPS works correctly
+- ✅ Auto-scaling responds to load
+- ✅ Monitoring shows healthy metrics
+- ✅ No errors in logs
+- ✅ All features work on web, mobile, and desktop

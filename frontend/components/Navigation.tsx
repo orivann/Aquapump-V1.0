@@ -1,5 +1,5 @@
-import { useLanguage } from '@/contexts/LanguageContext';
-import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@frontend/contexts/LanguageContext';
+import { useTheme } from '@frontend/contexts/ThemeContext';
 import { Globe, Sun, Moon } from 'lucide-react-native';
 import React, { memo, useEffect, useRef, useState } from 'react';
 import {

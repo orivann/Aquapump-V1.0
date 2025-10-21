@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Platform } from 'react-native';
-import { useTheme } from '@/contexts/ThemeContext';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useTheme } from '@frontend/contexts/ThemeContext';
+import { useLanguage } from '@frontend/contexts/LanguageContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Zap, Droplet, Factory, Download, ArrowRight } from 'lucide-react-native';
 import { Stack } from 'expo-router';

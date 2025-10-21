@@ -1,68 +1,26 @@
-# Dependencies
 node_modules
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Build outputs
 .expo
 .expo-shared
 dist
-build
-.next
-out
-
-# Environment files (use secrets management instead)
-.env
+.git
+.gitignore
+README.md
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
-# OS files
+.env.*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 .DS_Store
-Thumbs.db
-
-# IDE
+*.log
+coverage
 .vscode
 .idea
 *.swp
 *.swo
 *~
-
-# Git
-.git
-.gitignore
-.github
-
-# Documentation
-*.md
-!README.md
-Docs
-docs
-
-# Testing
-coverage
-.nyc_output
-*.test.ts
-*.spec.ts
-__tests__
-__mocks__
-
-# Logs
-logs
-*.log
-
-# Misc
-.turbo
-.eslintcache
-*.tsbuildinfo
-
-# Kubernetes and CI/CD
-kubernetes
-infra/helm
-infra/argocd
-.github/workflows
-
-# Scripts
-scripts/*.sh
+.cache
+kubernetes/secrets.yaml
+docker-compose.yml
+docker-compose.prod.yml
+Dockerfile
+.dockerignore

@@ -1,6 +1,6 @@
-import { useLanguage } from '@/contexts/LanguageContext';
-import { useTheme } from '@/contexts/ThemeContext';
-import { translations } from '@/constants/translations';
+import { useLanguage } from '@frontend/contexts/LanguageContext';
+import { useTheme } from '@frontend/contexts/ThemeContext';
+import { translations } from '@frontend/constants/translations';
 import { MessageCircle, Send, X } from 'lucide-react-native';
 import { useState, useRef, useCallback, memo } from 'react';
 import {

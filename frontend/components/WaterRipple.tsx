@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { Animated, StyleSheet } from 'react-native';
-import { theme } from '@/constants/theme';
+import { theme } from '@frontend/constants/theme';
 
 export default function WaterRipple({ trigger }: { trigger: boolean }) {
   const scaleAnim = useRef(new Animated.Value(0)).current;

@@ -4,8 +4,8 @@ import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect, useState } from "react";
 import { Platform, View, ActivityIndicator } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext";
-import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
+import { LanguageProvider, useLanguage } from "@frontend/contexts/LanguageContext";
+import { ThemeProvider, useTheme } from "@frontend/contexts/ThemeContext";
 import Head from "expo-router/head";
 
 function LoadingGuard({ children }: { children: React.ReactNode }) {

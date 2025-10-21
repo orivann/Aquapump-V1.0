@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useMemo, useState, createContext, useContext, ReactNode } from 'react';
 import { Platform } from 'react-native';
-import { lightTheme, darkTheme, Theme } from '@/src/config/theme';
+import { lightTheme, darkTheme, Theme } from '@frontend/src/config/theme';
 
 export type ThemeMode = 'light' | 'dark';
 
