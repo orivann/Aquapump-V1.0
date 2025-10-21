@@ -9,16 +9,16 @@ RUN bun install --frozen-lockfile --production=false
 
 FROM base AS builder
 WORKDIR /app
-RUN npm install -g bun@latest
+RUN npm install -g bun@latest @expo/cli
 COPY --from=deps /app/node_modules ./node_modules
 COPY package.json bun.lock* ./
 COPY frontend ./frontend
-COPY tsconfig.json expo-env.d.ts ./
 
 ENV NODE_ENV=production
 ENV EXPO_USE_FAST_RESOLVER=1
 
-RUN cd frontend && bun run expo export:web
+WORKDIR /app/frontend
+RUN npx expo export:web
 
 FROM base AS runner
 WORKDIR /app
