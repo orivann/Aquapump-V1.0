@@ -1,6 +1,6 @@
 import { useLanguage } from '@frontend/contexts/LanguageContext';
 import { useTheme } from '@frontend/contexts/ThemeContext';
-import { Globe, Sun, Moon } from 'lucide-react-native';
+import { Sun, Moon } from 'lucide-react-native';
 import React, { memo, useEffect, useRef, useState } from 'react';
 import {
   View,
@@ -15,12 +15,10 @@ import { BlurView } from 'expo-blur';
 
 function NavigationInner() {
   const [mounted, setMounted] = useState(false);
-  const { language, changeLanguage, isRTL } = useLanguage();
+  useLanguage();
   const { theme, themeMode, toggleTheme } = useTheme();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(-20)).current;
-  const logoFadeAnim = useRef(new Animated.Value(1)).current;
-  const controlsFadeAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     setMounted(true);
@@ -39,44 +37,17 @@ function NavigationInner() {
     ]).start();
   }, [fadeAnim, slideAnim]);
 
-  useEffect(() => {
-    Animated.parallel([
-      Animated.sequence([
-        Animated.timing(logoFadeAnim, {
-          toValue: 0.3,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-        Animated.timing(logoFadeAnim, {
-          toValue: 1,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-      ]),
-      Animated.sequence([
-        Animated.timing(controlsFadeAnim, {
-          toValue: 0.3,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-        Animated.timing(controlsFadeAnim, {
-          toValue: 1,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-      ]),
-    ]).start();
-  }, [isRTL, logoFadeAnim, controlsFadeAnim]);
-
-  const toggleLanguage = () => {
-    changeLanguage(language === 'en' ? 'he' : 'en');
-  };
-
   const isDark = themeMode === 'dark';
 
   if (!mounted) {
     return null;
   }
+
+  const navLinks = [
+    { title: 'Products', href: '#products' },
+    { title: 'Technology', href: '#technology' },
+    { title: 'About', href: '#about' },
+  ];
 
   return (
     <View style={[styles.container, Platform.OS === 'web' ? styles.fixedOnWeb : null]} testID="navbar-root">
@@ -87,7 +58,7 @@ function NavigationInner() {
               styles.navBar,
               {
                 backgroundColor: isDark ? 'rgba(10, 25, 41, 0.85)' : 'rgba(255, 255, 255, 0.85)',
-                borderBottomColor: isDark ? 'rgba(25, 195, 230, 0.15)' : 'rgba(14, 165, 233, 0.15)',
+                borderBottomColor: isDark ? 'rgba(25, 195, 230, 0.15)' : 'rgba(91, 103, 245, 0.15)',
               },
             ]}
           >
@@ -101,17 +72,32 @@ function NavigationInner() {
               ]}
               testID="navbar-content"
             >
-              <Animated.View style={{ opacity: logoFadeAnim }}>
-                <Text
-                  accessibilityRole="header"
-                  testID="navbar-logo"
-                  style={[styles.logo, { color: isDark ? theme.colors.primary : '#1E40AF' }]}
-                >
-                  AquaPump
-                </Text>
-              </Animated.View>
+              <Text
+                accessibilityRole="header"
+                testID="navbar-logo"
+                style={[styles.logo, { color: isDark ? theme.colors.primary : '#5B67F5' }]}
+              >
+                AquaPump
+              </Text>
 
-              <Animated.View style={[styles.controls, { opacity: controlsFadeAnim }]}>
+              <View style={styles.navLinks}>
+                {navLinks.map((link) => (
+                  <TouchableOpacity
+                    key={link.title}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel={link.title}
+                    style={styles.navLink}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={[styles.navLinkText, { color: isDark ? theme.colors.text : '#1E293B' }]}>
+                      {link.title}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              <View style={styles.controls}>
                 <TouchableOpacity
                   testID="btn-toggle-theme"
                   accessible={true}
@@ -120,8 +106,8 @@ function NavigationInner() {
                   style={[
                     styles.controlButton,
                     {
-                      borderColor: isDark ? 'rgba(25, 195, 230, 0.3)' : 'rgba(14, 165, 233, 0.3)',
-                      backgroundColor: isDark ? 'rgba(25, 195, 230, 0.1)' : 'rgba(14, 165, 233, 0.08)',
+                      borderColor: isDark ? 'rgba(25, 195, 230, 0.3)' : 'rgba(91, 103, 245, 0.15)',
+                      backgroundColor: isDark ? 'rgba(25, 195, 230, 0.1)' : 'rgba(91, 103, 245, 0.08)',
                     },
                   ]}
                   onPress={toggleTheme}
@@ -129,35 +115,30 @@ function NavigationInner() {
                   activeOpacity={0.7}
                 >
                   {isDark ? (
-                    <Sun size={20} color={theme.colors.primary} strokeWidth={2.5} />
+                    <Sun size={18} color={theme.colors.primary} strokeWidth={2.5} />
                   ) : (
-                    <Moon size={20} color={theme.colors.primary} strokeWidth={2.5} />
+                    <Moon size={18} color={theme.colors.primary} strokeWidth={2.5} />
                   )}
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  testID="btn-toggle-language"
                   accessible={true}
                   accessibilityRole="button"
-                  accessibilityLabel={language === 'en' ? 'Switch to Hebrew' : 'Switch to English'}
+                  accessibilityLabel="Get Quote"
                   style={[
-                    styles.controlButton,
-                    styles.langButton,
+                    styles.quoteButton,
                     {
-                      borderColor: isDark ? 'rgba(25, 195, 230, 0.3)' : 'rgba(14, 165, 233, 0.3)',
-                      backgroundColor: isDark ? 'rgba(25, 195, 230, 0.1)' : 'rgba(14, 165, 233, 0.08)',
+                      backgroundColor: isDark ? theme.colors.primary : '#5B67F5',
                     },
                   ]}
-                  onPress={toggleLanguage}
                   hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-                  activeOpacity={0.7}
+                  activeOpacity={0.85}
                 >
-                  <Globe size={20} color={theme.colors.primary} strokeWidth={2.5} />
-                  <Text style={[styles.langText, { color: theme.colors.primary }]}>
-                    {language === 'en' ? 'EN' : 'עב'}
+                  <Text style={styles.quoteButtonText}>
+                    Get Quote
                   </Text>
                 </TouchableOpacity>
-              </Animated.View>
+              </View>
             </Animated.View>
           </View>
         ) : (
@@ -167,7 +148,7 @@ function NavigationInner() {
             style={[
               styles.navBar,
               {
-                borderBottomColor: isDark ? 'rgba(25, 195, 230, 0.15)' : 'rgba(14, 165, 233, 0.15)',
+                borderBottomColor: isDark ? 'rgba(25, 195, 230, 0.15)' : 'rgba(91, 103, 245, 0.15)',
               },
             ]}
           >
@@ -181,17 +162,15 @@ function NavigationInner() {
               ]}
               testID="navbar-content"
             >
-              <Animated.View style={{ opacity: logoFadeAnim }}>
-                <Text
-                  accessibilityRole="header"
-                  testID="navbar-logo"
-                  style={[styles.logo, { color: isDark ? theme.colors.primary : '#1E40AF' }]}
-                >
-                  AquaPump
-                </Text>
-              </Animated.View>
+              <Text
+                accessibilityRole="header"
+                testID="navbar-logo"
+                style={[styles.logo, { color: isDark ? theme.colors.primary : '#5B67F5' }]}
+              >
+                AquaPump
+              </Text>
 
-              <Animated.View style={[styles.controls, { opacity: controlsFadeAnim }]}>
+              <View style={styles.controls}>
                 <TouchableOpacity
                   testID="btn-toggle-theme"
                   accessible={true}
@@ -200,8 +179,8 @@ function NavigationInner() {
                   style={[
                     styles.controlButton,
                     {
-                      borderColor: isDark ? 'rgba(25, 195, 230, 0.3)' : 'rgba(14, 165, 233, 0.3)',
-                      backgroundColor: isDark ? 'rgba(25, 195, 230, 0.1)' : 'rgba(14, 165, 233, 0.08)',
+                      borderColor: isDark ? 'rgba(25, 195, 230, 0.3)' : 'rgba(91, 103, 245, 0.15)',
+                      backgroundColor: isDark ? 'rgba(25, 195, 230, 0.1)' : 'rgba(91, 103, 245, 0.08)',
                     },
                   ]}
                   onPress={toggleTheme}
@@ -209,35 +188,12 @@ function NavigationInner() {
                   activeOpacity={0.7}
                 >
                   {isDark ? (
-                    <Sun size={20} color={theme.colors.primary} strokeWidth={2.5} />
+                    <Sun size={18} color={theme.colors.primary} strokeWidth={2.5} />
                   ) : (
-                    <Moon size={20} color={theme.colors.primary} strokeWidth={2.5} />
+                    <Moon size={18} color={theme.colors.primary} strokeWidth={2.5} />
                   )}
                 </TouchableOpacity>
-
-                <TouchableOpacity
-                  testID="btn-toggle-language"
-                  accessible={true}
-                  accessibilityRole="button"
-                  accessibilityLabel={language === 'en' ? 'Switch to Hebrew' : 'Switch to English'}
-                  style={[
-                    styles.controlButton,
-                    styles.langButton,
-                    {
-                      borderColor: isDark ? 'rgba(25, 195, 230, 0.3)' : 'rgba(14, 165, 233, 0.3)',
-                      backgroundColor: isDark ? 'rgba(25, 195, 230, 0.1)' : 'rgba(14, 165, 233, 0.08)',
-                    },
-                  ]}
-                  onPress={toggleLanguage}
-                  hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-                  activeOpacity={0.7}
-                >
-                  <Globe size={20} color={theme.colors.primary} strokeWidth={2.5} />
-                  <Text style={[styles.langText, { color: theme.colors.primary }]}>
-                    {language === 'en' ? 'EN' : 'עב'}
-                  </Text>
-                </TouchableOpacity>
-              </Animated.View>
+              </View>
             </Animated.View>
           </BlurView>
         )}
@@ -276,7 +232,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: 32,
     maxWidth: 1400,
     alignSelf: 'center',
   },
@@ -284,33 +240,49 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   logo: {
-    fontSize: 26,
+    fontSize: 24,
     fontWeight: '700' as const,
-    letterSpacing: -0.8,
+    letterSpacing: -0.5,
+  },
+  navLinks: {
+    flexDirection: 'row',
+    gap: 40,
+    alignItems: 'center',
+  },
+  navLink: {
+    paddingVertical: 8,
+  },
+  navLinkText: {
+    fontSize: 16,
+    fontWeight: '500' as const,
+    letterSpacing: 0.2,
   },
   controls: {
     flexDirection: 'row',
-    gap: 10,
+    gap: 12,
     alignItems: 'center',
   },
   controlButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
-    paddingHorizontal: 14,
+    paddingHorizontal: 12,
     paddingVertical: 10,
-    borderRadius: 12,
+    borderRadius: 10,
     borderWidth: 1,
-    minHeight: 44,
-    minWidth: 44,
+    minHeight: 40,
+    minWidth: 40,
   },
-  langButton: {
-    minWidth: 72,
+  quoteButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 10,
+    minHeight: 40,
   },
-  langText: {
-    fontSize: 14,
+  quoteButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
     fontWeight: '600' as const,
-    letterSpacing: 0.5,
+    letterSpacing: 0.3,
   },
 });

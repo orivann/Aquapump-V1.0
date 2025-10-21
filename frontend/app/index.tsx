@@ -13,7 +13,7 @@ const Contact = lazy(() => import('@frontend/components/Contact'));
 const Chatbot = lazy(() => import('@frontend/components/Chatbot'));
 
 export default function HomeScreen() {
-  const { theme, themeMode } = useTheme();
+  const { themeMode } = useTheme();
   const { height } = Dimensions.get('window');
   const scrollY = useRef(new Animated.Value(0)).current;
   const scrollViewRef = useRef<ScrollView>(null);
@@ -34,8 +34,8 @@ export default function HomeScreen() {
   );
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.secondary }]} edges={['top', 'bottom']}>
-      <StatusBar style={themeMode === 'dark' ? 'light' : 'dark'} />
+    <SafeAreaView style={[styles.container, { backgroundColor: themeMode === 'dark' ? '#0F1419' : '#F8FAFC' }]} edges={['top', 'bottom']}>
+      <StatusBar style={themeMode === 'dark' ? 'light' : 'light'} />
       <Navigation />
       <Animated.ScrollView
         ref={scrollViewRef}
