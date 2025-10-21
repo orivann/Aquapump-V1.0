@@ -22,9 +22,11 @@ RUN npm install -g bun@latest && \
 
 COPY --from=deps --chown=expouser:nodejs /app/node_modules ./node_modules
 COPY --chown=expouser:nodejs package.json bun.lock* ./
+COPY --chown=expouser:nodejs app ./app
 COPY --chown=expouser:nodejs frontend ./frontend
 COPY --chown=expouser:nodejs backend ./backend
 COPY --chown=expouser:nodejs tsconfig.json ./
+COPY --chown=expouser:nodejs expo-env.d.ts ./
 
 USER expouser
 
