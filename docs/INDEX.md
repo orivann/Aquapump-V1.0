@@ -1,311 +1,624 @@
 # AquaPump Documentation Index
 
-Complete, organized documentation for the AquaPump project.
-
-## 📖 Documentation Structure
-
-### 🚀 Getting Started (New Developers)
-1. **[Getting Started](getting-started.md)** ⭐
-   - 5-minute quick start
-   - Prerequisites and setup
-   - Environment configuration
-   - First run instructions
-   - Supabase setup
-   - Troubleshooting basics
-
-2. **[WSL Setup](wsl-setup.md)**
-   - Fix localhost:8081 access on WSL
-   - Network configuration
-   - Firewall setup
-   - Performance optimization
-   - Alternative solutions
-
-### 📦 Deployment (DevOps)
-3. **[Deployment Guide](deployment.md)** ⭐
-   - Docker Compose deployment
-   - Kubernetes + Helm deployment
-   - GitOps with Argo CD
-   - DNS configuration
-   - TLS/SSL setup
-   - Environment-specific configs
-   - Rollback procedures
-
-4. **[GitOps Guide](gitops.md)**
-   - Argo CD setup
-   - GitHub Actions CI/CD
-   - Automated deployment flow
-   - Application management
-   - Monitoring & notifications
-   - Best practices
-
-### 📚 Reference (Technical Details)
-5. **[Architecture](architecture.md)** ⭐
-   - System overview
-   - Technology stack
-   - Project structure
-   - Data flow
-   - Design patterns
-   - Scalability
-   - Security
-   - High availability
-
-6. **[API Reference](api.md)** ⭐
-   - Health endpoints
-   - tRPC procedures
-   - Pumps API
-   - Error handling
-   - React Query integration
-   - Testing APIs
-
-7. **[Contributing](contributing.md)**
-   - Development workflow
-   - Code style guidelines
-   - Pull request process
-   - Adding new features
-   - Documentation updates
-   - Testing checklist
-
-## 🎯 Quick Access by Role
-
-### For New Developers
-
-Start here:
-1. [Getting Started](getting-started.md) - Set up your environment
-2. [Architecture](architecture.md) - Understand the system
-3. [API Reference](api.md) - Learn the APIs
-4. [Contributing](contributing.md) - Start contributing
-
-**Using WSL?** → [WSL Setup](wsl-setup.md)
-
-### For DevOps Engineers
-
-Start here:
-1. [Deployment Guide](deployment.md) - Deploy the application
-2. [GitOps Guide](gitops.md) - Set up CI/CD
-3. [Architecture](architecture.md) - Understand infrastructure
-
-### For Contributors
-
-Start here:
-1. [Contributing](contributing.md) - Development workflow
-2. [Getting Started](getting-started.md) - Local setup
-3. [API Reference](api.md) - Backend APIs
-4. [Architecture](architecture.md) - System design
-
-## 🔍 Find What You Need
-
-### I want to...
-
-| Task | Documentation |
-|------|---------------|
-| **Set up locally** | [Getting Started](getting-started.md) |
-| **Fix WSL localhost issue** | [WSL Setup](wsl-setup.md) |
-| **Deploy to production** | [Deployment Guide](deployment.md) |
-| **Set up GitOps** | [GitOps Guide](gitops.md) |
-| **Understand the system** | [Architecture](architecture.md) |
-| **Use the API** | [API Reference](api.md) |
-| **Contribute code** | [Contributing](contributing.md) |
-
-### Common Questions
-
-**Q: How do I start development?**
-→ [Getting Started](getting-started.md)
-
-**Q: Can't access localhost:8081 on WSL?**
-→ [WSL Setup](wsl-setup.md)
-
-**Q: How do I deploy to production?**
-→ [Deployment Guide](deployment.md)
-
-**Q: What APIs are available?**
-→ [API Reference](api.md)
-
-**Q: How do I contribute?**
-→ [Contributing](contributing.md)
-
-**Q: What's the system architecture?**
-→ [Architecture](architecture.md)
-
-## 📋 Documentation Status
-
-| Document | Status | Last Updated |
-|----------|--------|--------------|
-| [Getting Started](getting-started.md) | ✅ Complete | 2025-10-17 |
-| [WSL Setup](wsl-setup.md) | ✅ Complete | 2025-10-17 |
-| [Deployment Guide](deployment.md) | ✅ Complete | 2025-10-17 |
-| [GitOps Guide](gitops.md) | ✅ Complete | 2025-10-17 |
-| [Architecture](architecture.md) | ✅ Complete | 2025-10-17 |
-| [API Reference](api.md) | ✅ Complete | 2025-10-17 |
-| [Contributing](contributing.md) | ✅ Complete | 2025-10-17 |
-
-## 🏗️ Project Overview
-
-### What is AquaPump?
-
-A production-ready, cross-platform application featuring:
-- Modern React Native Web UI
-- Type-safe tRPC APIs
-- Supabase PostgreSQL database
-- Kubernetes orchestration
-- GitOps deployment with Argo CD
-- Auto-scaling infrastructure
-
-### Key Features
-
-- ✨ Responsive design (web, iOS, Android)
-- 🌓 Dark/light themes
-- 🌍 Internationalization (EN/HE)
-- 🤖 AI-powered chatbot
-- 🚀 Production-ready infrastructure
-- 🔄 Automated GitOps deployment
-- 📊 Monitoring and observability
-
-### Technology Stack
-
-**Frontend:**
-- React Native Web (Expo SDK 53)
-- TypeScript (strict mode)
-- React Query (server state)
-- Context API (app state)
-
-**Backend:**
-- Hono.js (web framework)
-- tRPC (type-safe APIs)
-- Supabase (PostgreSQL)
-
-**Infrastructure:**
-- Docker (containers)
-- Kubernetes (orchestration)
-- Helm (package management)
-- Argo CD (GitOps)
-- NGINX Ingress (load balancing)
-
-## 🚀 Quick Start
-
-### 1. Development Setup
-
-```bash
-# Clone and install
-git clone <repository-url>
-cd aquapump
-bun install
-
-# Configure environment
-cp .env.example .env
-# Edit .env with your values
-
-# Start development
-bun run start-web
-# Or on WSL: ./start-web-wsl.sh
-```
-
-### 2. Docker Development
-
-```bash
-docker-compose up
-```
-
-### 3. Production Deployment
-
-```bash
-cd scripts
-./deploy-helm.sh production
-```
-
-See [Getting Started](getting-started.md) for detailed instructions.
-
-## 📁 Project Structure
-
-```
-aquapump/
-├── app/              # Expo Router pages
-├── components/       # React components
-├── contexts/         # State management
-├── backend/          # Backend API
-│   ├── services/     # Business logic
-│   └── trpc/         # API routes
-├── frontend/         # Frontend utilities
-│   └── lib/          # Client libraries
-├── infra/            # Infrastructure
-│   ├── helm/         # Helm charts
-│   ├── argocd/       # Argo CD configs
-│   └── Dockerfile    # Container
-├── scripts/          # Automation
-└── docs/             # This documentation
-```
-
-## 🔗 External Resources
-
-- [Expo Documentation](https://docs.expo.dev/)
-- [React Native Documentation](https://reactnative.dev/)
-- [tRPC Documentation](https://trpc.io/docs)
-- [Supabase Documentation](https://supabase.com/docs)
-- [Kubernetes Documentation](https://kubernetes.io/docs/)
-- [Helm Documentation](https://helm.sh/docs/)
-- [Argo CD Documentation](https://argo-cd.readthedocs.io/)
-
-## 💡 Tips
-
-- **Start simple**: Begin with [Getting Started](getting-started.md)
-- **Learn architecture**: Read [Architecture](architecture.md) early
-- **Follow conventions**: Check [Contributing](contributing.md) before coding
-- **Use GitOps**: Set up [Argo CD](gitops.md) for automated deployments
-- **Monitor everything**: Use health checks and logging
-
-## 🆘 Getting Help
-
-1. **Check documentation** - You're in the right place!
-2. **Search issues** - Look for similar problems
-3. **Ask questions** - GitHub Discussions or Issues
-4. **Contact support** - support@aquapump.com
-
-## 📝 Contributing to Docs
-
-Found an issue or want to improve docs?
-
-1. Edit the relevant `.md` file
-2. Follow markdown best practices
-3. Submit a pull request
-4. See [Contributing Guide](contributing.md)
-
-## 📦 What's Included
-
-### Core Documentation
-- Getting Started Guide
-- WSL Setup Guide
-- Deployment Guide
-- GitOps Guide
-- Architecture Documentation
-- API Reference
-- Contributing Guide
-
-### Additional Files
-- Environment templates (`.env.example`)
-- Docker configurations
-- Kubernetes manifests
-- Helm charts
-- Argo CD applications
-- Deployment scripts
-- CI/CD workflows
-
-## ✅ Documentation Checklist
-
-When adding new features, update:
-- [ ] [Getting Started](getting-started.md) - If setup changes
-- [ ] [Deployment Guide](deployment.md) - If deployment changes
-- [ ] [Architecture](architecture.md) - If design changes
-- [ ] [API Reference](api.md) - If APIs change
-- [ ] [Contributing](contributing.md) - If workflow changes
-
-## 🎯 Next Steps
-
-1. **New here?** → Start with [Getting Started](getting-started.md)
-2. **Want to deploy?** → Read [Deployment Guide](deployment.md)
-3. **Ready to contribute?** → Check [Contributing](contributing.md)
-4. **Need help?** → Ask questions or contact support
+Complete documentation for the AquaPump project - a production-ready React Native Web application.
+
+## 📖 Table of Contents
+
+### Getting Started
+1. [Quick Start Guide](./QUICK_START.md) ⚡
+2. [WSL Setup Guide](./WSL_SETUP.md) 🐧
+3. [Development Guide](#development)
+
+### Deployment
+4. [Deployment Overview](./DEPLOYMENT.md) 🚀
+5. [Docker Guide](./DOCKER.md) 🐳
+6. [Kubernetes Guide](./KUBERNETES.md) ☸️
+7. [Production Guide](./PRODUCTION.md) 🏭
+8. [Production Checklist](./PRODUCTION_CHECKLIST.md) ✅
+
+### Architecture & Design
+9. [Architecture Overview](./ARCHITECTURE.md) 🏗️
+10. [System Design](#system-design)
+11. [API Documentation](#api-documentation)
+
+### Operations
+12. [Troubleshooting Guide](./TROUBLESHOOTING.md) 🔧
+13. [Monitoring & Observability](#monitoring)
+14. [Security Best Practices](#security)
+
+### Reference
+15. [Environment Variables](#environment-variables)
+16. [Scripts Reference](#scripts)
+17. [FAQ](#faq)
 
 ---
 
-**Documentation maintained by the AquaPump team**
+## 🎯 Quick Navigation
 
-*Last updated: 2025-10-17*
+### I need to...
+
+| Task | Documentation |
+|------|---------------|
+| **Start developing locally** | [Quick Start](./QUICK_START.md) |
+| **Fix WSL localhost issue** | [WSL Setup](./WSL_SETUP.md) |
+| **Deploy to production** | [Deployment Guide](./DEPLOYMENT.md) |
+| **Use Docker** | [Docker Guide](./DOCKER.md) |
+| **Use Kubernetes** | [Kubernetes Guide](./KUBERNETES.md) |
+| **Troubleshoot issues** | [Troubleshooting](./TROUBLESHOOTING.md) |
+| **Understand architecture** | [Architecture](./ARCHITECTURE.md) |
+| **Prepare for deployment** | [Production Checklist](./PRODUCTION_CHECKLIST.md) |
+
+---
+
+## 📚 Documentation Details
+
+### 1. Quick Start Guide
+**File**: [QUICK_START.md](./QUICK_START.md)
+**Purpose**: Get up and running in 5 minutes
+**Covers**:
+- Local development setup
+- Docker quick start
+- Kubernetes quick start
+- Essential commands
+- Health checks
+
+**Start here if**: You're new to the project
+
+---
+
+### 2. WSL Setup Guide
+**File**: [WSL_SETUP.md](./WSL_SETUP.md)
+**Purpose**: Fix localhost access issues in WSL
+**Covers**:
+- WSL networking configuration
+- Port binding solutions
+- Firewall configuration
+- Network troubleshooting
+- Performance optimization
+
+**Start here if**: Running from WSL and can't access localhost:8081
+
+---
+
+### 3. Deployment Guide
+**File**: [DEPLOYMENT.md](./DEPLOYMENT.md)
+**Purpose**: Complete deployment instructions
+**Covers**:
+- Docker deployment
+- Kubernetes deployment
+- Environment configuration
+- Scaling strategies
+- Rollback procedures
+
+**Start here if**: Ready to deploy to production
+
+---
+
+### 4. Docker Guide
+**File**: [DOCKER.md](./DOCKER.md)
+**Purpose**: Docker-specific deployment
+**Covers**:
+- Dockerfile explanation
+- Docker Compose usage
+- Container management
+- Image building and tagging
+- Networking and volumes
+- Troubleshooting Docker issues
+
+**Start here if**: Deploying with Docker
+
+---
+
+### 5. Kubernetes Guide
+**File**: [KUBERNETES.md](./KUBERNETES.md)
+**Purpose**: Kubernetes deployment and management
+**Covers**:
+- K8s architecture
+- Configuration files explained
+- Deployment strategies
+- Scaling and auto-scaling
+- Monitoring and debugging
+- Health checks and probes
+
+**Start here if**: Deploying to Kubernetes
+
+---
+
+### 6. Production Guide
+**File**: [PRODUCTION.md](./PRODUCTION.md)
+**Purpose**: Production deployment best practices
+**Covers**:
+- Production architecture
+- Security considerations
+- Performance optimization
+- Monitoring setup
+- Backup strategies
+
+**Start here if**: Preparing for production deployment
+
+---
+
+### 7. Production Checklist
+**File**: [PRODUCTION_CHECKLIST.md](./PRODUCTION_CHECKLIST.md)
+**Purpose**: Pre-deployment verification
+**Covers**:
+- Code quality checks ✅
+- Security checks ✅
+- Performance checks ✅
+- Configuration checks ✅
+- Testing requirements ✅
+- Post-deployment verification
+
+**Start here if**: About to deploy to production
+
+---
+
+### 8. Architecture Overview
+**File**: [ARCHITECTURE.md](./ARCHITECTURE.md)
+**Purpose**: System design and architecture
+**Covers**:
+- Technology stack
+- System architecture
+- Data flow
+- Component structure
+- Deployment architecture
+- Scalability design
+
+**Start here if**: Want to understand system design
+
+---
+
+### 9. Troubleshooting Guide
+**File**: [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
+**Purpose**: Common issues and solutions
+**Covers**:
+- Development issues
+- Runtime errors
+- Docker problems
+- Kubernetes issues
+- Performance problems
+- Network issues
+- Emergency procedures
+
+**Start here if**: Encountering issues
+
+---
+
+## 🛠 Development
+
+### Local Development Setup
+
+```bash
+# 1. Clone repository
+git clone <repository-url>
+cd aquapump
+
+# 2. Install dependencies
+bun install
+
+# 3. Create environment file
+cp .env.example .env
+
+# 4. Start development server
+bun run start-web
+```
+
+**Access**: http://localhost:8081
+
+### WSL Development
+
+```bash
+# Use the provided script
+./start-web-wsl.sh
+```
+
+See [WSL Setup Guide](./WSL_SETUP.md) for details.
+
+### Development Commands
+
+```bash
+# Start web server
+bun run start-web
+
+# Start with debug
+bun run start-web-dev
+
+# Lint code
+bun run lint
+
+# Type check
+bunx tsc --noEmit
+```
+
+---
+
+## 🏗 System Design
+
+### Architecture Diagram
+
+```
+┌─────────────────────────────────────┐
+│          Users (Web/Mobile)          │
+└──────────────┬──────────────────────┘
+               │
+               ▼
+┌─────────────────────────────────────┐
+│    Load Balancer / Ingress           │
+│    (HTTPS/TLS Termination)           │
+└──────────────┬──────────────────────┘
+               │
+               ▼
+┌─────────────────────────────────────┐
+│       Kubernetes Service             │
+└──────────────┬──────────────────────┘
+               │
+       ┌───────┼───────┐
+       ▼       ▼       ▼
+   ┌─────┐ ┌─────┐ ┌─────┐
+   │Pod 1│ │Pod 2│ │Pod N│
+   └─────┘ └─────┘ └─────┘
+```
+
+### Technology Stack
+
+**Frontend**:
+- React Native Web (Expo SDK 53)
+- TypeScript (strict mode)
+- Expo Router (file-based routing)
+- React Query (server state)
+- Context API (app state)
+
+**Backend**:
+- Hono.js (web framework)
+- tRPC (type-safe API)
+- Bun (runtime)
+
+**Infrastructure**:
+- Docker (containerization)
+- Kubernetes (orchestration)
+- Nginx Ingress (load balancing)
+
+See [Architecture Overview](./ARCHITECTURE.md) for complete details.
+
+---
+
+## 📡 API Documentation
+
+### Health Endpoints
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/api/health` | GET | Health check |
+| `/api/ready` | GET | Readiness check |
+| `/api` | GET | API information |
+
+### tRPC Endpoints
+
+Base URL: `http://localhost:8081/api/trpc`
+
+**Example**:
+```typescript
+// Client usage
+const hiQuery = trpc.example.hi.useQuery();
+
+// Direct call
+const data = await trpcClient.example.hi.query();
+```
+
+### Testing Endpoints
+
+```bash
+# Health check
+curl http://localhost:8081/api/health
+
+# Readiness check
+curl http://localhost:8081/api/ready
+
+# API info
+curl http://localhost:8081/api
+```
+
+---
+
+## 📊 Monitoring
+
+### Health Monitoring
+
+```bash
+# Check application health
+curl http://localhost:8081/api/health
+
+# Kubernetes health
+kubectl get pods
+kubectl describe pod <pod-name>
+```
+
+### Log Monitoring
+
+```bash
+# Docker logs
+docker logs -f <container-id>
+
+# Kubernetes logs
+kubectl logs -f deployment/aquapump-app
+
+# Using script
+./scripts/logs.sh k8s
+```
+
+### Resource Monitoring
+
+```bash
+# Docker stats
+docker stats
+
+# Kubernetes metrics
+kubectl top pods
+kubectl top nodes
+
+# HPA status
+kubectl get hpa
+```
+
+---
+
+## 🔒 Security
+
+### Best Practices
+
+✅ Non-root user in containers
+✅ HTTPS/TLS via Ingress
+✅ CORS properly configured
+✅ Secrets management
+✅ Environment variable security
+✅ Regular security updates
+
+### Secrets Management
+
+**Local Development**:
+```bash
+# .env file (not committed)
+cp .env.example .env
+```
+
+**Kubernetes**:
+```bash
+# Create secrets
+kubectl create secret generic aquapump-secrets \
+  --from-literal=AI_CHAT_KEY=your-key
+```
+
+### Security Scanning
+
+```bash
+# Scan Docker image
+docker scan aquapump:latest
+
+# Or use Trivy
+trivy image aquapump:latest
+```
+
+---
+
+## 🌍 Environment Variables
+
+### Client-Side (EXPO_PUBLIC_*)
+
+```bash
+EXPO_PUBLIC_API_URL=http://localhost:8081/api
+EXPO_PUBLIC_TOOLKIT_URL=https://toolkit.rork.com
+EXPO_PUBLIC_AI_CHAT_KEY=sk-xxxxx
+```
+
+### Server-Side
+
+```bash
+NODE_ENV=development
+PORT=8081
+CORS_ORIGIN=*
+```
+
+### Configuration Files
+
+- **Development**: `.env`
+- **Production**: `.env.production`
+- **Docker**: `.env.docker`
+- **Kubernetes**: `kubernetes/secrets.yaml`
+
+---
+
+## 🔧 Scripts Reference
+
+### Provided Scripts
+
+```bash
+# Make scripts executable
+chmod +x scripts/*.sh
+
+# Deploy to production
+./scripts/deploy.sh production
+
+# View logs
+./scripts/logs.sh k8s        # Kubernetes
+./scripts/logs.sh docker     # Docker
+
+# Rollback deployment
+./scripts/rollback.sh
+
+# Start WSL web server
+./start-web-wsl.sh
+```
+
+### Script Locations
+
+```
+scripts/
+├── deploy.sh      # Deployment automation
+├── rollback.sh    # Rollback automation
+└── logs.sh        # Log viewing
+
+start-web-wsl.sh   # WSL startup script
+```
+
+---
+
+## ❓ FAQ
+
+### Q: How do I fix "Can't access localhost:8081" in WSL?
+
+**A**: Use the provided script:
+```bash
+./start-web-wsl.sh
+```
+
+See [WSL Setup Guide](./WSL_SETUP.md) for details.
+
+---
+
+### Q: Port 8081 is already in use, how do I fix it?
+
+**A**: Kill the process:
+```bash
+lsof -ti:8081 | xargs kill -9
+```
+
+---
+
+### Q: How do I deploy to production?
+
+**A**: Follow these steps:
+1. Review [Production Checklist](./PRODUCTION_CHECKLIST.md)
+2. Configure environment variables
+3. Run deployment script: `./scripts/deploy.sh production`
+4. Verify deployment
+5. Monitor health endpoints
+
+See [Deployment Guide](./DEPLOYMENT.md) for complete instructions.
+
+---
+
+### Q: How do I scale the application?
+
+**A**:
+- **Manual**: `kubectl scale deployment aquapump-app --replicas=5`
+- **Auto**: HPA is configured (2-10 replicas based on CPU/memory)
+
+See [Kubernetes Guide](./KUBERNETES.md) for details.
+
+---
+
+### Q: How do I rollback a deployment?
+
+**A**:
+```bash
+# Using script
+./scripts/rollback.sh
+
+# Or manually
+kubectl rollout undo deployment/aquapump-app
+```
+
+---
+
+### Q: Where are the health check endpoints?
+
+**A**:
+- Health: `GET /api/health`
+- Readiness: `GET /api/ready`
+- Info: `GET /api`
+
+---
+
+### Q: How do I view logs?
+
+**A**:
+```bash
+# Docker
+docker logs -f <container-id>
+
+# Kubernetes
+kubectl logs -f deployment/aquapump-app
+
+# Using scripts
+./scripts/logs.sh k8s
+./scripts/logs.sh docker
+```
+
+---
+
+## 📞 Support & Resources
+
+### Documentation
+- [Quick Start](./QUICK_START.md)
+- [Troubleshooting](./TROUBLESHOOTING.md)
+- [Architecture](./ARCHITECTURE.md)
+
+### External Resources
+- [Expo Documentation](https://docs.expo.dev/)
+- [React Native Docs](https://reactnative.dev/)
+- [Kubernetes Docs](https://kubernetes.io/docs/)
+- [Docker Docs](https://docs.docker.com/)
+
+### Project Files
+- Main README: [../README.md](../README.md)
+- Package Info: [../package.json](../package.json)
+- App Config: [../app.json](../app.json)
+
+---
+
+## 🎯 Next Steps
+
+### For New Developers
+1. ✅ Read [Quick Start Guide](./QUICK_START.md)
+2. ✅ Set up local development
+3. ✅ Review [Architecture](./ARCHITECTURE.md)
+4. ✅ Explore the codebase
+
+### For DevOps
+1. ✅ Review [Production Checklist](./PRODUCTION_CHECKLIST.md)
+2. ✅ Configure environment variables
+3. ✅ Review [Deployment Guide](./DEPLOYMENT.md)
+4. ✅ Set up monitoring
+5. ✅ Deploy to production
+
+### For Troubleshooting
+1. ✅ Check [Troubleshooting Guide](./TROUBLESHOOTING.md)
+2. ✅ Review logs
+3. ✅ Check health endpoints
+4. ✅ Verify configuration
+
+---
+
+## 📋 Documentation Checklist
+
+- [x] Quick Start Guide
+- [x] WSL Setup Guide
+- [x] Deployment Guide
+- [x] Docker Guide
+- [x] Kubernetes Guide
+- [x] Production Guide
+- [x] Production Checklist
+- [x] Architecture Overview
+- [x] Troubleshooting Guide
+- [x] Documentation Index
+
+---
+
+## 🏆 Project Status
+
+✅ **Production Ready**
+
+- Code quality verified
+- Security hardened
+- Performance optimized
+- Documentation complete
+- Deployment automated
+- Monitoring configured
+
+**Ready for deployment!** 🚀
+
+---
+
+*Last Updated: 2025-01-16*
+*Version: 1.0.0*
+*AquaPump by AquaTech Group*
