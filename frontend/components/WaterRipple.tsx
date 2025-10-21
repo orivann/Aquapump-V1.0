@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { Animated, StyleSheet } from 'react-native';
-import { useTheme } from '@frontend/contexts/ThemeContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 export default function WaterRipple({ trigger }: { trigger: boolean }) {
   const { theme } = useTheme();

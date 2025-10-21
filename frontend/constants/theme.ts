@@ -79,6 +79,7 @@ export const darkTheme = {
   },
   gradients: {
     hero: ['#0F1419', '#1A1F2E', '#0F1419'],
+    heroBlue: ['#22D3EE', '#38BDF8'],
     chrome: ['#A0AEC0', '#CBD5E1', '#A0AEC0'],
     water: ['#22D3EE', '#38BDF8', '#22D3EE'],
   },

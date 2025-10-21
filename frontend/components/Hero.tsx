@@ -1,5 +1,5 @@
-import { useLanguage } from '@frontend/contexts/LanguageContext';
-import { useTheme } from '@frontend/contexts/ThemeContext';
+import { useLanguage } from '../contexts/LanguageContext';
+import { useTheme } from '../contexts/ThemeContext';
 import { ArrowRight } from 'lucide-react-native';
 import React, { useRef, useEffect, memo } from 'react';
 import { useRouter } from 'expo-router';

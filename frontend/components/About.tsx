@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Dimensions, Animated, Platform } from 'react-native';
-import { useLanguage } from '@frontend/contexts/LanguageContext';
-import { useTheme } from '@frontend/contexts/ThemeContext';
-import { translations } from '@frontend/constants/translations';
+import { useLanguage } from '../contexts/LanguageContext';
+import { useTheme } from '../contexts/ThemeContext';
+import { translations } from '../constants/translations';
 import { Building2, MapPin, Award } from 'lucide-react-native';
 import { memo, useRef, useEffect } from 'react';
 
