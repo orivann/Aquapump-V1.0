@@ -1,3 +1,12 @@
+// expo-env.d.ts
 /// <reference types="expo/types" />
+/// <reference types="expo-router/types" />
 
-// NOTE: This file should not be edited and should be in your git ignore
+declare namespace NodeJS {
+  interface ProcessEnv {
+    EXPO_PUBLIC_API_URL?: string;
+    EXPO_PUBLIC_ENV?: string;
+    [key: string]: string | undefined;
+  }
+}
+
