@@ -35,4 +35,4 @@ EXPOSE 8081
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD curl -f http://localhost:8081/api/health || exit 1
 
-CMD ["dumb-init", "bun", "run", "start-web-docker"]
+CMD ["dumb-init", "--", "bun", "run", "start-web-docker"]

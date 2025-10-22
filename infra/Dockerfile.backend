@@ -5,7 +5,7 @@ WORKDIR /app
 FROM base AS deps
 RUN npm install -g bun@latest
 COPY package.json bun.lock* ./
-RUN bun install
+RUN bun install --frozen-lockfile --production
 
 FROM base AS runner
 WORKDIR /app
@@ -29,4 +29,4 @@ EXPOSE 8081
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD curl -f http://localhost:8081/health || exit 1
 
-CMD ["dumb-init", "bun", "run", "backend/server.ts"]
+CMD ["dumb-init", "--", "bun", "run", "backend/server.ts"]

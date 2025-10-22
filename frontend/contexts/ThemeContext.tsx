@@ -29,7 +29,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [themeMode, setThemeMode] = useState<ThemeMode>('dark');
   const [isLoading, setIsLoading] = useState<boolean>(Platform.OS !== 'web');
   const fadeAnim = useRef(new Animated.Value(1)).current;
-  const isTogglingRef = useRef(false);
+  const toggleTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -64,13 +64,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const toggleTheme = useCallback(() => {
-    if (isTogglingRef.current) {
-      console.log('[ThemeContext] Toggle in progress, ignoring');
+    if (toggleTimerRef.current) {
+      console.log('[ThemeContext] Debouncing toggle');
       return;
     }
-    
-    isTogglingRef.current = true;
-    console.log('[ThemeContext] Toggle initiated');
     
     const newMode = themeMode === 'dark' ? 'light' : 'dark';
     console.log('[ThemeContext] Toggling theme from', themeMode, 'to', newMode);
@@ -88,10 +85,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         duration: 100,
         useNativeDriver: true,
       }),
-    ]).start(() => {
-      isTogglingRef.current = false;
-      console.log('[ThemeContext] Toggle animation complete');
-    });
+    ]).start();
+    
+    toggleTimerRef.current = setTimeout(() => {
+      toggleTimerRef.current = null;
+    }, 300);
     
     (async () => {
       try {

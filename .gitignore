@@ -1,52 +1,98 @@
+# ===============================================
+# AquaPump .gitignore
+# ===============================================
+
 # Dependencies
 node_modules/
 .pnp
 .pnp.js
+bower_components/
 
 # Expo
 .expo/
 .expo-shared/
 dist/
 web-build/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
 
-# Environment variables
+# Environment Variables (NEVER COMMIT THESE!)
 .env
 .env.local
 .env.*.local
 .env.production
+.env.development
+.env.staging
+*.env
 
 # Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 *.log
 
 # OS
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# IDE
+# IDE & Editors
 .vscode/
 .idea/
 *.swp
 *.swo
+*.swn
 *~
+.project
+.settings
+.classpath
 
 # Testing
 coverage/
 .nyc_output/
+*.lcov
+.jest/
 
 # Build
 build/
 *.tsbuildinfo
+.cache/
 
-# Kubernetes secrets
-kubernetes/secrets.yaml
+# Kubernetes Secrets (NEVER COMMIT THESE!)
+infra/kubernetes/secrets.yaml
+**/secrets.yaml
+*.secret.yaml
 
 # Docker
 .dockerignore
+
+# CI/CD
+.github/workflows/*.log
 
 # Misc
 .cache/
 *.bak
 *.tmp
+*.pid
+*.seed
+*.pid.lock
+.npm
+
+# MacOS
+.AppleDouble
+.LSOverride
+
+# Temporary files
+tmp/
+temp/
