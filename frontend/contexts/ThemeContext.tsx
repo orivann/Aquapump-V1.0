@@ -20,7 +20,7 @@ interface ThemeContextType {
   themeMode: ThemeMode;
   theme: Theme;
   isLoading: boolean;
-  toggleTheme: () => Promise<void>;
+  toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -29,84 +29,103 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [themeMode, setThemeMode] = useState<ThemeMode>('dark');
   const [isLoading, setIsLoading] = useState<boolean>(Platform.OS !== 'web');
   const fadeAnim = useRef(new Animated.Value(1)).current;
-  const [displayMode, setDisplayMode] = useState<ThemeMode>('dark');
+  const isTogglingRef = useRef(false);
 
   useEffect(() => {
-    if (Platform.OS === 'web') return;
-
     (async () => {
       try {
-        const stored = await AsyncStorage.getItem(THEME_KEY);
+        let stored: string | null = null;
+        
+        if (Platform.OS === 'web') {
+          stored = localStorage.getItem(THEME_KEY);
+        } else {
+          stored = await AsyncStorage.getItem(THEME_KEY);
+        }
+        
         if (stored && (stored === 'light' || stored === 'dark')) {
           setThemeMode(stored as ThemeMode);
-          setDisplayMode(stored as ThemeMode);
         } else {
-          setThemeMode('dark');
-          setDisplayMode('dark');
-          await AsyncStorage.setItem(THEME_KEY, 'dark');
+          const defaultMode = 'dark';
+          setThemeMode(defaultMode);
+          if (Platform.OS === 'web') {
+            localStorage.setItem(THEME_KEY, defaultMode);
+          } else {
+            await AsyncStorage.setItem(THEME_KEY, defaultMode);
+          }
         }
       } catch (error) {
         console.error('[ThemeContext] Failed to initialize:', error);
       } finally {
-        setIsLoading(false);
+        if (Platform.OS !== 'web') {
+          setIsLoading(false);
+        }
       }
     })();
   }, []);
 
-  useEffect(() => {
-    if (displayMode !== themeMode) {
+  const toggleTheme = useCallback(() => {
+    if (isTogglingRef.current) {
+      console.log('[ThemeContext] Toggle in progress, ignoring');
+      return;
+    }
+    
+    isTogglingRef.current = true;
+    
+    setThemeMode((current) => {
+      const newMode = current === 'dark' ? 'light' : 'dark';
+      console.log('[ThemeContext] Toggling theme from', current, 'to', newMode);
+      
       Animated.sequence([
         Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 200,
+          toValue: 0.95,
+          duration: 150,
           useNativeDriver: true,
         }),
         Animated.timing(fadeAnim, {
           toValue: 1,
-          duration: 200,
+          duration: 150,
           useNativeDriver: true,
         }),
-      ]).start();
-
-      setTimeout(() => setDisplayMode(themeMode), 200);
-    }
-  }, [themeMode, displayMode, fadeAnim]);
-
-  const toggleTheme = useCallback(async () => {
-    const newMode = themeMode === 'dark' ? 'light' : 'dark';
-    try {
-      console.log('[ThemeContext] Toggling theme to:', newMode);
-      setThemeMode(newMode);
-      if (Platform.OS !== 'web') {
-        await AsyncStorage.setItem(THEME_KEY, newMode);
-      }
-    } catch (error) {
-      console.error('[ThemeContext] Failed to save theme:', error);
-    }
-  }, [themeMode]);
+      ]).start(() => {
+        isTogglingRef.current = false;
+      });
+      
+      (async () => {
+        try {
+          if (Platform.OS === 'web') {
+            localStorage.setItem(THEME_KEY, newMode);
+          } else {
+            await AsyncStorage.setItem(THEME_KEY, newMode);
+          }
+        } catch (error) {
+          console.error('[ThemeContext] Failed to save theme:', error);
+        }
+      })();
+      
+      return newMode;
+    });
+  }, [fadeAnim]);
 
   const theme: Theme = useMemo(() => {
-    return displayMode === 'dark' ? darkTheme : lightTheme;
-  }, [displayMode]);
+    return themeMode === 'dark' ? darkTheme : lightTheme;
+  }, [themeMode]);
 
   const value = useMemo(
     () => ({
-      themeMode: displayMode,
+      themeMode,
       theme,
       isLoading,
       toggleTheme,
     }),
-    [displayMode, theme, isLoading, toggleTheme]
+    [themeMode, theme, isLoading, toggleTheme]
   );
-
-  const currentTheme = displayMode === 'dark' ? darkTheme : lightTheme;
 
   return (
     <ThemeContext.Provider value={value}>
       <Animated.View
         style={[
           styles.container,
-          { opacity: fadeAnim, backgroundColor: currentTheme.colors.secondary },
+          { opacity: fadeAnim, backgroundColor: theme.colors.secondary },
         ]}
       >
         {children}
@@ -125,7 +144,7 @@ export function useTheme() {
       themeMode: 'dark' as ThemeMode,
       theme: darkTheme,
       isLoading: false,
-      toggleTheme: async () => {},
+      toggleTheme: () => {},
     };
   }
   return context;
