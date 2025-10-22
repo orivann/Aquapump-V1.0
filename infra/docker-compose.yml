@@ -4,6 +4,7 @@ services:
       context: ..
       dockerfile: infra/Dockerfile.backend
     image: aquapump-backend:latest
+    pull_policy: never
     container_name: aquapump-backend
     restart: unless-stopped
     ports:
@@ -28,6 +29,7 @@ services:
       context: ..
       dockerfile: infra/Dockerfile.frontend
     image: aquapump-frontend:latest
+    pull_policy: never
     container_name: aquapump-frontend
     restart: unless-stopped
     ports:

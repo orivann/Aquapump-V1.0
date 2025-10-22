@@ -6,8 +6,6 @@
 # This script verifies your AquaPump setup
 # Run: bash infra/scripts/verify-setup.sh
 
-set -e
-
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -27,13 +25,28 @@ echo ""
 
 # Function to check command exists
 check_command() {
-    if command -v $1 &> /dev/null; then
-        echo -e "${GREEN}✓${NC} $1 is installed"
+    local cmd=$1
+    if command -v "$cmd" &> /dev/null; then
+        echo -e "${GREEN}✓${NC} $cmd is installed"
         ((PASSED++))
         return 0
     else
-        echo -e "${RED}✗${NC} $1 is NOT installed"
+        echo -e "${RED}✗${NC} $cmd is NOT installed"
         ((FAILED++))
+        return 1
+    fi
+}
+
+# Function to check command exists (non-fatal)
+check_command_optional() {
+    local cmd=$1
+    local msg=$2
+    if command -v "$cmd" &> /dev/null; then
+        echo -e "${GREEN}✓${NC} $cmd is installed"
+        ((PASSED++))
+        return 0
+    else
+        warn "$cmd is NOT installed - $msg"
         return 1
     fi
 }
@@ -73,46 +86,44 @@ warn() {
 # Section 1: Required Tools
 echo -e "\n${BLUE}1. Checking Required Tools${NC}"
 echo "----------------------------"
-check_command "node"
-check_command "bun"
-check_command "docker"
-check_command "git"
+check_command "node" || true
+check_command_optional "bun" "recommended for faster installs" || true
+check_command "docker" || true
+check_command "git" || true
 
 # Section 2: Optional Tools
 echo -e "\n${BLUE}2. Checking Optional Tools${NC}"
 echo "----------------------------"
-if ! check_command "kubectl"; then
-    warn "kubectl not found - needed for Kubernetes deployment"
-fi
-
-if ! check_command "helm"; then
-    warn "helm not found - needed for Helm deployment"
-fi
+check_command_optional "kubectl" "needed for Kubernetes deployment" || true
+check_command_optional "helm" "needed for Helm deployment" || true
 
 # Section 3: Project Structure
 echo -e "\n${BLUE}3. Checking Project Structure${NC}"
 echo "--------------------------------"
-check_directory "frontend" "Frontend directory"
-check_directory "backend" "Backend directory"
-check_directory "infra" "Infrastructure directory"
-check_directory "frontend/app" "Frontend app directory"
-check_directory "frontend/components" "Frontend components directory"
-check_directory "backend/trpc" "Backend tRPC directory"
+check_directory "frontend" "Frontend directory" || true
+check_directory "backend" "Backend directory" || true
+check_directory "infra" "Infrastructure directory" || true
+check_directory "frontend/app" "Frontend app directory" || true
+check_directory "frontend/components" "Frontend components directory" || true
+check_directory "backend/trpc" "Backend tRPC directory" || true
 
 # Section 4: Configuration Files
 echo -e "\n${BLUE}4. Checking Configuration Files${NC}"
 echo "----------------------------------"
-check_file "package.json" "package.json"
-check_file "tsconfig.json" "tsconfig.json"
-check_file ".gitignore" ".gitignore"
-check_file "infra/docker-compose.yml" "Docker Compose file"
+check_file "package.json" "package.json" || true
+check_file "tsconfig.json" "tsconfig.json" || true
+check_file ".gitignore" ".gitignore" || true
+check_file "infra/docker-compose.yml" "Docker Compose file" || true
 
 # Section 5: Environment Configuration
 echo -e "\n${BLUE}5. Checking Environment Configuration${NC}"
 echo "----------------------------------------"
-check_file ".env.example" ".env.example template"
+check_file ".env.example" ".env.example template" || true
 
-if check_file ".env" ".env file"; then
+if [ -f ".env" ]; then
+    echo -e "${GREEN}✓${NC} .env file exists"
+    ((PASSED++))
+    
     # Check for required variables
     if grep -q "EXPO_PUBLIC_SUPABASE_URL" .env; then
         if grep -q "your-project.supabase.co" .env; then
@@ -144,62 +155,70 @@ fi
 # Section 6: Docker Configuration
 echo -e "\n${BLUE}6. Checking Docker Configuration${NC}"
 echo "-----------------------------------"
-check_file "infra/Dockerfile" "Main Dockerfile"
-check_file "infra/Dockerfile.backend" "Backend Dockerfile"
-check_file "infra/Dockerfile.frontend" "Frontend Dockerfile"
+check_file "infra/Dockerfile" "Main Dockerfile" || true
+check_file "infra/Dockerfile.backend" "Backend Dockerfile" || true
+check_file "infra/Dockerfile.frontend" "Frontend Dockerfile" || true
 
 # Section 7: Kubernetes/Helm
 echo -e "\n${BLUE}7. Checking Kubernetes/Helm Configuration${NC}"
 echo "--------------------------------------------"
-check_directory "infra/helm/aquapump" "Helm chart directory"
-check_file "infra/helm/aquapump/Chart.yaml" "Helm Chart.yaml"
-check_file "infra/helm/aquapump/values.yaml" "Helm values.yaml"
+check_directory "infra/helm/aquapump" "Helm chart directory" || true
+check_file "infra/helm/aquapump/Chart.yaml" "Helm Chart.yaml" || true
+check_file "infra/helm/aquapump/values.yaml" "Helm values.yaml" || true
 
 # Section 8: Dependencies
 echo -e "\n${BLUE}8. Checking Dependencies${NC}"
 echo "--------------------------"
-if check_directory "node_modules" "node_modules directory"; then
-    echo -e "${GREEN}✓${NC} Dependencies installed"
+if [ -d "node_modules" ]; then
+    echo -e "${GREEN}✓${NC} node_modules directory exists"
+    ((PASSED++))
 else
-    warn "Dependencies not installed. Run: bun install"
+    warn "Dependencies not installed. Run: bun install (or npm install)"
 fi
 
 # Section 9: Documentation
 echo -e "\n${BLUE}9. Checking Documentation${NC}"
 echo "----------------------------"
-check_file "README.md" "README.md"
-check_file "PRODUCTION_GUIDE.md" "Production Guide"
-check_file "QUICK_START.md" "Quick Start Guide"
-check_file "OPTIMIZATION_SUMMARY.md" "Optimization Summary"
+check_file "README.md" "README.md" || true
+check_file "PRODUCTION_GUIDE.md" "Production Guide" || true
+check_file "QUICK_START.md" "Quick Start Guide" || true
+check_file "OPTIMIZATION_SUMMARY.md" "Optimization Summary" || true
 
 # Section 10: Security
 echo -e "\n${BLUE}10. Checking Security Configuration${NC}"
 echo "--------------------------------------"
 
 # Check .gitignore for secrets
-if grep -q ".env" .gitignore; then
-    echo -e "${GREEN}✓${NC} .env files are in .gitignore"
-    ((PASSED++))
+if [ -f ".gitignore" ]; then
+    if grep -q ".env" .gitignore; then
+        echo -e "${GREEN}✓${NC} .env files are in .gitignore"
+        ((PASSED++))
+    else
+        echo -e "${RED}✗${NC} .env files NOT in .gitignore - SECURITY RISK!"
+        ((FAILED++))
+    fi
+    
+    if grep -q "secrets.yaml" .gitignore || grep -q "secrets" .gitignore; then
+        echo -e "${GREEN}✓${NC} secrets files are in .gitignore"
+        ((PASSED++))
+    else
+        warn "secrets.yaml NOT in .gitignore - consider adding"
+    fi
 else
-    echo -e "${RED}✗${NC} .env files NOT in .gitignore - SECURITY RISK!"
-    ((FAILED++))
-fi
-
-if grep -q "secrets.yaml" .gitignore; then
-    echo -e "${GREEN}✓${NC} secrets.yaml is in .gitignore"
-    ((PASSED++))
-else
-    echo -e "${RED}✗${NC} secrets.yaml NOT in .gitignore - SECURITY RISK!"
-    ((FAILED++))
+    warn ".gitignore not found"
 fi
 
 # Check for committed secrets
-if git ls-files | grep -q "\.env$"; then
-    echo -e "${RED}✗${NC} WARNING: .env file is committed to git!"
-    ((FAILED++))
+if command -v git &> /dev/null && [ -d ".git" ]; then
+    if git ls-files | grep -q "\.env$"; then
+        echo -e "${RED}✗${NC} WARNING: .env file is committed to git!"
+        ((FAILED++))
+    else
+        echo -e "${GREEN}✓${NC} No .env files committed to git"
+        ((PASSED++))
+    fi
 else
-    echo -e "${GREEN}✓${NC} No .env files committed to git"
-    ((PASSED++))
+    warn "Git repository not initialized or git not available"
 fi
 
 # Final Summary
@@ -217,13 +236,22 @@ if [ $FAILED -eq 0 ]; then
     echo ""
     echo -e "${BLUE}Next Steps:${NC}"
     echo "  1. Update .env with your credentials"
-    echo "  2. Start backend: bun run backend/server.ts"
-    echo "  3. Start frontend: bun start"
-    echo "  4. Access: http://localhost:19006"
+    echo "  2. Install dependencies: bun install (or npm install)"
+    echo "  3. Start backend: bun run backend/server.ts"
+    echo "  4. Start frontend: bun start"
+    echo "  5. Access web: http://localhost:19006"
+    echo ""
+    echo -e "${BLUE}Docker Deployment:${NC}"
+    echo "  cd infra && docker compose up --build"
     echo ""
     exit 0
 else
-    echo -e "${RED}✗ Some checks failed. Please fix the issues above.${NC}"
+    echo -e "${YELLOW}⚠ Some checks failed, but the script completed.${NC}"
+    echo ""
+    echo -e "${BLUE}Common Fixes:${NC}"
+    echo "  - Install missing tools (node, docker, git)"
+    echo "  - Run: cp .env.example .env"
+    echo "  - Run: bun install (or npm install)"
     echo ""
     exit 1
 fi

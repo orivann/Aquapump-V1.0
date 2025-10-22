@@ -24,7 +24,7 @@ COPY frontend ./frontend
 ENV NODE_ENV=production
 ENV EXPO_USE_FAST_RESOLVER=1
 
-RUN npx expo export:web
+RUN npx expo export --platform web
 
 FROM base AS runner
 WORKDIR /app
