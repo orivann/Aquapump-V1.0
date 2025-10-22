@@ -37,42 +37,45 @@ export function useLanguage() {
 }
 
 function useLanguageValue(): LanguageContextType {
-  const [language, setLanguage] = useState<Language>('en');
-  const [isRTL, setIsRTL] = useState<boolean>(false);
+  const getInitialLanguage = (): Language => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem(LANGUAGE_KEY);
+        if (stored === 'en' || stored === 'he') {
+          return stored;
+        }
+      } catch (e) {
+        console.warn('[LanguageContext] Failed to read from localStorage:', e);
+      }
+    }
+    return 'en';
+  };
+
+  const initialLanguage = getInitialLanguage();
+  const [language, setLanguage] = useState<Language>(initialLanguage);
+  const [isRTL, setIsRTL] = useState<boolean>(initialLanguage === 'he');
   const [isLoading, setIsLoading] = useState<boolean>(Platform.OS !== 'web');
 
   useEffect(() => {
     (async () => {
       try {
-        let stored: string | null = null;
-        
         if (Platform.OS === 'web') {
-          stored = localStorage.getItem(LANGUAGE_KEY);
-        } else {
-          stored = await AsyncStorage.getItem(LANGUAGE_KEY);
+          return;
         }
+        
+        const stored = await AsyncStorage.getItem(LANGUAGE_KEY);
         
         if (stored && (stored === 'en' || stored === 'he')) {
           setLanguage(stored as Language);
           setIsRTL(stored === 'he');
-          if (Platform.OS !== 'web') {
-            I18nManager.forceRTL(stored === 'he');
-          }
+          I18nManager.forceRTL(stored === 'he');
         } else {
-          const defaultLang = 'en';
-          setLanguage(defaultLang);
-          if (Platform.OS === 'web') {
-            localStorage.setItem(LANGUAGE_KEY, defaultLang);
-          } else {
-            await AsyncStorage.setItem(LANGUAGE_KEY, defaultLang);
-          }
+          await AsyncStorage.setItem(LANGUAGE_KEY, 'en');
         }
       } catch (error) {
         console.error('[LanguageContext] Failed to initialize:', error);
       } finally {
-        if (Platform.OS !== 'web') {
-          setIsLoading(false);
-        }
+        setIsLoading(false);
       }
     })();
   }, []);

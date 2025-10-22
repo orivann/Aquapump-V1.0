@@ -26,7 +26,21 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [themeMode, setThemeMode] = useState<ThemeMode>('dark');
+  const getInitialTheme = (): ThemeMode => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem(THEME_KEY);
+        if (stored === 'light' || stored === 'dark') {
+          return stored;
+        }
+      } catch (e) {
+        console.warn('[ThemeContext] Failed to read from localStorage:', e);
+      }
+    }
+    return 'dark';
+  };
+
+  const [themeMode, setThemeMode] = useState<ThemeMode>(getInitialTheme);
   const [isLoading, setIsLoading] = useState<boolean>(Platform.OS !== 'web');
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const toggleTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -34,31 +48,21 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     (async () => {
       try {
-        let stored: string | null = null;
-        
         if (Platform.OS === 'web') {
-          stored = localStorage.getItem(THEME_KEY);
-        } else {
-          stored = await AsyncStorage.getItem(THEME_KEY);
+          return;
         }
+        
+        const stored = await AsyncStorage.getItem(THEME_KEY);
         
         if (stored && (stored === 'light' || stored === 'dark')) {
           setThemeMode(stored as ThemeMode);
         } else {
-          const defaultMode = 'dark';
-          setThemeMode(defaultMode);
-          if (Platform.OS === 'web') {
-            localStorage.setItem(THEME_KEY, defaultMode);
-          } else {
-            await AsyncStorage.setItem(THEME_KEY, defaultMode);
-          }
+          await AsyncStorage.setItem(THEME_KEY, 'dark');
         }
       } catch (error) {
         console.error('[ThemeContext] Failed to initialize:', error);
       } finally {
-        if (Platform.OS !== 'web') {
-          setIsLoading(false);
-        }
+        setIsLoading(false);
       }
     })();
   }, []);

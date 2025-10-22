@@ -101,12 +101,14 @@ export default function RootLayout() {
       try {
         if (Platform.OS !== 'web') {
           await SplashScreen.preventAutoHideAsync();
+        } else {
+          setIsReady(true);
         }
       } catch (e) {
         console.warn('[RootLayout] Splash screen error:', e);
       } finally {
-        setIsReady(true);
         if (Platform.OS !== 'web') {
+          setIsReady(true);
           await SplashScreen.hideAsync();
         }
       }
@@ -115,7 +117,7 @@ export default function RootLayout() {
     prepare();
   }, []);
 
-  if (!isReady) {
+  if (!isReady && Platform.OS !== 'web') {
     return null;
   }
 
