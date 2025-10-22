@@ -59,7 +59,7 @@ function NavigationInner() {
               styles.navBar,
               {
                 backgroundColor: isDark ? 'rgba(10, 25, 41, 0.85)' : 'rgba(255, 255, 255, 0.85)',
-                borderBottomColor: isDark ? 'rgba(25, 195, 230, 0.15)' : 'rgba(91, 103, 245, 0.15)',
+                borderBottomColor: isDark ? 'rgba(132, 196, 125, 0.25)' : 'rgba(0, 34, 123, 0.15)',
               },
             ]}
           >
@@ -73,13 +73,18 @@ function NavigationInner() {
               ]}
               testID="navbar-content"
             >
-              <Text
-                accessibilityRole="header"
-                testID="navbar-logo"
-                style={[styles.logo, { color: isDark ? theme.colors.primary : '#5B67F5' }]}
-              >
-                AquaPump
-              </Text>
+              <View style={styles.logoContainer}>
+                <View style={[styles.logoIcon, { backgroundColor: theme.colors.primary }]}>
+                  <Text style={styles.logoEmoji}>💧</Text>
+                </View>
+                <Text
+                  accessibilityRole="header"
+                  testID="navbar-logo"
+                  style={[styles.logo, { color: isDark ? theme.colors.primary : theme.colors.primary }]}
+                >
+                  AquaPump
+                </Text>
+              </View>
 
               <View style={styles.navLinks}>
                 {navLinks.map((link) => (
@@ -107,8 +112,8 @@ function NavigationInner() {
                   style={[
                     styles.controlButton,
                     {
-                      borderColor: isDark ? 'rgba(25, 195, 230, 0.3)' : 'rgba(91, 103, 245, 0.15)',
-                      backgroundColor: isDark ? 'rgba(25, 195, 230, 0.1)' : 'rgba(91, 103, 245, 0.08)',
+                      borderColor: isDark ? 'rgba(132, 196, 125, 0.4)' : 'rgba(0, 34, 123, 0.2)',
+                      backgroundColor: isDark ? 'rgba(132, 196, 125, 0.15)' : 'rgba(0, 34, 123, 0.08)',
                     },
                   ]}
                   onPress={() => changeLanguage(language === 'en' ? 'he' : 'en')}
@@ -128,8 +133,8 @@ function NavigationInner() {
                   style={[
                     styles.controlButton,
                     {
-                      borderColor: isDark ? 'rgba(25, 195, 230, 0.3)' : 'rgba(91, 103, 245, 0.15)',
-                      backgroundColor: isDark ? 'rgba(25, 195, 230, 0.1)' : 'rgba(91, 103, 245, 0.08)',
+                      borderColor: isDark ? 'rgba(132, 196, 125, 0.4)' : 'rgba(0, 34, 123, 0.2)',
+                      backgroundColor: isDark ? 'rgba(132, 196, 125, 0.15)' : 'rgba(0, 34, 123, 0.08)',
                     },
                   ]}
                   onPress={toggleTheme}
@@ -150,13 +155,13 @@ function NavigationInner() {
                   style={[
                     styles.quoteButton,
                     {
-                      backgroundColor: isDark ? theme.colors.primary : '#5B67F5',
+                      backgroundColor: theme.colors.primary,
                     },
                   ]}
                   hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
                   activeOpacity={0.85}
                 >
-                  <Text style={styles.quoteButtonText}>
+                  <Text style={[styles.quoteButtonText, { color: isDark ? theme.colors.dark : theme.colors.light }]}>
                     {t(translations.hero.quoteCTA)}
                   </Text>
                 </TouchableOpacity>
@@ -170,7 +175,7 @@ function NavigationInner() {
             style={[
               styles.navBar,
               {
-                borderBottomColor: isDark ? 'rgba(25, 195, 230, 0.15)' : 'rgba(91, 103, 245, 0.15)',
+                borderBottomColor: isDark ? 'rgba(132, 196, 125, 0.25)' : 'rgba(0, 34, 123, 0.15)',
               },
             ]}
           >
@@ -184,13 +189,18 @@ function NavigationInner() {
               ]}
               testID="navbar-content"
             >
-              <Text
-                accessibilityRole="header"
-                testID="navbar-logo"
-                style={[styles.logo, { color: isDark ? theme.colors.primary : '#5B67F5' }]}
-              >
-                AquaPump
-              </Text>
+              <View style={styles.logoContainer}>
+                <View style={[styles.logoIcon, { backgroundColor: theme.colors.primary }]}>
+                  <Text style={styles.logoEmoji}>💧</Text>
+                </View>
+                <Text
+                  accessibilityRole="header"
+                  testID="navbar-logo"
+                  style={[styles.logo, { color: isDark ? theme.colors.primary : theme.colors.primary }]}
+                >
+                  AquaPump
+                </Text>
+              </View>
 
               <View style={styles.controls}>
                 <TouchableOpacity
@@ -201,8 +211,8 @@ function NavigationInner() {
                   style={[
                     styles.controlButton,
                     {
-                      borderColor: isDark ? 'rgba(25, 195, 230, 0.3)' : 'rgba(91, 103, 245, 0.15)',
-                      backgroundColor: isDark ? 'rgba(25, 195, 230, 0.1)' : 'rgba(91, 103, 245, 0.08)',
+                      borderColor: isDark ? 'rgba(132, 196, 125, 0.4)' : 'rgba(0, 34, 123, 0.2)',
+                      backgroundColor: isDark ? 'rgba(132, 196, 125, 0.15)' : 'rgba(0, 34, 123, 0.08)',
                     },
                   ]}
                   onPress={() => changeLanguage(language === 'en' ? 'he' : 'en')}
@@ -222,8 +232,8 @@ function NavigationInner() {
                   style={[
                     styles.controlButton,
                     {
-                      borderColor: isDark ? 'rgba(25, 195, 230, 0.3)' : 'rgba(91, 103, 245, 0.15)',
-                      backgroundColor: isDark ? 'rgba(25, 195, 230, 0.1)' : 'rgba(91, 103, 245, 0.08)',
+                      borderColor: isDark ? 'rgba(132, 196, 125, 0.4)' : 'rgba(0, 34, 123, 0.2)',
+                      backgroundColor: isDark ? 'rgba(132, 196, 125, 0.15)' : 'rgba(0, 34, 123, 0.08)',
                     },
                   ]}
                   onPress={toggleTheme}
@@ -282,8 +292,23 @@ const styles = StyleSheet.create({
   safeArea: {
     width: '100%',
   },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  logoIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoEmoji: {
+    fontSize: 20,
+  },
   logo: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '700' as const,
     letterSpacing: -0.5,
   },
@@ -323,7 +348,6 @@ const styles = StyleSheet.create({
     minHeight: 40,
   },
   quoteButtonText: {
-    color: '#FFFFFF',
     fontSize: 15,
     fontWeight: '600' as const,
     letterSpacing: 0.3,

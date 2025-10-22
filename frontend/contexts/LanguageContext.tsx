@@ -42,41 +42,61 @@ function useLanguageValue(): LanguageContextType {
   const [isLoading, setIsLoading] = useState<boolean>(Platform.OS !== 'web');
 
   useEffect(() => {
-    if (Platform.OS === 'web') {
-      return;
-    }
-
     (async () => {
       try {
-        const stored = await AsyncStorage.getItem(LANGUAGE_KEY);
+        let stored: string | null = null;
+        
+        if (Platform.OS === 'web') {
+          stored = localStorage.getItem(LANGUAGE_KEY);
+        } else {
+          stored = await AsyncStorage.getItem(LANGUAGE_KEY);
+        }
+        
         if (stored && (stored === 'en' || stored === 'he')) {
           setLanguage(stored as Language);
           setIsRTL(stored === 'he');
-          I18nManager.forceRTL(stored === 'he');
+          if (Platform.OS !== 'web') {
+            I18nManager.forceRTL(stored === 'he');
+          }
         } else {
-          await AsyncStorage.setItem(LANGUAGE_KEY, 'en');
+          const defaultLang = 'en';
+          setLanguage(defaultLang);
+          if (Platform.OS === 'web') {
+            localStorage.setItem(LANGUAGE_KEY, defaultLang);
+          } else {
+            await AsyncStorage.setItem(LANGUAGE_KEY, defaultLang);
+          }
         }
       } catch (error) {
         console.error('[LanguageContext] Failed to initialize:', error);
       } finally {
-        setIsLoading(false);
+        if (Platform.OS !== 'web') {
+          setIsLoading(false);
+        }
       }
     })();
   }, []);
 
   const changeLanguage = useCallback(async (newLanguage: Language) => {
     try {
-      console.log('[LanguageContext] Changing language to:', newLanguage);
-      await AsyncStorage.setItem(LANGUAGE_KEY, newLanguage);
+      console.log('[LanguageContext] Changing language from', language, 'to:', newLanguage);
+      
+      if (Platform.OS === 'web') {
+        localStorage.setItem(LANGUAGE_KEY, newLanguage);
+        console.log('[LanguageContext] Saved language to localStorage:', newLanguage);
+      } else {
+        await AsyncStorage.setItem(LANGUAGE_KEY, newLanguage);
+        I18nManager.forceRTL(newLanguage === 'he');
+        console.log('[LanguageContext] Saved language to AsyncStorage:', newLanguage);
+      }
+      
       setLanguage(newLanguage);
       setIsRTL(newLanguage === 'he');
-      if (Platform.OS !== 'web') {
-        I18nManager.forceRTL(newLanguage === 'he');
-      }
+      console.log('[LanguageContext] Language changed successfully');
     } catch (error) {
       console.error('[LanguageContext] Failed to save language:', error);
     }
-  }, []);
+  }, [language]);
 
   const t = useCallback((translations: { en: string; he: string }) => {
     return translations[language];

@@ -135,21 +135,21 @@ const Products = memo(function Products({ scrollY }: ProductsProps) {
 
   const products = useMemo(() => [
     {
-      name: t(translations.products.aquaPro.name),
-      description: t(translations.products.aquaPro.description),
+      name: t(translations.products.saj.name),
+      description: t(translations.products.saj.description),
       color: theme.colors.primary,
     },
     {
-      name: t(translations.products.aquaHome.name),
-      description: t(translations.products.aquaHome.description),
-      color: '#0066FF',
+      name: t(translations.products.evoke.name),
+      description: t(translations.products.evoke.description),
+      color: theme.colors.green || '#84C47D',
     },
     {
-      name: t(translations.products.aquaIndustrial.name),
-      description: t(translations.products.aquaIndustrial.description),
-      color: '#6366F1',
+      name: t(translations.products.comprehensive.name),
+      description: t(translations.products.comprehensive.description),
+      color: isDark ? '#38BDF8' : '#0066FF',
     },
-  ], [theme.colors.primary, t]);
+  ], [theme.colors.primary, theme.colors.green, isDark, t]);
 
   const parallaxY = scrollY.interpolate({
     inputRange: [height * 1.5, height * 2.5],

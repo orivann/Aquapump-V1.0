@@ -8,76 +8,76 @@ export const translations = {
   },
   hero: {
     headline: {
-      en: 'Revolutionizing Water Flow Technology',
-      he: 'מהפכה בטכנולוגיית זרימת מים',
+      en: 'Your Pump, Our Solution',
+      he: 'המשאבה שלך, הפתרון שלנו',
     },
     subheadline: {
-      en: 'Smart pumps engineered for efficiency, sustainability, and performance',
-      he: 'משאבות חכמות מהונדסות ליעילות, קיימות וביצועים',
+      en: '30+ years of excellence in water system solutions. Leading provider of pumps for industry, agriculture, municipalities, and infrastructure',
+      he: '30+ שנות מצוינות בפתרונות מערכות מים. ספק מוביל של משאבות לתעשייה, חקלאות, רשויות ותשתיות',
     },
-    exploreCTA: { en: 'Explore Technology', he: 'חקור טכנולוגיה' },
+    exploreCTA: { en: 'Our Products', he: 'המוצרים שלנו' },
     quoteCTA: { en: 'Get Quote', he: 'קבל הצעת מחיר' },
     whatsappCTA: { en: 'Chat on WhatsApp', he: 'שוחח בוואטסאפ' },
   },
   about: {
     title: { en: 'About AquaPump', he: 'אודות AquaPump' },
     description: {
-      en: 'AquaPump is part of AquaTech Group, a leading Israeli company in smart water pump technology. Based in Ramla, Israel, we have been an industry leader for over 20 years, combining cutting-edge engineering with sustainable practices to deliver pumps that exceed industry standards.',
-      he: 'AquaPump היא חלק מקבוצת AquaTech, חברה ישראלית מובילה בטכנולוגיית משאבות מים חכמות. ממוקמים ברמלה, ישראל, אנו מובילים בתעשייה כבר למעלה מ-20 שנה, משלבים הנדסה מתקדמת עם שיטות קיימות כדי לספק משאבות העולות על תקני התעשייה.',
+      en: 'AquaPump is a leading company in the marketing and sale of water pumps for all needs - water, chemicals, fuels, etc. With over 30 years of experience and professional solutions for customers of all types - from individual households to industrial and agricultural clients.',
+      he: 'AquaPump היא חברה מובילה בשיווק ומכירה של משאבות לכל הצרכים - מים, כימיקלים, שפכים, מי קולחין ועוד - לצד ציוד נלווה ושירותים טכניים משלימים. החברה מציעה פתרונות מקצועיים מקצה לקצה: תכנון מיזוגן ותחזוקה הנדסית, דרך אספקה והתקנה, ועד תחזוקה שוטפת.',
     },
-    company: { en: 'Part of', he: 'חלק מ' },
-    companyName: { en: 'AquaTech Group', he: 'קבוצת AquaTech' },
-    location: { en: 'Location', he: 'מיקום' },
-    locationName: { en: 'Ramla, Israel', he: 'רמלה, ישראל' },
+    company: { en: 'Services', he: 'שירותים' },
+    companyName: { en: 'Design, Installation & Maintenance', he: 'תכנון, התקנה ותחזוקה' },
+    location: { en: 'Specialization', he: 'התמחות' },
+    locationName: { en: 'Industry, Municipalities & Agriculture', he: 'תעשייה, רשויות וחקלאות' },
     experience: { en: 'Experience', he: 'ניסיון' },
-    experienceYears: { en: '20+ Years Industry Leader', he: 'מובילים בתעשייה 20+ שנים' },
+    experienceYears: { en: '30+ Years of Excellence', he: '30+ שנות מצוינות' },
   },
   technology: {
-    title: { en: 'Advanced Technology', he: 'טכנולוגיה מתקדמת' },
+    title: { en: 'Our Expertise', he: 'תחומי ההתמחות שלנו' },
     efficiency: {
-      title: { en: 'Energy Efficient', he: 'יעילות אנרגטית' },
+      title: { en: 'Professional Consultation', he: 'ייעוץ מקצועי' },
       description: {
-        en: 'Up to 40% energy savings with smart flow optimization',
-        he: 'חיסכון של עד 40% באנרגיה עם אופטימיזציה חכמה של זרימה',
+        en: 'Marketing and selling pumps of all types - for industry, municipalities, agriculture',
+        he: 'שיווק ומכירה של משאבות לכל סוגי הנוזלים – לתעשייה, לרשויות ולחקלאות',
       },
     },
     durability: {
-      title: { en: 'Built to Last', he: 'בנוי להחזיק מעמד' },
+      title: { en: 'Complete Solutions', he: 'פתרונות מלאים' },
       description: {
-        en: 'Premium materials and engineering for 20+ year lifespan',
-        he: 'חומרים והנדסה מובחרים לאורך חיים של 20+ שנים',
+        en: 'Equipment supply including: pipes, tanks, filters, and pumps from all manufacturers',
+        he: 'אספקת ציוד נלווה כגון צנרת, מיכלים, מסננים, שסתומים וציוד נוסף',
       },
     },
     smart: {
-      title: { en: 'IoT Connected', he: 'מחובר IoT' },
+      title: { en: 'Professional Approach', he: 'גישה מקצועית' },
       description: {
-        en: 'Real-time monitoring and control via mobile app',
-        he: 'ניטור ובקרה בזמן אמת דרך אפליקציה סלולרית',
+        en: 'Expert team with ability to handle projects of all types and sizes',
+        he: 'יכול להתמודד עם פרויקטים מכל סדר גודול. ההסבר הטכני והתאמה אישית לצרכים של הלקוח',
       },
     },
   },
   products: {
     title: { en: 'Our Products', he: 'המוצרים שלנו' },
-    viewSpecs: { en: 'View Specs', he: 'צפה במפרט' },
-    aquaPro: {
-      name: { en: 'AquaPro 3000', he: 'AquaPro 3000' },
+    viewSpecs: { en: 'Learn More', he: 'למד עוד' },
+    saj: {
+      name: { en: 'Smart Pump Drive SAJ', he: 'Smart Pump Drive SAJ' },
       description: {
-        en: 'Professional-grade pump for commercial applications',
-        he: 'משאבה ברמה מקצועית ליישומים מסחריים',
+        en: 'Advanced variable frequency drive for intelligent pump control. Energy efficient with smart flow optimization and remote monitoring.',
+        he: 'מנע תדר משתנה מתקדם לבקרה חכמה של משאבות. חסכוני באנרגיה עם אופטימיזציה חכמה של זרימה וניטור מרחוק.',
       },
     },
-    aquaHome: {
-      name: { en: 'AquaHome Plus', he: 'AquaHome Plus' },
+    evoke: {
+      name: { en: 'EVOKE 2026', he: 'EVOKE 2026' },
       description: {
-        en: 'Perfect for residential water systems',
-        he: 'מושלם למערכות מים ביתיות',
+        en: 'Next-generation smart water pump system. Premium build quality with IoT connectivity for commercial and industrial applications.',
+        he: 'מערכת משאבת מים חכמה מהדור הבא. איכות בנייה מעולה עם חיבור IoT ליישומים מסחריים ותעשייתיים.',
       },
     },
-    aquaIndustrial: {
-      name: { en: 'AquaIndustrial X', he: 'AquaIndustrial X' },
+    comprehensive: {
+      name: { en: 'Comprehensive Solutions', he: 'פתרונות מקיפים' },
       description: {
-        en: 'Heavy-duty solution for industrial needs',
-        he: 'פתרון כבד לצרכים תעשייתיים',
+        en: 'Complete water system solutions including pipes, tanks, filters, valves, and equipment from leading manufacturers worldwide.',
+        he: 'פתרונות מערכות מים מלאים כולל צנרת, מיכלים, מסננים, שסתומים וציוד מיצרנים מובילים בעולם.',
       },
     },
   },
@@ -97,10 +97,10 @@ export const translations = {
   },
   chatbot: {
     greeting: {
-      en: "Hi! I'm AquaBot 💧. How can I help with your water pump needs?",
-      he: 'שלום! אני AquaBot 💧. איך אוכל לעזור לך עם צרכי משאבת המים שלך?',
+      en: "Hi! I'm AquaPump Assistant 💧. I can help you find the perfect pump solution for your needs. What type of application are you looking for?",
+      he: 'שלום! אני עוזר AquaPump 💧. אוכל לעזור לך למצוא את פתרון המשאבה המושלם לצרכים שלך. איזה סוג יישום אתה מחפש?',
     },
-    placeholder: { en: 'Type your message...', he: 'הקלד את ההודעה שלך...' },
+    placeholder: { en: 'Describe your pump needs...', he: 'תאר את צרכי המשאבה שלך...' },
     send: { en: 'Send', he: 'שלח' },
   },
   footer: {

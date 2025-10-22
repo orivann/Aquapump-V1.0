@@ -88,7 +88,7 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
   return (
     <View style={styles.wrapper}>
       <LinearGradient
-        colors={isDark ? ['#1a1f2e', '#0f1419'] : ['#5B67F5', '#7B68EE', '#9B88FF']}
+        colors={isDark ? ['#1a1f2e', '#0f1419'] : ['#00227B', '#003BA8', '#84C47D']}
         style={styles.gradientContainer}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -144,7 +144,7 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
                 <Text style={styles.primaryButtonText}>
                   {t(translations.hero.exploreCTA)}
                 </Text>
-                <ArrowRight size={20} color="#5B67F5" strokeWidth={2.5} />
+                <ArrowRight size={20} color="#00227B" strokeWidth={2.5} />
               </TouchableOpacity>
               <TouchableOpacity 
                 accessible={true}
@@ -284,7 +284,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '600' as const,
     letterSpacing: 0.3,
-    color: '#5B67F5',
+    color: '#00227B',
   },
   secondaryButton: {
     paddingHorizontal: 36,

@@ -70,41 +70,43 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
     
     isTogglingRef.current = true;
+    console.log('[ThemeContext] Toggle initiated');
     
-    setThemeMode((current) => {
-      const newMode = current === 'dark' ? 'light' : 'dark';
-      console.log('[ThemeContext] Toggling theme from', current, 'to', newMode);
-      
-      Animated.sequence([
-        Animated.timing(fadeAnim, {
-          toValue: 0.95,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 150,
-          useNativeDriver: true,
-        }),
-      ]).start(() => {
-        isTogglingRef.current = false;
-      });
-      
-      (async () => {
-        try {
-          if (Platform.OS === 'web') {
-            localStorage.setItem(THEME_KEY, newMode);
-          } else {
-            await AsyncStorage.setItem(THEME_KEY, newMode);
-          }
-        } catch (error) {
-          console.error('[ThemeContext] Failed to save theme:', error);
-        }
-      })();
-      
-      return newMode;
+    const newMode = themeMode === 'dark' ? 'light' : 'dark';
+    console.log('[ThemeContext] Toggling theme from', themeMode, 'to', newMode);
+    
+    setThemeMode(newMode);
+    
+    Animated.sequence([
+      Animated.timing(fadeAnim, {
+        toValue: 0.95,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      isTogglingRef.current = false;
+      console.log('[ThemeContext] Toggle animation complete');
     });
-  }, [fadeAnim]);
+    
+    (async () => {
+      try {
+        if (Platform.OS === 'web') {
+          localStorage.setItem(THEME_KEY, newMode);
+          console.log('[ThemeContext] Saved theme to localStorage:', newMode);
+        } else {
+          await AsyncStorage.setItem(THEME_KEY, newMode);
+          console.log('[ThemeContext] Saved theme to AsyncStorage:', newMode);
+        }
+      } catch (error) {
+        console.error('[ThemeContext] Failed to save theme:', error);
+      }
+    })();
+  }, [themeMode, fadeAnim]);
 
   const theme: Theme = useMemo(() => {
     return themeMode === 'dark' ? darkTheme : lightTheme;
