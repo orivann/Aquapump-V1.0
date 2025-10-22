@@ -83,6 +83,7 @@ const About = memo(function About() {
         <Text
           style={[
             styles.description,
+            isRTL && styles.rtlText,
             {
               color: isDark ? '#CBD5E1' : '#64748B',
               textAlign: 'center',
@@ -214,7 +215,7 @@ export default About;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    paddingVertical: 100,
+    paddingVertical: 96,
     paddingHorizontal: 24,
   },
   content: {
@@ -226,7 +227,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 24,
   },
   title: {
     fontSize: 44,

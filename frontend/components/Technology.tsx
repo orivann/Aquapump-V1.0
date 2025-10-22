@@ -172,13 +172,14 @@ export default Technology;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    paddingVertical: 100,
+    paddingVertical: 96,
     alignItems: 'center',
   },
   titleContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: 56,
+    paddingHorizontal: 24,
   },
   sectionTitle: {
     fontSize: 44,

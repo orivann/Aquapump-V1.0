@@ -26,10 +26,10 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [themeMode, setThemeMode] = useState<ThemeMode>('light');
+  const [themeMode, setThemeMode] = useState<ThemeMode>('dark');
   const [isLoading, setIsLoading] = useState<boolean>(Platform.OS !== 'web');
   const fadeAnim = useRef(new Animated.Value(1)).current;
-  const [displayMode, setDisplayMode] = useState<ThemeMode>(themeMode);
+  const [displayMode, setDisplayMode] = useState<ThemeMode>('dark');
 
   useEffect(() => {
     if (Platform.OS === 'web') return;
@@ -41,7 +41,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           setThemeMode(stored as ThemeMode);
           setDisplayMode(stored as ThemeMode);
         } else {
-          await AsyncStorage.setItem(THEME_KEY, 'light');
+          setThemeMode('dark');
+          setDisplayMode('dark');
+          await AsyncStorage.setItem(THEME_KEY, 'dark');
         }
       } catch (error) {
         console.error('[ThemeContext] Failed to initialize:', error);
@@ -74,10 +76,10 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const newMode = themeMode === 'dark' ? 'light' : 'dark';
     try {
       console.log('[ThemeContext] Toggling theme to:', newMode);
+      setThemeMode(newMode);
       if (Platform.OS !== 'web') {
         await AsyncStorage.setItem(THEME_KEY, newMode);
       }
-      setThemeMode(newMode);
     } catch (error) {
       console.error('[ThemeContext] Failed to save theme:', error);
     }
@@ -120,8 +122,8 @@ export function useTheme() {
       '[ThemeContext] useTheme called outside ThemeProvider, returning defaults'
     );
     return {
-      themeMode: 'light' as ThemeMode,
-      theme: lightTheme,
+      themeMode: 'dark' as ThemeMode,
+      theme: darkTheme,
       isLoading: false,
       toggleTheme: async () => {},
     };

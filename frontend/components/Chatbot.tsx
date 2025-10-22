@@ -26,13 +26,7 @@ const Chatbot = memo(function Chatbot() {
   const { t, isRTL, language } = useLanguage();
   const { theme, themeMode } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      role: 'assistant',
-      content: t(translations.chatbot.greeting),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const toolkitUrl = process.env.EXPO_PUBLIC_TOOLKIT_URL ?? 'https://toolkit.rork.com';
   const apiKey = process.env.EXPO_PUBLIC_AI_CHAT_KEY ?? '';
   const [input, setInput] = useState('');
@@ -79,6 +73,13 @@ const Chatbot = memo(function Chatbot() {
   const toggleChat = useCallback(() => {
     if (!isOpen) {
       setIsOpen(true);
+      if (messages.length === 0) {
+        setMessages([{
+          id: '1',
+          role: 'assistant',
+          content: t(translations.chatbot.greeting),
+        }]);
+      }
       Animated.spring(slideAnim, {
         toValue: 0,
         friction: 8,
@@ -92,7 +93,7 @@ const Chatbot = memo(function Chatbot() {
         useNativeDriver: true,
       }).start(() => setIsOpen(false));
     }
-  }, [isOpen, slideAnim]);
+  }, [isOpen, slideAnim, messages.length, t]);
 
   const sendMessage = useCallback(async () => {
     if (!input.trim() || isLoading) return;

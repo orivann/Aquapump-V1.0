@@ -212,7 +212,7 @@ export default Contact;
 const styles = StyleSheet.create({
   container: {
     width: width,
-    paddingVertical: 100,
+    paddingVertical: 96,
     alignItems: 'center',
   },
   contentWrapper: {

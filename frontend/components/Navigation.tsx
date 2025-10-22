@@ -1,5 +1,6 @@
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { translations } from '../constants/translations';
 import { Sun, Moon } from 'lucide-react-native';
 import React, { memo, useEffect, useRef, useState } from 'react';
 import {
@@ -15,7 +16,7 @@ import { BlurView } from 'expo-blur';
 
 function NavigationInner() {
   const [mounted, setMounted] = useState(false);
-  const { language, changeLanguage } = useLanguage();
+  const { language, changeLanguage, t } = useLanguage();
   const { theme, themeMode, toggleTheme } = useTheme();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(-20)).current;
@@ -44,9 +45,9 @@ function NavigationInner() {
   }
 
   const navLinks = [
-    { title: 'Products', href: '#products' },
-    { title: 'Technology', href: '#technology' },
-    { title: 'About', href: '#about' },
+    { title: t(translations.nav.products), href: '#products' },
+    { title: t(translations.nav.technology), href: '#technology' },
+    { title: t(translations.nav.sustainability), href: '#about' },
   ];
 
   return (
@@ -156,7 +157,7 @@ function NavigationInner() {
                   activeOpacity={0.85}
                 >
                   <Text style={styles.quoteButtonText}>
-                    Get Quote
+                    {t(translations.hero.quoteCTA)}
                   </Text>
                 </TouchableOpacity>
               </View>

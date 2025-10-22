@@ -34,7 +34,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: themeMode === 'dark' ? '#0F1419' : '#F8FAFC' }]} edges={['top', 'bottom']}>
-      <StatusBar style={themeMode === 'dark' ? 'light' : 'light'} />
+      <StatusBar style={themeMode === 'dark' ? 'light' : 'dark'} />
       <Navigation />
       <Animated.ScrollView
         ref={scrollViewRef}

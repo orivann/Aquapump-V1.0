@@ -1,5 +1,6 @@
 import { useLanguage } from '../contexts/LanguageContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { translations } from '../constants/translations';
 import { ArrowRight } from 'lucide-react-native';
 import React, { useRef, useEffect, memo } from 'react';
 import { useRouter } from 'expo-router';
@@ -23,7 +24,7 @@ interface HeroProps {
 }
 
 const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
-  const { isRTL } = useLanguage();
+  const { isRTL, t, language } = useLanguage();
   const { themeMode } = useTheme();
   const isDark = themeMode === 'dark';
   const router = useRouter();
@@ -70,7 +71,7 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
         useNativeDriver: true,
       }),
     ]).start();
-  }, [isRTL, headlineFadeAnim]);
+  }, [language, headlineFadeAnim]);
 
   const parallaxY = scrollY.interpolate({
     inputRange: [0, height],
@@ -107,7 +108,7 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
             <View style={[styles.badgeIcon, { backgroundColor: 'rgba(255,255,255,0.3)' }]}>
               <View style={[styles.badgeIconInner, { backgroundColor: '#FFFFFF' }]} />
             </View>
-            <Text style={styles.badgeText}>Industry-Leading Water Solutions</Text>
+            <Text style={styles.badgeText}>{language === 'en' ? 'Industry-Leading Water Solutions' : 'פתרונות מים מובילים בתעשייה'}</Text>
           </View>
 
           <Animated.View style={[styles.headlineContainer, { opacity: headlineFadeAnim }]}>
@@ -117,14 +118,13 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
                 styles.headline,
                 isRTL && styles.rtlText,
               ]}>
-              Revolutionizing Water Flow Technology
+              {t(translations.hero.headline)}
             </Text>
             <Text style={[
                 styles.subheadline,
                 isRTL && styles.rtlText,
               ]}>
-              Smart pumps engineered for efficiency, sustainability, and performance.
-              Experience the future of water management.
+              {t(translations.hero.subheadline)}
             </Text>
           </Animated.View>
 
@@ -142,7 +142,7 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
                 activeOpacity={0.85}
               >
                 <Text style={styles.primaryButtonText}>
-                  Explore Technology
+                  {t(translations.hero.exploreCTA)}
                 </Text>
                 <ArrowRight size={20} color="#5B67F5" strokeWidth={2.5} />
               </TouchableOpacity>
@@ -158,7 +158,7 @@ const Hero = memo(function Hero({ scrollY, onQuotePress }: HeroProps) {
                 activeOpacity={0.85}
               >
                 <Text style={styles.secondaryButtonText}>
-                  Get Quote
+                  {t(translations.hero.quoteCTA)}
                 </Text>
               </TouchableOpacity>
             </View>
