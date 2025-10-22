@@ -86,39 +86,39 @@ warn() {
 # Section 1: Required Tools
 echo -e "\n${BLUE}1. Checking Required Tools${NC}"
 echo "----------------------------"
-check_command "node" || true
-check_command_optional "bun" "recommended for faster installs" || true
-check_command "docker" || true
-check_command "git" || true
+check_command "node"
+check_command_optional "bun" "recommended for faster installs"
+check_command "docker"
+check_command "git"
 
 # Section 2: Optional Tools
 echo -e "\n${BLUE}2. Checking Optional Tools${NC}"
 echo "----------------------------"
-check_command_optional "kubectl" "needed for Kubernetes deployment" || true
-check_command_optional "helm" "needed for Helm deployment" || true
+check_command_optional "kubectl" "needed for Kubernetes deployment"
+check_command_optional "helm" "needed for Helm deployment"
 
 # Section 3: Project Structure
 echo -e "\n${BLUE}3. Checking Project Structure${NC}"
 echo "--------------------------------"
-check_directory "frontend" "Frontend directory" || true
-check_directory "backend" "Backend directory" || true
-check_directory "infra" "Infrastructure directory" || true
-check_directory "frontend/app" "Frontend app directory" || true
-check_directory "frontend/components" "Frontend components directory" || true
-check_directory "backend/trpc" "Backend tRPC directory" || true
+check_directory "frontend" "Frontend directory"
+check_directory "backend" "Backend directory"
+check_directory "infra" "Infrastructure directory"
+check_directory "frontend/app" "Frontend app directory"
+check_directory "frontend/components" "Frontend components directory"
+check_directory "backend/trpc" "Backend tRPC directory"
 
 # Section 4: Configuration Files
 echo -e "\n${BLUE}4. Checking Configuration Files${NC}"
 echo "----------------------------------"
-check_file "package.json" "package.json" || true
-check_file "tsconfig.json" "tsconfig.json" || true
-check_file ".gitignore" ".gitignore" || true
-check_file "infra/docker-compose.yml" "Docker Compose file" || true
+check_file "package.json" "package.json"
+check_file "tsconfig.json" "tsconfig.json"
+check_file ".gitignore" ".gitignore"
+check_file "infra/docker-compose.yml" "Docker Compose file"
 
 # Section 5: Environment Configuration
 echo -e "\n${BLUE}5. Checking Environment Configuration${NC}"
 echo "----------------------------------------"
-check_file ".env.example" ".env.example template" || true
+check_file ".env.example" ".env.example template"
 
 if [ -f ".env" ]; then
     echo -e "${GREEN}✓${NC} .env file exists"
@@ -155,16 +155,16 @@ fi
 # Section 6: Docker Configuration
 echo -e "\n${BLUE}6. Checking Docker Configuration${NC}"
 echo "-----------------------------------"
-check_file "infra/Dockerfile" "Main Dockerfile" || true
-check_file "infra/Dockerfile.backend" "Backend Dockerfile" || true
-check_file "infra/Dockerfile.frontend" "Frontend Dockerfile" || true
+check_file "infra/Dockerfile" "Main Dockerfile"
+check_file "infra/Dockerfile.backend" "Backend Dockerfile"
+check_file "infra/Dockerfile.frontend" "Frontend Dockerfile"
 
 # Section 7: Kubernetes/Helm
 echo -e "\n${BLUE}7. Checking Kubernetes/Helm Configuration${NC}"
 echo "--------------------------------------------"
-check_directory "infra/helm/aquapump" "Helm chart directory" || true
-check_file "infra/helm/aquapump/Chart.yaml" "Helm Chart.yaml" || true
-check_file "infra/helm/aquapump/values.yaml" "Helm values.yaml" || true
+check_directory "infra/helm/aquapump" "Helm chart directory"
+check_file "infra/helm/aquapump/Chart.yaml" "Helm Chart.yaml"
+check_file "infra/helm/aquapump/values.yaml" "Helm values.yaml"
 
 # Section 8: Dependencies
 echo -e "\n${BLUE}8. Checking Dependencies${NC}"
@@ -179,10 +179,10 @@ fi
 # Section 9: Documentation
 echo -e "\n${BLUE}9. Checking Documentation${NC}"
 echo "----------------------------"
-check_file "README.md" "README.md" || true
-check_file "PRODUCTION_GUIDE.md" "Production Guide" || true
-check_file "QUICK_START.md" "Quick Start Guide" || true
-check_file "OPTIMIZATION_SUMMARY.md" "Optimization Summary" || true
+check_file "README.md" "README.md"
+check_file "PRODUCTION_GUIDE.md" "Production Guide"
+check_file "QUICK_START.md" "Quick Start Guide"
+check_file "OPTIMIZATION_SUMMARY.md" "Optimization Summary"
 
 # Section 10: Security
 echo -e "\n${BLUE}10. Checking Security Configuration${NC}"

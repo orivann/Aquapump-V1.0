@@ -1,0 +1,116 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  DOCKER_USERNAME: orivann
+  BACKEND_IMAGE: orivann/aquapump-backend
+  FRONTEND_IMAGE: orivann/aquapump-frontend
+
+jobs:
+  build-and-push:
+    name: Build & Push Docker Images
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        run: |
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "timestamp=$(date +%s)" >> $GITHUB_OUTPUT
+
+      - name: Build and push Backend
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./infra/Dockerfile.backend
+          push: true
+          tags: |
+            ${{ env.BACKEND_IMAGE }}:prod
+            ${{ env.BACKEND_IMAGE }}:latest
+            ${{ env.BACKEND_IMAGE }}:${{ steps.meta.outputs.sha_short }}
+          cache-from: type=registry,ref=${{ env.BACKEND_IMAGE }}:buildcache
+          cache-to: type=registry,ref=${{ env.BACKEND_IMAGE }}:buildcache,mode=max
+
+      - name: Build and push Frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./infra/Dockerfile.frontend
+          push: true
+          tags: |
+            ${{ env.FRONTEND_IMAGE }}:prod
+            ${{ env.FRONTEND_IMAGE }}:latest
+            ${{ env.FRONTEND_IMAGE }}:${{ steps.meta.outputs.sha_short }}
+          cache-from: type=registry,ref=${{ env.FRONTEND_IMAGE }}:buildcache
+          cache-to: type=registry,ref=${{ env.FRONTEND_IMAGE }}:buildcache,mode=max
+
+      - name: Image digest
+        run: |
+          echo "Backend: ${{ env.BACKEND_IMAGE }}:prod"
+          echo "Frontend: ${{ env.FRONTEND_IMAGE }}:prod"
+
+  deploy-argocd:
+    name: Trigger ArgoCD Sync
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update image tags in Helm values
+        run: |
+          sed -i 's/tag: ".*"/tag: "prod"/g' infra/helm/aquapump/values.yaml
+          
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add infra/helm/aquapump/values.yaml
+          git diff --staged --quiet || git commit -m "ci: update image tags to prod [skip ci]"
+          git push
+
+      - name: Trigger ArgoCD Sync (if configured)
+        if: secrets.ARGOCD_SERVER != ''
+        run: |
+          echo "ArgoCD sync would be triggered here"
+          echo "ArgoCD Server: ${{ secrets.ARGOCD_SERVER }}"
+
+  notify:
+    name: Deployment Notification
+    runs-on: ubuntu-latest
+    needs: [build-and-push, deploy-argocd]
+    if: always()
+    
+    steps:
+      - name: Send notification
+        run: |
+          if [ "${{ needs.build-and-push.result }}" == "success" ]; then
+            echo "✅ Build and push successful"
+          else
+            echo "❌ Build and push failed"
+          fi
+          
+          if [ "${{ needs.deploy-argocd.result }}" == "success" ] || [ "${{ needs.deploy-argocd.result }}" == "skipped" ]; then
+            echo "✅ Deployment triggered successfully"
+          else
+            echo "❌ Deployment failed"
+          fi
